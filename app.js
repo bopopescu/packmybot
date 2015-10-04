@@ -19,7 +19,7 @@ var options = {
 
 bot.on('text', function (msg) {
   var chatId = msg.chat.id;
-  bot.sendMessage(chatId, "Boujour! A bienôt?");
+  bot.sendMessage(chatId, "Bonjour! Je ne comprends pas encore toutes les subtilités de votre langues ;)");
   // bot.sendPhoto(chatId, photo, {caption: 'Lovely kittens'});
 });
 
