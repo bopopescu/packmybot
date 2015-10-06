@@ -1,7 +1,7 @@
 var TelegramBot = require('node-telegram-bot-api');
  
 var token = '125345847:AAFKJFwaETnTK_pEQXQ2Hqwx8bnLFV5oo2E';
-Setup polling way
+//Setup polling way
 var options = {
   polling: true
 };
@@ -18,7 +18,7 @@ var options = {
 // var bot = new TelegramBot('token', options);
 
 var bot = new TelegramBot(token, options);
-bot.setWebHook('');
+//bot.setWebHook('');
 //bot.setWebHook('infinite-ravine-7544.herokuapp.com'+':443/bot'+token,  __dirname+'/crt.pem');
 
 bot.getMe().then(function (me) {
