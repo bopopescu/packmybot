@@ -1,12 +1,12 @@
 var TelegramBot = require('node-telegram-bot-api');
  
 var token = '125345847:AAFKJFwaETnTK_pEQXQ2Hqwx8bnLFV5oo2E';
-//Setup polling way
+// Setup polling way
 // var options = {
 //   polling: true
 // };
 
-//Setup webhooks way
+// Setup webhooks way
 var options = {
   webHook: {
     port: 443,
@@ -18,8 +18,8 @@ var options = {
 // var bot = new TelegramBot('token', options);
 
 var bot = new TelegramBot(token, options);
-//bot.setWebHook('');
-bot.setWebHook('78.126.184.139:443'+'/bot'+token,  __dirname+'/crt.pem');
+bot.setWebHook('');
+bot.setWebHook('https://infinite-ravine-7544.herokuapp.com'+':443/bot'+token,  __dirname+'/crt.pem');
 
 bot.getMe().then(function (me) {
   console.log('Hi my name is %s!', me.username);
