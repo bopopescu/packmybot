@@ -19,7 +19,7 @@ var options = {
 
 var bot = new TelegramBot(token, options);
 bot.setWebHook('');
-bot.setWebHook('https://infinite-ravine-7544'+':443/bot'+token,  __dirname+'/YOURPUBLIC.pem');
+bot.setWebHook('https://infinite-ravine-7544.com'+':443/bot'+token,  __dirname+'/YOURPUBLIC.pem');
 
 bot.getMe().then(function (me) {
   console.log('Hi my name is %s!', me.username);
