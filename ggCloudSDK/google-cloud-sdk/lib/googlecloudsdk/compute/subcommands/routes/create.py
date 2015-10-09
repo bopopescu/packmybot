@@ -1,11 +1,11 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for creating routes."""
 
-from googlecloudsdk.core import properties
-
 from googlecloudsdk.calliope import actions
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import properties
+
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import constants
 

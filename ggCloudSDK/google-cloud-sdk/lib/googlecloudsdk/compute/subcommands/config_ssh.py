@@ -8,10 +8,10 @@ import os
 import re
 import textwrap
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import constants
 from googlecloudsdk.compute.lib import lister

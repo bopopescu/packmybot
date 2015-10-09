@@ -2,9 +2,9 @@
 
 """gcloud dns record-sets changes describe command."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import resolvers
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.dns.lib import util
 
 

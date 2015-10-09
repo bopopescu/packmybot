@@ -6,6 +6,7 @@ import json
 import os
 
 import distutils.version as dist_version
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import config
 from googlecloudsdk.core import exceptions as core_exceptions
 from googlecloudsdk.core import log
@@ -14,7 +15,6 @@ from googlecloudsdk.core.updater import update_manager
 from googlecloudsdk.core.util import files as file_utils
 from googlecloudsdk.core.util import platforms
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.container.lib import kubeconfig as kconfig
 
 

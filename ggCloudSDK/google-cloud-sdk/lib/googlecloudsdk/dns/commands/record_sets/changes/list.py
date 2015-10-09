@@ -2,11 +2,10 @@
 
 """gcloud dns record-sets changes list command."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import properties
-
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-from googlecloudsdk.calliope import base
 
 from googlecloudsdk.dns.lib import util
 

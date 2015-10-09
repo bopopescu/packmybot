@@ -7,11 +7,10 @@ import re
 import string
 import sys
 
-from googlecloudsdk.third_party.apis.compute.alpha import compute_alpha_messages
-from googlecloudsdk.third_party.apitools.base.py import exceptions
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.third_party.apis.compute.alpha import compute_alpha_messages
+
 from googlecloudsdk.compute.lib import lister
 from googlecloudsdk.compute.lib import path_simplifier
 from googlecloudsdk.compute.lib import request_helper

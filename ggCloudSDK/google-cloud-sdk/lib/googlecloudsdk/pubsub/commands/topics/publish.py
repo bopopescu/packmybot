@@ -1,10 +1,10 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Cloud Pub/Sub topics publish command."""
-from googlecloudsdk.core.console import console_io as io
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions as sdk_ex
+from googlecloudsdk.core.console import console_io as io
+
 from googlecloudsdk.pubsub.lib import util
 
 MAX_ATTRIBUTES = 100

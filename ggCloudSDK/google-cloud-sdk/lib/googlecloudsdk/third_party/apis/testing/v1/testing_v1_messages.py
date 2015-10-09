@@ -318,7 +318,8 @@ class CancelTestMatrixResponse(_messages.Message):
       VALIDATING: The execution or matrix is being validated.
       PENDING: The execution or matrix is waiting for resources to become
         available.
-      RUNNING: The execution or matrix is currently being processed.
+      RUNNING: The execution is currently being processed.  Can only be set on
+        an execution.
       FINISHED: The execution or matrix has terminated normally.  On a matrix
         this means that the matrix level processing completed normally, but
         individual executions may be in an ERROR state.
@@ -335,7 +336,8 @@ class CancelTestMatrixResponse(_messages.Message):
         provided inputs are incompatible with the requested architecture.
         Example: requested device does not support running the native code in
         the supplied APK  Can only be set on an execution.
-      CANCELLED: The user cancelled the execution or matrix.
+      CANCELLED: The user cancelled the execution.  Can only be set on an
+        execution.
       INVALID: The execution or matrix was not run because the provided inputs
         are not valid.  Examples: input file is not of the expected type, is
         malformed/corrupt, or was flagged as malware
@@ -814,7 +816,8 @@ class TestExecution(_messages.Message):
       VALIDATING: The execution or matrix is being validated.
       PENDING: The execution or matrix is waiting for resources to become
         available.
-      RUNNING: The execution or matrix is currently being processed.
+      RUNNING: The execution is currently being processed.  Can only be set on
+        an execution.
       FINISHED: The execution or matrix has terminated normally.  On a matrix
         this means that the matrix level processing completed normally, but
         individual executions may be in an ERROR state.
@@ -831,7 +834,8 @@ class TestExecution(_messages.Message):
         provided inputs are incompatible with the requested architecture.
         Example: requested device does not support running the native code in
         the supplied APK  Can only be set on an execution.
-      CANCELLED: The user cancelled the execution or matrix.
+      CANCELLED: The user cancelled the execution.  Can only be set on an
+        execution.
       INVALID: The execution or matrix was not run because the provided inputs
         are not valid.  Examples: input file is not of the expected type, is
         malformed/corrupt, or was flagged as malware
@@ -890,7 +894,8 @@ class TestMatrix(_messages.Message):
       VALIDATING: The execution or matrix is being validated.
       PENDING: The execution or matrix is waiting for resources to become
         available.
-      RUNNING: The execution or matrix is currently being processed.
+      RUNNING: The execution is currently being processed.  Can only be set on
+        an execution.
       FINISHED: The execution or matrix has terminated normally.  On a matrix
         this means that the matrix level processing completed normally, but
         individual executions may be in an ERROR state.
@@ -907,7 +912,8 @@ class TestMatrix(_messages.Message):
         provided inputs are incompatible with the requested architecture.
         Example: requested device does not support running the native code in
         the supplied APK  Can only be set on an execution.
-      CANCELLED: The user cancelled the execution or matrix.
+      CANCELLED: The user cancelled the execution.  Can only be set on an
+        execution.
       INVALID: The execution or matrix was not run because the provided inputs
         are not valid.  Examples: input file is not of the expected type, is
         malformed/corrupt, or was flagged as malware

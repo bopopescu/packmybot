@@ -1,9 +1,9 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Cloud Pub/Sub subscription modify command."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.pubsub.lib import util
 
 

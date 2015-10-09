@@ -62,10 +62,10 @@
     locales: [de, en_US, en_GB, es, fr, it, ru, zh]
 """
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 import yaml
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.test.lib import arg_validate
 
 

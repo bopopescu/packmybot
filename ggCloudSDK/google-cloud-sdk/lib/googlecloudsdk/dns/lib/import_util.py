@@ -6,10 +6,9 @@ import re
 
 from dns import rdatatype
 from dns import zone
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.third_party.apis.dns.v1 import dns_v1_messages as messages
 import yaml
-
-from googlecloudsdk.calliope import exceptions
 
 
 def _AddressTranslation(rdata, unused_origin):

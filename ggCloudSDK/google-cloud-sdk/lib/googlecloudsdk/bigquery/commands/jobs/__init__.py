@@ -2,7 +2,6 @@
 
 """The command group for gcloud bigquery jobs.
 """
-
 from googlecloudsdk.calliope import base
 
 

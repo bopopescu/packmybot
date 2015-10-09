@@ -4,10 +4,9 @@
 
 import json
 
-from googlecloudsdk.core import properties
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import properties
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
 
 def GetError(error):

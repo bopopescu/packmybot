@@ -10,11 +10,9 @@ import argparse
 import json
 import time
 
-from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.third_party.apitools.base.py import exceptions
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core.console import console_io
 
 # TODO(user): Use generated list of possible enum values.
 ALLOWED_UTILIZATION_TARGET_TYPES = ['GAUGE', 'DELTA_PER_SECOND',

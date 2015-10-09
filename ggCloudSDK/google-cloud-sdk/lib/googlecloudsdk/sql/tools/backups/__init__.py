@@ -2,7 +2,6 @@
 
 """Provide commands for working with backups of Cloud SQL instances."""
 
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
 

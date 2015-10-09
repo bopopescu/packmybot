@@ -5,7 +5,6 @@
 import logging
 import os
 import re
-import string
 import subprocess
 import sys
 import textwrap
@@ -506,40 +505,37 @@ def PromptChoice(options, default=None, message=None, prompt_string=None):
                        .format(maximum=maximum))
 
 
-def LazyFormat(s, *args, **kwargs):
-  """Format a string, allowing unresolved parameters to remain unresolved.
+def LazyFormat(s, **kwargs):
+  """Converts {key} => value for key, value in kwargs.iteritems().
+
+  After the {key} converstions it converts {{<identifier>}} => {<identifier>}.
 
   Args:
     s: str, The string to format.
-    *args: [str], A list of strings for numerical parameters.
     **kwargs: {str:str}, A dict of strings for named parameters.
 
   Returns:
     str, The lazily-formatted string.
   """
 
-  class SafeDict(dict):
-
-    def __missing__(self, key):
-      return '{' + key + '}'
-
-  # LazyFormat() supports {<identifier>} for help string parameterization. Some
-  # help strings, say those providing JSON example data, may have
-  # {...<not-identifier>...} constructs that vformat() may interpret as a
-  # malformed format spec (ValueError). That can be avoided by converting all {
-  # not followed by <identifier>+} to {{ and all } not preceded by
-  # {<identifier>+ to }}.
-
-  # { => {{ and } => }}.
-  s = re.sub(r'{', '{{', s)
-  s = re.sub(r'}', '}}', s)
-
-  # Undo {{<id>}} => {<id>}.
-  s = re.sub(r'{({\w+})}', r'\1', s)
-  # Undo {{{{<id>}}}} => {{<id>>}}.
-  s = re.sub(r'{({{\w+}})}', r'\1', s)
-
-  return string.Formatter().vformat(s, args, SafeDict(kwargs))
+  for key, value in kwargs.iteritems():
+    fmt = '{' + key + '}'
+    start = 0
+    while True:
+      start = s.find(fmt, start)
+      if start == -1:
+        break
+      if (start and s[start - 1] == '{' and
+          len(fmt) < len(s[start:]) and s[start + len(fmt)] == '}'):
+        # {{key}} => {key}
+        s = s[0:start - 1] + fmt + s[start + len(fmt) + 1:]
+        start += len(fmt)
+      else:
+        # {key} => value
+        s = s[0:start] + value + s[start + len(fmt):]
+        start += len(value)
+  # {{unknown}} => {unknown}
+  return re.sub(r'{({\w+})}', r'\1', s)
 
 
 def PrintExtendedList(items, col_fetchers):

@@ -2,10 +2,9 @@
 
 """The main command group for bigtable."""
 
-from googlecloudsdk.core import properties
-
-from googlecloudsdk.third_party.apis.bigtableclusteradmin import v1
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import properties
+from googlecloudsdk.third_party.apis.bigtableclusteradmin import v1
 
 
 @base.ReleaseTracks(base.ReleaseTrack.ALPHA)

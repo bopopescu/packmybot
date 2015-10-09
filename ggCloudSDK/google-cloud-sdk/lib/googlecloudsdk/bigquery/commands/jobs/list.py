@@ -3,12 +3,12 @@
 """Implementation of gcloud bigquery jobs list.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import properties
 
 from googlecloudsdk.bigquery.lib import bigquery
 from googlecloudsdk.bigquery.lib import job_display
-from googlecloudsdk.calliope import base
 
 
 class JobsList(base.Command):

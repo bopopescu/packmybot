@@ -1,14 +1,14 @@
 # Copyright 2013 Google Inc. All Rights Reserved.
 
 """Updates the settings of a Cloud SQL instance."""
-from googlecloudsdk.core import log
-from googlecloudsdk.core import resource_printer
-from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+from googlecloudsdk.core import resource_printer
+from googlecloudsdk.core.console import console_io
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import instances
 from googlecloudsdk.sql.lib import operations

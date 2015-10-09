@@ -3,6 +3,8 @@
 """Implementation of gcloud bigquery query.
 """
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 
@@ -12,8 +14,6 @@ from googlecloudsdk.bigquery.lib import job_ids
 from googlecloudsdk.bigquery.lib import job_progress
 from googlecloudsdk.bigquery.lib import message_conversions
 from googlecloudsdk.bigquery.lib import schema_and_rows
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
 
 
 class Query(base.Command):

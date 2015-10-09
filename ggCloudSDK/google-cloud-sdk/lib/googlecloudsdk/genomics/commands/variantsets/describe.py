@@ -2,8 +2,8 @@
 
 """Implementation of gcloud genomics variantsets describe.
 """
-
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.genomics import lib
 from googlecloudsdk.genomics.lib import genomics_util
 

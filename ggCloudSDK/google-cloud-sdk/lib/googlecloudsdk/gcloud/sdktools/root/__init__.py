@@ -6,11 +6,9 @@ import argparse
 import os
 import textwrap
 
-from googlecloudsdk.core import properties
-from googlecloudsdk.core import remote_completion
-
 from googlecloudsdk.calliope import actions
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import properties
 
 
 class Gcloud(base.Group):
@@ -22,7 +20,7 @@ class Gcloud(base.Group):
 
   @staticmethod
   def Args(parser):
-    project_arg = parser.add_argument(
+    parser.add_argument(
         '--account',
         metavar='ACCOUNT',
         help='Google Cloud Platform user account to use for invocation.',
@@ -32,14 +30,10 @@ class Gcloud(base.Group):
         '--project',
         metavar='PROJECT_ID',
         dest='project',
+        completion_resource='cloudresourcemanager.projects',
+        list_command_path='beta.projects',
         help='Google Cloud Platform project ID to use for this invocation.',
         action=actions.StoreProperty(properties.VALUES.core.project))
-
-    cli = Gcloud.GetCLIGenerator()
-    collection = 'cloudresourcemanager.projects'
-    project_arg.completer = (remote_completion.RemoteCompletion.
-                             GetCompleterForResource(collection, cli,
-                                                     'alpha.projects'))
 
     project_arg.detailed_help = """\
         The Google Cloud Platform project name to use for this invocation. If

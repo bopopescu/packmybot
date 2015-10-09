@@ -10,6 +10,7 @@ import os
 import sys
 import urlparse
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import cli
 from googlecloudsdk.core import config
 from googlecloudsdk.core import execution_utils
@@ -18,8 +19,6 @@ from googlecloudsdk.core.util import platforms
 from googlecloudsdk.third_party.apis.storage.v1 import storage_v1_client
 from googlecloudsdk.third_party.apis.storage.v1 import storage_v1_messages as messages
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-
-from googlecloudsdk.calliope import exceptions
 
 
 # URI scheme for GCS.

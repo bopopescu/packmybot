@@ -1,6 +1,7 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for creating target instances."""
 from googlecloudsdk.calliope import exceptions as calliope_exceptions
+
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import utils
 

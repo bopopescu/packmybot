@@ -1,6 +1,5 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Commands for reading and manipulating groups."""
-
 from googlecloudsdk.calliope import base
 
 

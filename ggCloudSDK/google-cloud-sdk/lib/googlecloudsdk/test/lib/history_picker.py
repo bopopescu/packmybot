@@ -2,10 +2,10 @@
 
 """A library to find a Tool Results History to publish results to."""
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.test.lib import util
 
 

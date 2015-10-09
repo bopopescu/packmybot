@@ -3,10 +3,10 @@
 """Implementation of gcloud dataflow metrics tail command.
 """
 
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions as calliope_exceptions
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.dataflow import commands
 from googlecloudsdk.dataflow.lib import dataflow_util
 from googlecloudsdk.dataflow.lib import job_utils

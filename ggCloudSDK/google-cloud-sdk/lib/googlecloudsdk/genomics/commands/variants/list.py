@@ -3,11 +3,11 @@
 """Implementation of gcloud genomics variants list.
 """
 
+from googlecloudsdk.calliope import arg_parsers
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
-from googlecloudsdk.calliope import arg_parsers
-from googlecloudsdk.calliope import base
 from googlecloudsdk.genomics import lib
 from googlecloudsdk.genomics.lib import genomics_util
 

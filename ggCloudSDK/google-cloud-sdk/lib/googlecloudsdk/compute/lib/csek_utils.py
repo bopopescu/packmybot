@@ -6,9 +6,8 @@ import base64
 import json
 import re
 
-from googlecloudsdk.core import exceptions as core_exceptions
-
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import exceptions as core_exceptions
 
 
 EXPECTED_RECORD_KEY_KEYS = set(['uri', 'key', 'key-type'])

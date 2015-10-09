@@ -38,7 +38,11 @@ class Error(core_exceptions.Error):
 
 
 class UnknownFormatError(Error):
-  """UnknownFormatError is thrown for unknown format names."""
+  """UnknownFormatError for unknown format names."""
+
+
+class ProjectionRequiredError(Error):
+  """ProjectionRequiredError for format with no projection that needs one."""
 
 
 class DefaultPrinter(yaml_printer.YamlPrinter):
@@ -148,8 +152,16 @@ def Print(resources, print_format, out=None, defaults=None, single=False):
     defaults: Optional resource_projection_spec.ProjectionSpec defaults.
     single: If True then resources is a single item and not a list.
       For example, use this to print a single object as JSON.
+
+  Raises:
+    ProjectionRequiredError: If a format requires a projection and one is not
+      provided.
   """
   printer = Printer(print_format, out=out, defaults=defaults)
+  if printer.ByColumns() and not printer.column_attributes.Columns():
+    raise ProjectionRequiredError(
+        'Format [{0}] requires a non-empty projection.'.format(
+            printer.column_attributes.Name()))
 
   # Resources may be a generator and since generators can raise exceptions, we
   # have to call Finish() in the finally block to make sure that the resources

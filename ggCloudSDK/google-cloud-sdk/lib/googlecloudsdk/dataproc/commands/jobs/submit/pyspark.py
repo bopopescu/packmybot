@@ -4,9 +4,9 @@
 
 import argparse
 
+from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
-from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.dataproc.lib import base_classes
 
 

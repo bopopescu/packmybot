@@ -2,11 +2,10 @@
 
 """Command to describe named configuration."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core import named_configs
 from googlecloudsdk.core import properties
-
-from googlecloudsdk.calliope import base
 
 
 class Describe(base.Command):

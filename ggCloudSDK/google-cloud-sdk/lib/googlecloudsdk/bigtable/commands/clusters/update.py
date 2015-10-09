@@ -2,10 +2,10 @@
 
 """bigtable clusters update command."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 
 from googlecloudsdk.bigtable.lib import util
-from googlecloudsdk.calliope import base
 
 
 class UpdateCluster(base.Command):

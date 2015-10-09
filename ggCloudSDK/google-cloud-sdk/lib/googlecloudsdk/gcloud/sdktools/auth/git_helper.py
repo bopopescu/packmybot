@@ -20,14 +20,13 @@ import subprocess
 import sys
 import textwrap
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as c_exc
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.credentials import store as c_store
 from googlecloudsdk.core.util import platforms
 from oauth2client import client
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as c_exc
 
 
 _KEYVAL_RE = re.compile(r'(.+)=(.+)')

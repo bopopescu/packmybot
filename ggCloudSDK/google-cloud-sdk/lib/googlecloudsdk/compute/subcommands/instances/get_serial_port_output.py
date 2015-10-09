@@ -1,9 +1,9 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for reading the serial port output of an instance."""
 
+from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import request_helper
 from googlecloudsdk.compute.lib import utils

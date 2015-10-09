@@ -6,13 +6,12 @@ Sets docker up to authenticate with the Google Container Registry,
 and passes all flags after -- to the docker CLI.
 """
 
-from googlecloudsdk.core import log
-from googlecloudsdk.core.docker import constants
-from googlecloudsdk.core.docker import docker
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+from googlecloudsdk.core.docker import constants
+from googlecloudsdk.core.docker import docker
 
 
 # By default, we'll set up authentication for these registries.

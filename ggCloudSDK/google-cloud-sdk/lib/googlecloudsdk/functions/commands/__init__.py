@@ -4,10 +4,9 @@
 
 import argparse
 
-from googlecloudsdk.core import properties
-
-from googlecloudsdk.third_party.apis.cloudfunctions import v1beta1
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import properties
+from googlecloudsdk.third_party.apis.cloudfunctions import v1beta1
 
 
 @base.ReleaseTracks(base.ReleaseTrack.ALPHA)

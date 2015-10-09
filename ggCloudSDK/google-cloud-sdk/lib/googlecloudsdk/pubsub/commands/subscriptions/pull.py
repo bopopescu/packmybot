@@ -1,8 +1,8 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Cloud Pub/Sub subscription pull command."""
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core.console import console_io as io
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.pubsub.lib import util
 
 

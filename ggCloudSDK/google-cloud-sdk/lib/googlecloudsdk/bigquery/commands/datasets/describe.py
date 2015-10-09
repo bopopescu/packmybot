@@ -3,11 +3,11 @@
 """Implementation of gcloud bigquery datasets describe.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 
 from googlecloudsdk.bigquery import commands
 from googlecloudsdk.bigquery.lib import bigquery_client_helper
-from googlecloudsdk.calliope import base
 
 
 class DatasetsDescribe(base.Command):

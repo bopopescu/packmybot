@@ -3,6 +3,7 @@
 """Api client adapter containers commands."""
 import time
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
@@ -12,7 +13,6 @@ from googlecloudsdk.core.console import console_io
 from googlecloudsdk.third_party.apis.container import v1 as container_v1
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import constants
 from googlecloudsdk.container.lib import util
 

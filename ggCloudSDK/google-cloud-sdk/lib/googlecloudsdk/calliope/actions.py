@@ -8,13 +8,12 @@ import cStringIO
 import os
 import sys
 
+from googlecloudsdk.calliope import markdown
+from googlecloudsdk.calliope import usage_text
 from googlecloudsdk.core import metrics
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.console import console_io
 from googlecloudsdk.core.document_renderers import render_document
-
-from googlecloudsdk.calliope import markdown
-from googlecloudsdk.calliope import usage_text
 
 
 def FunctionExitAction(func):
@@ -277,6 +276,30 @@ positional arguments:
 
 """
 
+# pylint:disable=pointless-string-statement
+"""
+$ gcloud auth activate-service-account -h
+usage: gcloud auth activate-service-account
+                         --key-file=KEY_FILE [optional flags] ACCOUNT
+
+Get credentials for a service account, using a .p12 file for the private key. If
+--project is set, set the default project.
+
+required flags:
+  --key-file KEY_FILE    Path to the service accounts private key.
+
+optional flags:
+  -h, --help             Print this help message and exit.
+  --password-file PASSWORD_FILE
+                         Path to a file containing the password for the service
+                         account private key.
+  --prompt-for-password  Prompt for the password for the service account private
+                         key.
+
+positional arguments:
+  ACCOUNT                The email for the service account.
+
+"""
 
 
 def ShortHelpAction(command):
@@ -307,6 +330,9 @@ def RenderDocumentAction(command, default_style=None):
 
   class Action(argparse.Action):
 
+    # TODO(cherba): remove this.
+    # A signal to the lint checker to ignore nargs checks for this action.
+    _NOLINT = True
 
     def __init__(self, **kwargs):
       if default_style:

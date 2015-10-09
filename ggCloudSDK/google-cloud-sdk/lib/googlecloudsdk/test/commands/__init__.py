@@ -4,15 +4,15 @@
 
 import argparse
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
 from googlecloudsdk.core import resources
-
 from googlecloudsdk.third_party.apis.testing import v1 as testing_v1
 from googlecloudsdk.third_party.apis.toolresults import v1beta3 as toolresults_v1beta3
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
+
 from googlecloudsdk.test.lib import util
 
 

@@ -84,17 +84,26 @@ def _GetToolEnv(env=None):
   return env
 
 
-def ArgsForPythonTool(executable_path, *args):
+def ArgsForPythonTool(executable_path, *args, **kwargs):
   """Constructs an argument list for calling the Python interpreter.
 
   Args:
     executable_path: str, The full path to the Python main file.
     *args: args for the command
+    **kwargs: python: str, path to Python executable to use (defaults to
+      automatically detected)
 
   Returns:
     An argument list to execute the Python interpreter
+
+  Raises:
+    TypeError: if an unexpected keyword argument is passed
   """
-  python_executable = GetPythonExecutable()
+  unexpected_arguments = set(kwargs) - set(['python'])
+  if unexpected_arguments:
+    raise TypeError(("ArgsForPythonTool() got unexpected keyword arguments "
+                     "'[{0}]'").format(', '.join(unexpected_arguments)))
+  python_executable = kwargs.get('python') or GetPythonExecutable()
   python_args_str = os.environ.get('CLOUDSDK_PYTHON_ARGS', '')
   python_args = python_args_str.split()
   return _GetToolArgs(

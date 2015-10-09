@@ -7,9 +7,8 @@ bad filename, etc. Gcloud command surfaces are free to use exit codes 10..20.
 Gaps in exit_code numbering are left in case future expansion is needed.
 """
 
-from googlecloudsdk.core import log
-
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
 
 
 ROLLUP_SUCCESS = 0       # Every test case within an execution passed.

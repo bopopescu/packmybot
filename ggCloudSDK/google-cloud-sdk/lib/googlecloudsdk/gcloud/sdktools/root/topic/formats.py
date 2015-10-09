@@ -4,9 +4,8 @@
 
 import textwrap
 
-from googlecloudsdk.core.resource import resource_topics
-
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core.resource import resource_topics
 
 
 class Formats(base.Command):

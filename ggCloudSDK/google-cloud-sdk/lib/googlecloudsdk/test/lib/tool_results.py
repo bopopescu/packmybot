@@ -7,10 +7,9 @@ import time
 import urllib
 import urlparse
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.calliope import exceptions
 
 
 STATUS_INTERVAL_SECS = 3

@@ -2,10 +2,10 @@
 """Cloud Pub/Sub topics create command."""
 import json
 
-from googlecloudsdk.core.console import console_io as io
-
-from googlecloudsdk.third_party.apitools.base.py import exceptions as api_ex
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core.console import console_io as io
+from googlecloudsdk.third_party.apitools.base.py import exceptions as api_ex
+
 from googlecloudsdk.pubsub.lib import util
 
 

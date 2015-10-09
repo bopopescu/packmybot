@@ -233,7 +233,7 @@ def main():
     log.err.Print('Traceback (most recent call last):')
     unused_ex_type, unused_ex, tb = sys.exc_info()
     traceback.print_tb(tb, file=log.err)
-    log.err.Print('{0}: {1}'.format(type(e).__name__, e))
+    log.err.Print(type(e).__name__ + ': ' + _cli.SafeExceptionToString(e))
 
     log.err.Print('\nIf you would like to report this issue, please run the '
                   'following command:')

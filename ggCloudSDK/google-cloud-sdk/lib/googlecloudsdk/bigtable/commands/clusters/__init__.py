@@ -2,9 +2,8 @@
 
 """The main command group for bigtable."""
 
-from googlecloudsdk.core import properties
-
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import properties
 
 
 class Clusters(base.Group):

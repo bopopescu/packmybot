@@ -4,11 +4,11 @@
 import json
 import sys
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import resource_printer
 from googlecloudsdk.core.console import console_io
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import time_utils
 
 

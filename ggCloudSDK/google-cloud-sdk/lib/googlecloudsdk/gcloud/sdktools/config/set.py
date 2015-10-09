@@ -2,13 +2,11 @@
 
 """Command to set properties."""
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as c_exc
 from googlecloudsdk.core import log
 from googlecloudsdk.core import named_configs
 from googlecloudsdk.core import properties
-from googlecloudsdk.core import remote_completion
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as c_exc
 
 
 @c_exc.RaiseToolExceptionInsteadOf(properties.Error)
@@ -31,14 +29,11 @@ def CommonArgs(cmd_class, parser):
       help='The property to be set. Note that SECTION/ is optional while '
       'referring to properties in the core section.')
   property_arg.completer = cmd_class.group_class.PropertiesCompleter
-  value_arg = parser.add_argument(
+  parser.add_argument(
       'value',
+      completion_resource='cloudresourcemanager.projects',
+      list_command_path='beta.projects',
       help='The value to be set.')
-  cli = cmd_class.GetCLIGenerator()
-  collection = 'cloudresourcemanager.projects'
-  value_arg.completer = (remote_completion.RemoteCompletion.
-                         GetCompleterForResource(collection, cli,
-                                                 'alpha.projects'))
 
 DETAILED_HELP = {
     'DESCRIPTION': '{description}',

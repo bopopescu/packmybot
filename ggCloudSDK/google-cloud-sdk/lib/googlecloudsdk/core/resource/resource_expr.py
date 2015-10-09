@@ -143,15 +143,30 @@ class Backend(object):
     """
 
     def __init__(self, value):
+      """Initializes an operand from value.
+
+      Sets self.string_value to the string representation of value and
+      self.numeric_value to the numeric value of value or None if it is not a
+      number.
+
+      Args:
+        value: An int, float or string constant. If it is a string then
+          self.numeric_value will be set to the int() or float() conversion of
+          the string, or None if the string does not represent a number.
+      """
       super(Backend.ExprOperand, self).__init__()
-      self.string_value = value
-      try:
-        self.numeric_value = int(value)
-      except ValueError:
+      if isinstance(value, basestring):
+        self.string_value = value
         try:
-          self.numeric_value = float(value)
+          self.numeric_value = int(value)
         except ValueError:
-          self.numeric_value = None
+          try:
+            self.numeric_value = float(value)
+          except ValueError:
+            self.numeric_value = None
+      else:
+        self.string_value = str(value)
+        self.numeric_value = value
 
   class ExprOperator(Expr):
     """Base term (<key operator operand>) node.
@@ -191,6 +206,8 @@ class Backend(object):
                    else self._transform(*self._args))
         except (AttributeError, TypeError, ValueError):
           value = None
+      # Each try/except attempts a different combination of value/operand
+      # numeric and string conversions
       if self._operand.numeric_value is not None:
         try:
           return self.Apply(float(value), self._operand.numeric_value)
@@ -198,7 +215,14 @@ class Backend(object):
           pass
       try:
         return self.Apply(value, self._operand.string_value)
-      except (AttributeError, TypeError, ValueError):
+      except (AttributeError, ValueError):
+        return False
+      except TypeError:
+        if isinstance(value, basestring):
+          return False
+      try:
+        return self.Apply(str(value), self._operand.string_value)
+      except TypeError:
         return False
 
   class ExprLT(ExprOperator):
@@ -431,6 +455,9 @@ class Backend(object):
       self.pattern = re.compile(self._operand.string_value)
 
     def Apply(self, value, unused_operand):
+      if not isinstance(value, basestring):
+        # This exception is caught by Evaluate().
+        raise TypeError('RE match subject value must be a string.')
       return self.pattern.search(value) is not None
 
   class ExprNotRE(ExprOperator):
@@ -441,4 +468,7 @@ class Backend(object):
       self.pattern = re.compile(self._operand.string_value)
 
     def Apply(self, value, unused_operand):
+      if not isinstance(value, basestring):
+        # This exception is caught by Evaluate().
+        raise TypeError('RE match subject value must be a string.')
       return self.pattern.search(value) is None

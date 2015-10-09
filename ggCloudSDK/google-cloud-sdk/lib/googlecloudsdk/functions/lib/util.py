@@ -8,11 +8,10 @@ import os
 import re
 import sys
 
-from googlecloudsdk.core import properties
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions as base_exceptions
+from googlecloudsdk.core import properties
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
 _ENTRY_POINT_NAME_RE = re.compile(r'^[_a-zA-Z0-9]{1,128}$')
 _FUNCTION_NAME_RE = re.compile(r'^[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?$')

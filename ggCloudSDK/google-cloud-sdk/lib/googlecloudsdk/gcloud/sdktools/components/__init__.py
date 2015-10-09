@@ -6,13 +6,12 @@ import argparse
 import os
 import textwrap
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import config
 from googlecloudsdk.core import log
 from googlecloudsdk.core.updater import update_manager
 from googlecloudsdk.core.util import platforms
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
 
 
 @base.ReleaseTracks(base.ReleaseTrack.GA)

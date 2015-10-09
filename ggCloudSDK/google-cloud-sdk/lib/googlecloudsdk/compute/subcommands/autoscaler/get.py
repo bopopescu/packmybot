@@ -3,10 +3,10 @@
 
 # TODO(user): Rename get command to describe to be consistent with compute.
 
-from googlecloudsdk.core import log
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import exceptions as calliope_exceptions
+from googlecloudsdk.core import log
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.compute.lib import autoscaler_utils as util
 from googlecloudsdk.compute.lib import base_classes
 

@@ -9,6 +9,10 @@ import sys
 import uuid
 
 import argcomplete
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import backend
+from googlecloudsdk.calliope import base as calliope_base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import config
 from googlecloudsdk.core import exceptions as core_exceptions
 from googlecloudsdk.core import log
@@ -18,11 +22,6 @@ from googlecloudsdk.core import properties
 from googlecloudsdk.core.resource import resource_printer
 from googlecloudsdk.core.util import files
 from googlecloudsdk.core.util import pkg_resources
-
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import backend
-from googlecloudsdk.calliope import base as calliope_base
-from googlecloudsdk.calliope import exceptions
 
 
 # There are some error classes that we create and want to be handled as
@@ -431,7 +430,7 @@ class CLILoader(object):
     # This should be a pure Boolean flag, but the alternate true/false explicit
     # value form is preserved for backwards compatibility. This flag and
     # is the only Cloud SDK outlier.
-    # TODO(user): b/24095744: Add true/false deprecation message.
+    # TODO(gsfowler): b/24095744: Add true/false deprecation message.
     top_element.ai.add_argument(
         '--user-output-enabled',
         metavar=' ',  # Help text will look like the flag does not have a value.
@@ -603,7 +602,8 @@ class CLI(object):
         self._HandleKnownError(command_path_string, exc, print_error=True)
       else:
         # Make sure any uncaught exceptions still make it into the log file.
-        log.file_only_logger.debug(str(exc), exc_info=sys.exc_info())
+        exc_printable = self.SafeExceptionToString(exc)
+        log.file_only_logger.debug(exc_printable, exc_info=sys.exc_info())
         metrics.Error(command_path_string, exc)
         raise
     finally:
@@ -613,6 +613,23 @@ class CLI(object):
       # values.
       log.SetUserOutputEnabled(None)
       log.SetVerbosity(None)
+
+  def SafeExceptionToString(self, exc):
+    """Equivalent to str(exc), but handling cases with unprintable unicode.
+
+    Args:
+      exc: an exception to be printed
+
+    Returns:
+      A string form of the exception stripped of unicode BOM if str(exc) fails.
+    """
+    try:
+      return str(exc)
+    except UnicodeEncodeError:
+      # Handle errors that have unprintable unicode BOM markers (eg html).
+      # See http://bugs.python.org/issue2517.
+      # See http://stackoverflow.com/questions/3715865/unicodeencodeerror-ascii.
+      return unicode(exc).encode('ascii', 'ignore')
 
   def _HandleKnownError(self, command_path_string, exc, print_error=True):
     """For exceptions we know about, just print the error and exit.

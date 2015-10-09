@@ -5,10 +5,10 @@
 Lists all instance operations that have been performed on the given
 Cloud SQL instance.
 """
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import validate
 

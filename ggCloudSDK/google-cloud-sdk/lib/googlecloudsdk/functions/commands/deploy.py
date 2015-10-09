@@ -7,12 +7,12 @@ import os
 import random
 import string
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.util import archive
 from googlecloudsdk.core.util import files as file_utils
-
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-from googlecloudsdk.calliope import base
+
 from googlecloudsdk.functions.lib import cloud_storage as storage
 from googlecloudsdk.functions.lib import exceptions
 from googlecloudsdk.functions.lib import operations

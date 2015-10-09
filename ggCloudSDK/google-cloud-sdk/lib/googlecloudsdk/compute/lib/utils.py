@@ -7,6 +7,8 @@ import cStringIO
 import re
 import urlparse
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import exceptions as calliope_exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
@@ -18,8 +20,6 @@ from googlecloudsdk.third_party.apis.compute.alpha import compute_alpha_client
 from googlecloudsdk.third_party.apis.compute.beta import compute_beta_client
 from googlecloudsdk.third_party.apis.compute.v1 import compute_v1_client
 
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import exceptions as calliope_exceptions
 from googlecloudsdk.compute.lib import constants
 
 

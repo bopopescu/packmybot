@@ -2,10 +2,10 @@
 """Command for updating a backend in a backend service."""
 import copy
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.third_party.apis.compute.v1 import compute_v1_messages
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import backend_services_utils
 from googlecloudsdk.compute.lib import base_classes
 
@@ -133,6 +133,13 @@ UpdateBackend.detailed_help = {
         behaves. Example changes that can be made include changing the
         load balancing policy and ``draining'' a backend by setting
         its capacity scaler to zero.
+
+        Backends are named by their associated instances groups, and one
+        of the ``--group'' or ``--instance-group'' flags is required to
+        identify the backend that you are modifying.  You cannot "change"
+        the instance group associated with a backend, but you can accomplish
+        something similar with ``backend-services remove-backend'' and
+        ``backend-services add-backend''.
 
         'gcloud compute backend-services edit' can also be used to
         update a backend if the use of a text editor is desired.

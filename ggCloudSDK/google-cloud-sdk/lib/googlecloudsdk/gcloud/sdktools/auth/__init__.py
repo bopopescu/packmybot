@@ -3,7 +3,6 @@
 """Auth for the Google Cloud SDK.
 """
 
-
 from googlecloudsdk.calliope import base
 
 

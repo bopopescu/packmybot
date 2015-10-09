@@ -5,15 +5,14 @@
 import argparse
 import urlparse
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
 from googlecloudsdk.core import resources
 from googlecloudsdk.third_party.apis.dns.v1 import dns_v1_client
 from googlecloudsdk.third_party.apis.dns.v1 import dns_v1_messages
-
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import base
 
 
 @base.ReleaseTracks(base.ReleaseTrack.GA)

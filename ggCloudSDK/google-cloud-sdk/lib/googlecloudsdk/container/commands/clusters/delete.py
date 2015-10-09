@@ -3,12 +3,12 @@
 """Delete cluster command."""
 import argparse
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.console import console_io
-
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-from googlecloudsdk.calliope import base
+
 from googlecloudsdk.container.lib import util
 
 

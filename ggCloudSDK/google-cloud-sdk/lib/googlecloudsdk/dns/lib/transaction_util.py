@@ -5,11 +5,11 @@
 import os
 
 from dns import rdatatype
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import resource_printer
 from googlecloudsdk.third_party.apis.dns.v1 import dns_v1_messages as messages
 import yaml
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.dns.lib import import_util
 from googlecloudsdk.dns.lib import util
 

@@ -4,10 +4,10 @@
 
 import types
 
-from googlecloudsdk.core import log
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+
 from googlecloudsdk.test.lib import arg_file
 from googlecloudsdk.test.lib import arg_validate
 

@@ -1,6 +1,5 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Command for deleting instances managed by managed instance group."""
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import utils

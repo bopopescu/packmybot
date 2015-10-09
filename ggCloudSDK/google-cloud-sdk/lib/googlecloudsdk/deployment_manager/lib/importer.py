@@ -3,8 +3,8 @@
 """Library that handles importing files for Deployment Manager."""
 
 import os
-import yaml
 from googlecloudsdk.calliope import exceptions
+import yaml
 from googlecloudsdk.deployment_manager.lib.exceptions import DeploymentManagerError
 
 IMPORTS = 'imports'

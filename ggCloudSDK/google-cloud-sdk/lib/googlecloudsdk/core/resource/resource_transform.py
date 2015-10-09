@@ -212,12 +212,9 @@ def TransformFirstOf(r, *args):
     x.BarFoo, and x.BAR_FOO in order for the first non-empty value.
   """
   for name in args:
-    try:
-      v = r.get(name, None)
-      if v is not None:
-        return v
-    except AttributeError:
-      pass
+    v = resource_property.Get(r, [name], None)
+    if v is not None:
+      return v
   return ''
 
 

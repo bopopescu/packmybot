@@ -2,6 +2,7 @@
 """Command for attaching a disk to an instance."""
 
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import csek_utils
 from googlecloudsdk.compute.lib import utils

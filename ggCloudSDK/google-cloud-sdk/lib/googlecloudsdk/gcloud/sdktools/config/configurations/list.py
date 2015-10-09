@@ -2,10 +2,9 @@
 
 """Command to list named configuration."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import named_configs
 from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.calliope import base
 
 
 class List(base.Command):

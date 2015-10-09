@@ -8,14 +8,14 @@ import random
 import string
 import types
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import config
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.console import console_io
 from googlecloudsdk.core.resource import resource_printer
-
 from googlecloudsdk.third_party.apis.storage import v1 as storage_v1
-from googlecloudsdk.calliope import base
+
 from googlecloudsdk.test.lib import arg_util
 from googlecloudsdk.test.lib import ctrl_c_handler
 from googlecloudsdk.test.lib import exit_code

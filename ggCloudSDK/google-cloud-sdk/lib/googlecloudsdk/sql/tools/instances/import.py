@@ -6,9 +6,9 @@ Imports data into a Cloud SQL instance from a MySQL dump file in
 Google Cloud Storage.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import operations
 from googlecloudsdk.sql.lib import validate

@@ -3,11 +3,11 @@
 
 import abc
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.console import console_io
 from googlecloudsdk.core.credentials import gce as c_gce
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import lister
 from googlecloudsdk.compute.lib import utils
 

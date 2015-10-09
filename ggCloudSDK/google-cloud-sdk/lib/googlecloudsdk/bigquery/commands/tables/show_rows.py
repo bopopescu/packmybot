@@ -3,10 +3,10 @@
 """Implementation of gcloud bigquery tables show-rows.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.bigquery import commands
 from googlecloudsdk.bigquery.lib import bigquery
 from googlecloudsdk.bigquery.lib import schema_and_rows
-from googlecloudsdk.calliope import base
 
 
 class TablesShowRows(base.Command):

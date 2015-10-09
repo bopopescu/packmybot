@@ -3,13 +3,13 @@
 """Implementation of gcloud bigquery tables describe.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
 from googlecloudsdk.bigquery import commands
 from googlecloudsdk.bigquery.lib import bigquery
 from googlecloudsdk.bigquery.lib import message_conversions
-from googlecloudsdk.calliope import base
 
 
 class TablesDescribe(base.Command):

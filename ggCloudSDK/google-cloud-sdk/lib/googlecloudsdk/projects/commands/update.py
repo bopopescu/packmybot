@@ -4,10 +4,10 @@
 
 import textwrap
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.projects.lib import util
 
 

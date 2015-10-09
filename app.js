@@ -10,8 +10,8 @@ var token = '125345847:AAFKJFwaETnTK_pEQXQ2Hqwx8bnLFV5oo2E';
 var options = {
   webHook: {
     port: 443,
-    key: __dirname+'/key.pem',
-    cert: __dirname+'/crt.pem'
+    key: __dirname+'/YOURPRIVATE.key',
+    cert: __dirname+'/YOURPUBLIC.pem'
   }
 };
 
@@ -19,7 +19,7 @@ var options = {
 
 var bot = new TelegramBot(token, options);
 bot.setWebHook('');
-bot.setWebHook('https://infinite-ravine-7544.herokuapp.com'+':443/bot'+token,  __dirname+'/crt.pem');
+bot.setWebHook('https://infinite-ravine-7544'+':443/bot'+token,  __dirname+'/YOURPUBLIC.pem');
 
 bot.getMe().then(function (me) {
   console.log('Hi my name is %s!', me.username);

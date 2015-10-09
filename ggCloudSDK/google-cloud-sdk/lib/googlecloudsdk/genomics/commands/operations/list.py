@@ -2,9 +2,9 @@
 """Implementation of the gcloud genomics operations list command.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.genomics import lib
 from googlecloudsdk.genomics.lib import genomics_util
 

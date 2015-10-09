@@ -2,12 +2,11 @@
 
 """The command to list installed/available gcloud components."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core.console import console_io
 from googlecloudsdk.core.updater import snapshots
 from googlecloudsdk.core.updater import update_manager
-
-from googlecloudsdk.calliope import base
 
 
 class List(base.Command):

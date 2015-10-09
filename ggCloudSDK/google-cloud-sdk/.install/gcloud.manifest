@@ -730,7 +730,6 @@ lib/googlecloudsdk/source/commands/repos/list.py
 lib/googlecloudsdk/source/lib/
 lib/googlecloudsdk/source/lib/__init__.py
 lib/googlecloudsdk/source/lib/git.py
-lib/googlecloudsdk/source/lib/source.py
 lib/googlecloudsdk/bigquery/
 lib/googlecloudsdk/bigquery/__init__.py
 lib/googlecloudsdk/bigquery/commands/

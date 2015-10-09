@@ -4,11 +4,11 @@
 
 import os
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.third_party.apis.storage import v1 as storage_v1
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.test.lib import util
 
 

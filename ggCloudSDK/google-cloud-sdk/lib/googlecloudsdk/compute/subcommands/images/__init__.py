@@ -1,6 +1,5 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Commands for reading and manipulating images."""
-
 from googlecloudsdk.calliope import base
 
 

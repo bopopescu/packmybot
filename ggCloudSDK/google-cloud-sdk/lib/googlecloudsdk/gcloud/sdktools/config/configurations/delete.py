@@ -2,12 +2,11 @@
 
 """Command to delete named configuration."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import named_configs
 from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.calliope import base
 
 
 class DeleteCanceledException(exceptions.Error):

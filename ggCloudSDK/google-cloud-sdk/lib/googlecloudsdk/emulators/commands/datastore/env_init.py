@@ -2,6 +2,7 @@
 """gcloud datastore emulator start command."""
 
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.emulators.lib import util
 
 

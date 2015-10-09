@@ -1,6 +1,5 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for updating firewall rules."""
-
 from googlecloudsdk.calliope import exceptions as calliope_exceptions
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import firewalls_utils

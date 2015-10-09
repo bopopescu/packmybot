@@ -2,7 +2,6 @@
 
 """The command group for gcloud bigquery datasets.
 """
-
 from googlecloudsdk.calliope import base
 
 

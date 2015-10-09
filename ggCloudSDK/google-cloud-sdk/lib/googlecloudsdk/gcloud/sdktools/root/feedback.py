@@ -17,12 +17,11 @@ import re
 import textwrap
 import urllib
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core.console import console_attr_os
 from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.gcloud.lib import info_holder
+from googlecloudsdk.shared.sdktool import info_holder
 
 
 STACKOVERFLOW_URL = 'http://stackoverflow.com/questions/tagged/gcloud'

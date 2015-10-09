@@ -35,7 +35,7 @@ class ResourcePrinter(object):
   Attributes:
     _attributes: Optional printer attribute dict indexed by attribute name.
     _by_columns: True if AddRecord() expects a list of columns.
-    _column_attributes: Projection ColumnAttributes().
+    column_attributes: Projection ColumnAttributes().
     _heading: The list of column heading label strings.
     _name: Format name.
     _out: Output stream.
@@ -60,7 +60,7 @@ class ResourcePrinter(object):
     """
     self._attributes = attributes or {}
     self._by_columns = by_columns
-    self._column_attributes = column_attributes
+    self.column_attributes = column_attributes
     self._heading = None
     self._name = name
     self._out = out or log.out

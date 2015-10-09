@@ -1,10 +1,9 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """General IAM utilities used by the Cloud SDK."""
 
+from googlecloudsdk.core import exceptions
 from googlecloudsdk.third_party.apitools.base.py import encoding
 from protorpc.messages import DecodeError
-
-from googlecloudsdk.calliope import exceptions
 
 
 def AddArgsForAddIamPolicyBinding(parser):
@@ -90,7 +89,7 @@ def ParseJsonPolicyFile(policy_file_path, policy_message_type):
   except EnvironmentError:
     # EnvironmnetError is parent of IOError, OSError and WindowsError.
     # Raised when file does not exist or can't be opened/read.
-    raise exceptions.BadFileException(
+    raise exceptions.Error(
         'Unable to read policy file {0}'.format(policy_file_path))
 
   try:
@@ -98,7 +97,7 @@ def ParseJsonPolicyFile(policy_file_path, policy_message_type):
   except (ValueError, DecodeError) as e:
     # ValueError is raised when JSON is badly formatted
     # DecodeError is raised when etag is badly formatted (not proper Base64)
-    raise exceptions.BadFileException((
-        'Policy file {0} is not a properly formatted JSON policy file. '
-        '{1}').format(policy_file_path, str(e)))
+    raise exceptions.Error(
+        'Policy file {0} is not a properly formatted JSON policy file. {1}'
+        .format(policy_file_path, str(e)))
   return policy

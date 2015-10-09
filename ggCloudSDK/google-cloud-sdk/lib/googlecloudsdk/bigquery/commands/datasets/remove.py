@@ -3,6 +3,8 @@
 """Implementation of gcloud bigquery datasets remove.
 """
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core.console import console_io
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
@@ -11,8 +13,6 @@ from googlecloudsdk.bigquery import commands
 from googlecloudsdk.bigquery.lib import bigquery
 from googlecloudsdk.bigquery.lib import bigquery_client_helper
 from googlecloudsdk.bigquery.lib import message_conversions
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
 
 
 class DatasetsRemove(base.Command):

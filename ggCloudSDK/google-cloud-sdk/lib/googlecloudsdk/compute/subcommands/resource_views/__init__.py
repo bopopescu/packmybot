@@ -2,13 +2,12 @@
 
 """The super-group for the Resource Views CLI."""
 
-from googlecloudsdk.core import log
-from googlecloudsdk.core import properties
-from googlecloudsdk.core.credentials import store
-
 from googlecloudsdk.calliope import actions
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+from googlecloudsdk.core import properties
+from googlecloudsdk.core.credentials import store
 
 
 @base.ReleaseTracks(base.ReleaseTrack.ALPHA)

@@ -352,7 +352,7 @@ class Datetime(object):
       return None
     accepted_formats = ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M:%S.%f',
                         '%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S.%fZ')
-    # TODO(user): Add timezone support.
+    # TODO(filipjs): Add timezone support.
     for date_format in accepted_formats:
       try:
         return datetime.datetime.strptime(s, date_format)
@@ -473,7 +473,7 @@ class ArgList(ArgType):
             'information on escaping list or dictionary flag values.')
     arg_list = _TokenizeQuotedList(arg_value, delim=delim)
 
-    # TODO(user): These exceptions won't present well to the user.
+    # TODO(jasmuth): These exceptions won't present well to the user.
     if len(arg_list) < self.min_length:
       raise ArgumentTypeError('not enough args')
     if self.max_length is not None and len(arg_list) > self.max_length:
@@ -534,7 +534,7 @@ class ArgDict(ArgList):
     arg_dict = {}
     for arg in arg_list:
       split_arg = arg.split('=', 1)  # only use the first =
-      # TODO(user): These exceptions won't present well to the user.
+      # TODO(jasmuth): These exceptions won't present well to the user.
       if len(split_arg) != 2:
         raise ArgumentTypeError(
             ('Bad syntax for dict arg: {0}. Please see `gcloud topic escaping` '
@@ -586,6 +586,8 @@ def FloatingListValuesCatcher(
     and we'll remove it eventually.
     """
 
+    # TODO(cherba): remove this.
+    _NOLINT = True
 
     def __init__(self, *args, **kwargs):
       if 'nargs' in kwargs:
@@ -640,7 +642,7 @@ def FloatingListValuesCatcher(
                 values=','.join(suggestions),
                 extras=', '.join(extras))
 
-        # TODO(user): stop warning when we're ready
+        # TODO(jasmuth): stop warning when we're ready
         warn_only = True
 
         if not warn_only:

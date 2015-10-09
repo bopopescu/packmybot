@@ -1,12 +1,12 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for describing operations."""
 
-from googlecloudsdk.core import properties
-from googlecloudsdk.core import resources as resource_exceptions
-
 from googlecloudsdk.calliope import actions
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import properties
+from googlecloudsdk.core import resources as resource_exceptions
+
 from googlecloudsdk.compute.lib import base_classes
 
 

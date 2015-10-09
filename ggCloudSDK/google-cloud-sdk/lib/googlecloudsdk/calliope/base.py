@@ -5,10 +5,9 @@
 
 import abc
 
+from googlecloudsdk.calliope import usage_text
 from googlecloudsdk.core import log
 from googlecloudsdk.core import resource_printer
-
-from googlecloudsdk.calliope import usage_text
 
 
 class LayoutException(Exception):
@@ -96,7 +95,7 @@ class _Common(object):
   _cli_generator = None
   _is_hidden = False
   _release_track = None
-  # TODO(user): Remove this once commands are only allowed to show up under
+  # TODO(markpell): Remove this once commands are only allowed to show up under
   # the correct track (b/19406151)
   _legacy_release_track = None
   _valid_release_tracks = None
@@ -222,7 +221,7 @@ class _Common(object):
 
   @classmethod
   def ReleaseTrack(cls, for_help=False):
-    # TODO(user): Remove for_help once commands are only allowed to show up
+    # TODO(markpell): Remove for_help once commands are only allowed to show up
     # under the correct track (b/19406151).
     if for_help and cls._legacy_release_track:
       return cls._legacy_release_track
@@ -330,7 +329,7 @@ class Command(_Common):
     """
     pass
 
-  # TODO(user): When the formatting revamp goes in, this should be renamed.
+  # TODO(markpell): When the formatting revamp goes in, this should be renamed.
   # pylint: disable=invalid-name
   def format(self, obj):
     """Prints out the given object using the format decided by the format flag.
@@ -414,7 +413,7 @@ def Hidden(cmd_class):
   return cmd_class
 
 
-# TODO(user): Remove this once commands are only allowed to show up under
+# TODO(markpell): Remove this once commands are only allowed to show up under
 # the correct track (b/19406151).
 def Alpha(cmd_class):
   """Decorator for annotating a command or group as ALPHA.
@@ -430,7 +429,7 @@ def Alpha(cmd_class):
   return cmd_class
 
 
-# TODO(user): Remove this once commands are only allowed to show up under
+# TODO(markpell): Remove this once commands are only allowed to show up under
 # the correct track (b/19406151)
 def Beta(cmd_class):
   """Decorator for annotating a command or group as BETA.

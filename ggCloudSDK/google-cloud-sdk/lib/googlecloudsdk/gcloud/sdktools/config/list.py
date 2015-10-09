@@ -2,13 +2,12 @@
 
 """Command to list properties."""
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as c_exc
 from googlecloudsdk.core import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import named_configs
 from googlecloudsdk.core import properties
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as c_exc
 
 
 class BadConfigListInvocation(exceptions.Error):

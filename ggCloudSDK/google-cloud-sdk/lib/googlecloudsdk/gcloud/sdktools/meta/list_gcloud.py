@@ -2,10 +2,9 @@
 
 """A command that lists the gcloud group and command tree with details."""
 
-from googlecloudsdk.core import resource_printer
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import walker_util
+from googlecloudsdk.core import resource_printer
 
 
 class ListGCloud(base.Command):

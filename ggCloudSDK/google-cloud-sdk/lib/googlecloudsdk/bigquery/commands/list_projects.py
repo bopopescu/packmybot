@@ -3,11 +3,11 @@
 """Implementation of gcloud bigquery list_projects.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 
 from googlecloudsdk.bigquery import commands
 from googlecloudsdk.bigquery.lib import bigquery
-from googlecloudsdk.calliope import base
 
 
 class ListProjects(base.Command):

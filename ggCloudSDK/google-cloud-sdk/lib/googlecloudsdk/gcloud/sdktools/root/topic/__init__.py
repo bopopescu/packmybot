@@ -1,7 +1,6 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 
 """gcloud supplementary help topic command group."""
-
 from googlecloudsdk.calliope import base
 
 

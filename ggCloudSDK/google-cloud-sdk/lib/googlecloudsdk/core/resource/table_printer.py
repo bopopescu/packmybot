@@ -123,7 +123,7 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
     rows = [[_Stringify(cell) for cell in row] for row in self._rows]
     heading = []
     if 'no-heading' not in self._attributes:
-      labels = self._heading or self._column_attributes.Labels()
+      labels = self._heading or self.column_attributes.Labels()
       if labels:
         heading = [[_Stringify(cell) for cell in labels]]
     col_widths = [0] * max(len(x) for x in rows + heading)
@@ -198,11 +198,11 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
         self._out.write(os.linesep)
 
     # Sort by columns if requested.
-    if self._column_attributes:
-      order = self._column_attributes.Order()
+    if self.column_attributes:
+      order = self.column_attributes.Order()
       if order:
         rows = sorted(rows, key=operator.itemgetter(*order))
-      align = self._column_attributes.Alignments()
+      align = self.column_attributes.Alignments()
     else:
       align = None
 

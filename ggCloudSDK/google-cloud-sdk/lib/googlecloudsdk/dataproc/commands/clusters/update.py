@@ -4,11 +4,10 @@
 
 import argparse
 
-from googlecloudsdk.core import log
-
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+
 from googlecloudsdk.dataproc.lib import util
 
 

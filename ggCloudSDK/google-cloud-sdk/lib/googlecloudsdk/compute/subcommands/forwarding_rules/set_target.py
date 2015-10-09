@@ -1,6 +1,5 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for modifying the target of forwarding rules."""
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.compute.lib import forwarding_rules_utils as utils
 

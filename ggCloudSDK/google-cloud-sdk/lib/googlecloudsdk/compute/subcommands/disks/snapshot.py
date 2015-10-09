@@ -1,6 +1,5 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for snapshotting disks."""
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import base_classes

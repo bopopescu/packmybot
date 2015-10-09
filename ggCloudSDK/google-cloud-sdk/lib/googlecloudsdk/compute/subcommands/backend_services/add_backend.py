@@ -2,10 +2,10 @@
 """Command for adding a backend to a backend service."""
 import copy
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.third_party.apis.compute.v1 import compute_v1_messages
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import backend_services_utils
 from googlecloudsdk.compute.lib import base_classes
 

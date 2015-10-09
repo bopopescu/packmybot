@@ -6,10 +6,10 @@
 import re
 import time
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
 from googlecloudsdk.bigquery.lib import bigquery
-from googlecloudsdk.calliope import exceptions
 
 
 _DELIMITER_MAP = {

@@ -66,8 +66,6 @@ _SHELL_RCFILES = [
     'gcfilesys.zsh.inc'
 ]
 
-_MAX_RELEASE_NOTES = 10
-
 
 class Error(exceptions.Error):
   """Base exception for the update_manager module."""
@@ -630,8 +628,6 @@ class UpdateManager(object):
     md5dict1 = self._HashRcfiles(_SHELL_RCFILES)
     self._EnsureNotDisabled()
 
-    old_release_notes = release_notes.GetReleaseNotes(self.__sdk_root)
-
     try:
       install_state, diff = self._GetStateAndDiff(
           command_path='components.update')
@@ -684,10 +680,10 @@ class UpdateManager(object):
                              'installed')
     self.__Write(log.status)
 
-    if diff.latest.sdk_definition.release_notes_url:
-      self.__Write(log.status,
-                   'For the latest full release notes, please visit:\n  {0}'
-                   .format(diff.latest.sdk_definition.release_notes_url))
+    release_notes.PrintReleaseNotesDiff(
+        diff.latest.sdk_definition.release_notes_url,
+        config.INSTALLATION_CONFIG.version,
+        diff.latest.version)
 
     message = self._GetDontCancelMessage(disable_backup)
     if not console_io.PromptContinue(
@@ -746,21 +742,6 @@ Please remove the following to avoid accidentally invoking these old tools:
 {0}
 
 """.format('\n'.join(bad_commands)))
-
-    new_release_notes = release_notes.GetReleaseNotes(self.__sdk_root)
-    changed_entries = release_notes.ChangesBetween(old_release_notes,
-                                                   new_release_notes)
-    # If there are more changes than we want to print, just don't do anything.
-    # People can follow the link to visit the notes online and this probably
-    # mean that we changed the format of the release notes file.
-    # This logic is going to be replaced by the markdown rendered in the next
-    # release (b/23757402).
-    if changed_entries and len(changed_entries) < _MAX_RELEASE_NOTES:
-      log.status.Print('The following release notes are new in this upgrade. '
-                       'Please read carefully for information about new '
-                       'features, breaking changes, and bugs fixed:\n')
-      log.status.Print('\n\n'.join(changed_entries))
-
     return True
 
   def FindAllOldToolsOnPath(self, path=None):

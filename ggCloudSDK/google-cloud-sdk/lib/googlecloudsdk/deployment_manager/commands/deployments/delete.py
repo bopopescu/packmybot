@@ -2,14 +2,14 @@
 
 """deployments delete command."""
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resource_printer
 from googlecloudsdk.core.console import console_io
-
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
+
 from googlecloudsdk.deployment_manager.lib import dm_v2_util
 from googlecloudsdk.deployment_manager.lib.exceptions import DeploymentManagerError
 

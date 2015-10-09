@@ -10,6 +10,8 @@ for this command tree.  You can implement methods in this class to override some
 of the default behavior.
 """
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
 from googlecloudsdk.core import resources
@@ -17,8 +19,6 @@ from googlecloudsdk.core.credentials import store
 
 from googlecloudsdk.third_party.apis.genomics.v1 import genomics_v1_client
 from googlecloudsdk.third_party.apis.genomics.v1 import genomics_v1_messages
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.genomics import lib
 
 

@@ -2,12 +2,11 @@
 
 """Revoke credentials being used by the CloudSDK."""
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as c_exc
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.credentials import store as c_store
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as c_exc
 
 
 class Revoke(base.Command):

@@ -2,11 +2,9 @@
 
 """A command that prints out information about your gcloud environment."""
 
-
-from googlecloudsdk.core import log
-
 from googlecloudsdk.calliope import base
-from googlecloudsdk.gcloud.lib import info_holder
+from googlecloudsdk.core import log
+from googlecloudsdk.shared.sdktool import info_holder
 
 
 @base.ReleaseTracks(base.ReleaseTrack.GA)

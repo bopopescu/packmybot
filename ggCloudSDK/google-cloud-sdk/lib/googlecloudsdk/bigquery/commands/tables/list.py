@@ -3,6 +3,7 @@
 """Implementation of gcloud bigquery tables list.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.third_party.apitools.base.py import list_pager
@@ -10,7 +11,6 @@ from googlecloudsdk.third_party.apitools.base.py import list_pager
 from googlecloudsdk.bigquery import commands
 from googlecloudsdk.bigquery.lib import bigquery
 from googlecloudsdk.bigquery.lib import message_conversions
-from googlecloudsdk.calliope import base
 
 
 class TablesList(base.Command):

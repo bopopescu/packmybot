@@ -3,9 +3,9 @@
 """Implementation of gcloud dataflow logs list-messages command.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.dataflow import commands
 from googlecloudsdk.dataflow.lib import job_utils
 from googlecloudsdk.dataflow.lib import list_pager

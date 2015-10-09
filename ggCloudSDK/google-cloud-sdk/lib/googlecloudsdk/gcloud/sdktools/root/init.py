@@ -6,12 +6,11 @@ import argparse
 import os
 import sys
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as c_exc
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as c_exc
 
 
 class Init(base.Command):
@@ -285,7 +284,8 @@ class Init(base.Command):
 
   def _PickRepo(self):
     """Allows user to clone one of the projects repositories."""
-    repos = self._RunExperimentalCmd(['alpha', 'source', 'repos', 'list'])
+    cmd = ['alpha', 'source', 'repos', 'list']
+    repos = self._RunExperimentalCmd(cmd)
 
     if repos:
       repos = sorted(repo.name or 'default' for repo in repos)
@@ -295,9 +295,26 @@ class Init(base.Command):
           ['[{0}]'.format(repo) for repo in repos] + ['Do not clone'],
           message='Pick repository to clone to your local machine:',
           prompt_string=None)
-      if idx < len(repos):
+      if idx >= 0 and idx < len(repos):
         repo_name = repos[idx]
-        self._CloneRepo(repo_name)
+      else:
+        return
+    elif repos is None:
+      log.status.write('Could not retrieve list of repos via [gcloud {0}]\n'
+                       .format(' '.join(cmd)))
+      log.status.write('Perhaps alpha commands are not enabled '
+                       'or the repos list command failed.\n'
+                       '\n')
+      answer = console_io.PromptContinue(
+          prompt_string='Generally projects have a repository named [default]. '
+          'Would you like to try clone it?')
+      if not answer:
+        return
+      repo_name = 'default'
+    else:
+      return
+
+    self._CloneRepo(repo_name)
 
   def _CloneRepo(self, repo_name):
     """Queries user for output path and clones selected repo to it."""
@@ -312,8 +329,10 @@ class Init(base.Command):
         break
       log.status.write('No such directory [{0}]\n'.format(clone_path))
 
-    self._RunCmd(['source', 'repos', 'clone'],
-                 [repo_name, os.path.join(clone_path, repo_name)])
+    target_dir = os.path.join(clone_path, repo_name)
+    self._RunCmd(['source', 'repos', 'clone'], [repo_name, target_dir])
+    log.status.write('\nGit repository has been cloned to [{0}]\n'
+                     .format(target_dir))
 
   def _CreateConfiguration(self):
     configuration_name = console_io.PromptResponse(

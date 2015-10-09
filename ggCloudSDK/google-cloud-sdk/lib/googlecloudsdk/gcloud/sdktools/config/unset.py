@@ -2,11 +2,10 @@
 
 """Command to unset properties."""
 
-from googlecloudsdk.core import log
-from googlecloudsdk.core import properties
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions as c_exc
+from googlecloudsdk.core import log
+from googlecloudsdk.core import properties
 
 
 def CommonArgs(cmd_class, parser):

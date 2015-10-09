@@ -4,8 +4,8 @@
 
 import textwrap
 
-
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.projects.lib import util
 
 

@@ -13,15 +13,14 @@ of the default behavior.
 
 import argparse
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
 from googlecloudsdk.core import resources as cloud_resources
-
 from googlecloudsdk.third_party.apis.dataflow.v1b3 import dataflow_v1b3_client
 from googlecloudsdk.third_party.apis.dataflow.v1b3 import dataflow_v1b3_messages
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import base
 
 
 SERVICE_NAME = 'dataflow'

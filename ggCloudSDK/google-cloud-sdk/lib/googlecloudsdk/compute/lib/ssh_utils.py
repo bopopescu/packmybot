@@ -5,6 +5,7 @@ import logging
 import os
 import subprocess
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import exceptions as core_exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
@@ -12,7 +13,6 @@ from googlecloudsdk.core.console import console_io
 from googlecloudsdk.core.util import files
 from googlecloudsdk.core.util import platforms
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import constants
 from googlecloudsdk.compute.lib import gaia_utils

@@ -2,9 +2,9 @@
 
 """Lists all SSL certs for a Cloud SQL instance."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import validate
 

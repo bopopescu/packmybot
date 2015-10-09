@@ -1,8 +1,8 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Implementation of gcloud genomics datasets describe.
 """
-
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.genomics import lib
 from googlecloudsdk.genomics.lib import genomics_util
 

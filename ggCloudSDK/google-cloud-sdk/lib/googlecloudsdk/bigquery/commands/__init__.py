@@ -5,6 +5,7 @@
 
 import urlparse
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import cli
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
@@ -14,7 +15,6 @@ from googlecloudsdk.third_party.apis.bigquery.v2 import bigquery_v2_client
 from googlecloudsdk.third_party.apis.bigquery.v2 import bigquery_v2_messages
 
 from googlecloudsdk.bigquery.lib import bigquery
-from googlecloudsdk.calliope import base
 
 SERVICE_NAME = 'bigquery'
 

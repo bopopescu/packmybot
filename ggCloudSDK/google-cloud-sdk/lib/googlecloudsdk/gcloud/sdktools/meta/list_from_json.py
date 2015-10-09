@@ -5,12 +5,11 @@
 import json
 import sys
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core.resource import resource_filter
 from googlecloudsdk.core.resource import resource_lex
 from googlecloudsdk.core.resource import resource_printer
 from googlecloudsdk.core.resource import resource_property
-
-from googlecloudsdk.calliope import base
 
 
 class Aggregator(object):

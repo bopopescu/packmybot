@@ -5,13 +5,13 @@
 import json
 import sys
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resource_printer
-
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.third_party.apitools.base.py import extra_types
-from googlecloudsdk.calliope import exceptions
+
 from googlecloudsdk.genomics import lib
 from googlecloudsdk.genomics.lib.exceptions import GenomicsError
 

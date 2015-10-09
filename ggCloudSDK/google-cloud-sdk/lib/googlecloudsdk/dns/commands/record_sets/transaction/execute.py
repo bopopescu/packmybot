@@ -4,11 +4,10 @@
 
 import os
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
-
-from googlecloudsdk.calliope import base
 
 from googlecloudsdk.dns.lib import import_util
 from googlecloudsdk.dns.lib import transaction_util

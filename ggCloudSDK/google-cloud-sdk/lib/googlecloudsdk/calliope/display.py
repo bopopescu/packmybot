@@ -67,7 +67,7 @@ class Displayer(object):
     if fmt:
       # Most command output will end up here.
       log.debug('Display format "%s".', fmt)
-      # TODO(user): b/24267426
+      # TODO(gsfowler): b/24267426
       if self._resources is not None:
         resource_printer.Print(self._resources, fmt, out=log.out)
     else:

@@ -2,10 +2,10 @@
   "components": [
     {
       "data": {
-        "checksum": "52780630d90a7aa0098876356a1e7060632eb50d", 
-        "contents_checksum": "3f20e69550c83b02cec58befb2d00e435e753e58", 
+        "checksum": "c8f72e162a2a532e7a574432919ea50847a6e267", 
+        "contents_checksum": "f85a81f1e2f5ab95f5bb9b66790408b6d40743a7", 
         "size": 393, 
-        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-alpha-20150817103450.tar.gz", 
+        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-alpha-20151005124411.tar.gz", 
         "type": "tar"
       }, 
       "dependencies": [
@@ -21,16 +21,16 @@
       "is_required": false, 
       "platform": {}, 
       "version": {
-        "build_number": 20150817103450, 
-        "version_string": "2015.08.17"
+        "build_number": 20151005124411, 
+        "version_string": "2015.10.05"
       }
     }, 
     {
       "data": {
-        "checksum": "fcc53bf4587a57c2e375280885eb32bac73eaea5", 
-        "contents_checksum": "4e1e4ccc2930874edcc43aea7d9fad08974d81d8", 
-        "size": 448620, 
-        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-app-20150925172423.tar.gz", 
+        "checksum": "4ca7909d08a0cfa605429a76b98436586317b5c1", 
+        "contents_checksum": "3eaccca22bcc15fb8387db86eefeeaf908f20f45", 
+        "size": 445831, 
+        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-app-20151005124411.tar.gz", 
         "type": "tar"
       }, 
       "dependencies": [
@@ -46,16 +46,16 @@
       "is_required": false, 
       "platform": {}, 
       "version": {
-        "build_number": 20150925172423, 
-        "version_string": "2015.09.25"
+        "build_number": 20151005124411, 
+        "version_string": "2015.10.05"
       }
     }, 
     {
       "data": {
-        "checksum": "d125fdbdf66d3cc17c05eea102c4d058d9acf4c1", 
-        "contents_checksum": "0ad39011852b08eecc55c3b1cf4f487faa5ed719", 
-        "size": 101138371, 
-        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-app-engine-java-20150911090155.tar.gz", 
+        "checksum": "f99ac7b2832002db1808103e374d0bbc0fee5cdf", 
+        "contents_checksum": "93ead16d4b95672b0a29b32c381af77c86ba6ff4", 
+        "size": 100454123, 
+        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-app-engine-java-20151005124411.tar.gz", 
         "type": "tar"
       }, 
       "dependencies": [
@@ -72,8 +72,8 @@
       "is_required": false, 
       "platform": {}, 
       "version": {
-        "build_number": 20150911090155, 
-        "version_string": "1.9.26"
+        "build_number": 20151005124411, 
+        "version_string": "1.9.27"
       }
     }, 
     {
@@ -161,10 +161,10 @@
     }, 
     {
       "data": {
-        "checksum": "4334c84293e6ddd1c0e64ab06a02b4edd32ff42a", 
-        "contents_checksum": "0d505c219f37e1ae2552ff83f6057b31c3f7a56f", 
-        "size": 7445082, 
-        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-app-engine-python-20150911090155.tar.gz", 
+        "checksum": "0af0a30f4acb87507e3664f55995e4482cf1815c", 
+        "contents_checksum": "23f13a4af4e179683c2aad9556dc4563b0d69588", 
+        "size": 7432350, 
+        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-app-engine-python-20151005124411.tar.gz", 
         "type": "tar"
       }, 
       "dependencies": [
@@ -181,8 +181,8 @@
       "is_required": false, 
       "platform": {}, 
       "version": {
-        "build_number": 20150911090155, 
-        "version_string": "1.9.26"
+        "build_number": 20151005124411, 
+        "version_string": "1.9.27"
       }
     }, 
     {
@@ -213,10 +213,10 @@
     }, 
     {
       "data": {
-        "checksum": "0f09a36f18b68b9bf25732086cdf1e50cb761fa0", 
-        "contents_checksum": "82b6fb9b95ee0ea7fa9f62f395cfe7da08f71907", 
+        "checksum": "8bf2e958bb2721cf3115ae3bc10e43b54673255a", 
+        "contents_checksum": "e8767c88cec6fcbd767d97ff52947c8430a9232c", 
         "size": 389, 
-        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-beta-20150817103450.tar.gz", 
+        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-beta-20151005124411.tar.gz", 
         "type": "tar"
       }, 
       "dependencies": [
@@ -232,8 +232,8 @@
       "is_required": false, 
       "platform": {}, 
       "version": {
-        "build_number": 20150817103450, 
-        "version_string": "2015.08.17"
+        "build_number": 20151005124411, 
+        "version_string": "2015.10.05"
       }
     }, 
     {
@@ -328,10 +328,10 @@
     }, 
     {
       "data": {
-        "checksum": "1e8cfedc301a55a5c3f01e8ae12a256ff8f8f9af", 
-        "contents_checksum": "895642666e0bfd0fb15870ea2fed6b8173dae9d4", 
-        "size": 2253845, 
-        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-core-20150925172423.tar.gz", 
+        "checksum": "830828a51e4516d804fe629af1c10fd152e7cca0", 
+        "contents_checksum": "64468a5468366471c4283c09c982dc5a27c9398e", 
+        "size": 2262155, 
+        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-core-20151005124411.tar.gz", 
         "type": "tar"
       }, 
       "dependencies": [
@@ -349,8 +349,8 @@
       "is_required": true, 
       "platform": {}, 
       "version": {
-        "build_number": 20150925172423, 
-        "version_string": "2015.09.25"
+        "build_number": 20151005124411, 
+        "version_string": "2015.10.05"
       }
     }, 
     {
@@ -443,10 +443,10 @@
     }, 
     {
       "data": {
-        "checksum": "c37b09f015fa702dd73ceb4036fc328b2359d3f4", 
-        "contents_checksum": "815d8bae93eeb7b82de375334ba4022ed089750f", 
-        "size": 358167, 
-        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-gcloud-20150925172423.tar.gz", 
+        "checksum": "58c25148acdd738371e2b449068d40b6c1eb68fb", 
+        "contents_checksum": "581b71e71c915d446729ca94b2871d833c3500f7", 
+        "size": 355211, 
+        "source": "https://dl.google.com/dl/cloudsdk/channels/rapid/components/google-cloud-sdk-gcloud-20151005124411.tar.gz", 
         "type": "tar"
       }, 
       "dependencies": [
@@ -462,8 +462,8 @@
       "is_required": false, 
       "platform": {}, 
       "version": {
-        "build_number": 20150925172423, 
-        "version_string": "2015.09.25"
+        "build_number": 20151005124411, 
+        "version_string": "2015.10.05"
       }
     }, 
     {
@@ -959,11 +959,11 @@
     }
   ], 
   "release_notes_url": "https://dl.google.com/dl/cloudsdk/channels/rapid/RELEASE_NOTES", 
-  "revision": 20150925172423, 
+  "revision": 20151005124411, 
   "schema_version": {
     "no_update": false, 
     "url": "https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.tar.gz", 
     "version": 3
   }, 
-  "version": "0.9.80"
+  "version": "0.9.81"
 }
