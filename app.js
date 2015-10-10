@@ -1,5 +1,6 @@
 var TelegramBot = require('node-telegram-bot-api');
- 
+var http = require('http');
+
 var token = '125345847:AAFKJFwaETnTK_pEQXQ2Hqwx8bnLFV5oo2E';
 // Setup polling way
 // var options = {
@@ -56,3 +57,11 @@ bot.on('text', function (msg) {
 });
 
 
+
+var handleRequest = function(request, response) {
+  response.writeHead(200);
+  response.end("Hello World!");
+}
+
+var www = http.createServer(handleRequest);
+www.listen(8080);
