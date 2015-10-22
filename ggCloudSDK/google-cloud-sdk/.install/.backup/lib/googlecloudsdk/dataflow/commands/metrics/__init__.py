@@ -2,7 +2,6 @@
 
 """The command group for gcloud dataflow metrics.
 """
-
 from googlecloudsdk.calliope import base
 
 

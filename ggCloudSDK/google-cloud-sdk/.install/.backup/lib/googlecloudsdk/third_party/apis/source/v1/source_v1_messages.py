@@ -768,11 +768,6 @@ class Repo(_messages.Message):
     projectId: Immutable, globally unique, DNS-compatible textual identifier.
       Examples: user-chosen-project-id, yellow-banana-33.
     projectNumber: Immutable, globally unique, numerical ID of the project.
-    releasePipelinesApiHostname: The hostname of the release-pipelines Swarm
-      API. This should only be set if the RELEASE_PIPELINES tool is enabled.
-      This allows individual repositories to be tied to different instances of
-      the release pipelines backend, which in turn makes testing different
-      versions of that backend easier.
     repoSyncConfig: How RepoSync is configured for this repo. If missing, this
       repo is not set up for RepoSync.
     state: The state the repo is in.
@@ -809,10 +804,9 @@ class Repo(_messages.Message):
   name = _messages.StringField(4)
   projectId = _messages.StringField(5)
   projectNumber = _messages.IntegerField(6)
-  releasePipelinesApiHostname = _messages.StringField(7)
-  repoSyncConfig = _messages.MessageField('RepoSyncConfig', 8)
-  state = _messages.EnumField('StateValueValuesEnum', 9)
-  vcs = _messages.EnumField('VcsValueValuesEnum', 10)
+  repoSyncConfig = _messages.MessageField('RepoSyncConfig', 7)
+  state = _messages.EnumField('StateValueValuesEnum', 8)
+  vcs = _messages.EnumField('VcsValueValuesEnum', 9)
 
 
 class RepoId(_messages.Message):

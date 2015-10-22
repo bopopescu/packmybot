@@ -2,7 +2,6 @@
 
 """Simple console pager."""
 
-import os
 import re
 import sys
 
@@ -177,7 +176,7 @@ class Pager(object):
       self._out.write('\n' * clear)
     self._out.write(self.HELP_TEXT)
     self._attr.GetRawChar()
-    self._out.write(os.linesep)
+    self._out.write('\n')
 
   def Run(self):
     """Run the pager."""
@@ -197,7 +196,7 @@ class Pager(object):
       if nxt > len(self._lines):
         nxt = len(self._lines)
         pos = nxt - self._height
-      self._out.write(os.linesep.join(self._lines[pos:nxt]) + os.linesep)
+      self._out.write('\n'.join(self._lines[pos:nxt]) + '\n')
 
       # Handle the prompt response.
       percent = self._prompt.format(percent=100 * nxt / len(self._lines))

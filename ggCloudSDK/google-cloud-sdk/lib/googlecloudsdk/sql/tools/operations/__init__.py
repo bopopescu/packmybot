@@ -6,7 +6,7 @@ from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
 
 
-@base.ReleaseTracks(base.ReleaseTrack.GA, base.ReleaseTrack.BETA)
+@base.ReleaseTracks(base.ReleaseTrack.GA)
 class Operations(base.Group):
   """Provide commands for working with Cloud SQL instance operations.
 
@@ -26,3 +26,14 @@ class Operations(base.Group):
   def Filter(self, tool_context, args):
     if not args.instance:
       raise exceptions.ToolException('argument --instance/-i is required')
+
+
+@base.ReleaseTracks(base.ReleaseTrack.BETA)
+class OperationsBeta(base.Group):
+  """Provide commands for working with Cloud SQL instance operations.
+
+  Provide commands for working with Cloud SQL instance operations, including
+  listing and getting information about instance operations of a Cloud SQL
+  instance.
+  """
+  pass

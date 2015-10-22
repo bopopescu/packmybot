@@ -3,11 +3,10 @@
 """List project repositories.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import properties
-
-from googlecloudsdk.calliope import base
-from googlecloudsdk.source.lib import source
+from googlecloudsdk.shared.source import source
 
 
 @base.ReleaseTracks(base.ReleaseTrack.ALPHA)

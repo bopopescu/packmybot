@@ -246,6 +246,37 @@ def FindDirectoryContaining(starting_dir_path, directory_entry_name):
   return None
 
 
+def IsDirAncestorOf(ancestor_directory, path):
+  """Returns whether ancestor_directory is an ancestor of path.
+
+  Args:
+    ancestor_directory: str, path to the directory that is the potential
+      ancestor of path
+    path: str, path to the file/directory that is a potential descendent of
+      ancestor_directory
+
+  Returns:
+    bool, whether path has ancestor_directory as an ancestor.
+
+  Raises:
+    ValueError: if the given ancestor_directory is not, in fact, a directory.
+  """
+  if not os.path.isdir(ancestor_directory):
+    raise ValueError('[{0}] is not a directory.'.format(ancestor_directory))
+
+  path = os.path.realpath(path)
+  ancestor_directory = os.path.realpath(ancestor_directory)
+
+  # This works on *nix, because os.path.splitdrive always returns '' as the
+  # first component
+  if os.path.splitdrive(path)[0] != os.path.splitdrive(ancestor_directory)[0]:
+    return False
+
+  rel = os.path.relpath(path, ancestor_directory)
+  # rel can be just '..' if path is a child of ancestor_directory
+  return not rel.startswith('..' + os.path.sep) and rel != '..'
+
+
 def SearchForExecutableOnPath(executable, path=None):
   """Tries to find all 'executable' in the directories listed in the PATH.
 

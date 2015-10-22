@@ -6,10 +6,10 @@ Exports data from a Cloud SQL instance to a Google Cloud Storage bucket as
 a MySQL dump file.
 """
 
-from googlecloudsdk.core import log
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import log
+
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import operations
 from googlecloudsdk.sql.lib import validate

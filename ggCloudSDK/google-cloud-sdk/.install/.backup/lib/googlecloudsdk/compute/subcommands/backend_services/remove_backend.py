@@ -2,9 +2,9 @@
 """Command for removing a backend from a backend service."""
 import copy
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import utils
 

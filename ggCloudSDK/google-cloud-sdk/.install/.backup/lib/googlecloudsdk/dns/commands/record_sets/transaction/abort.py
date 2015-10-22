@@ -4,10 +4,9 @@
 
 import os
 
-from googlecloudsdk.core import log
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
 
 
 class Abort(base.Command):

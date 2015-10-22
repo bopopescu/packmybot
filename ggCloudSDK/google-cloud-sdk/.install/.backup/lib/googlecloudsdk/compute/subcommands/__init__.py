@@ -3,11 +3,11 @@
 import argparse
 import sys
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import base
 from googlecloudsdk.compute.lib import utils
 
 

@@ -695,6 +695,12 @@ class Job(_messages.Message):
       irrevocably terminating the job if it has not already reached a terminal
       state.
     steps: The top-level steps that constitute the entire job.
+    tempFiles: A set of files the system should be aware of that are used for
+      temporary storage. These temporary files will be removed on job
+      completion. No duplicates are allowed. No file patterns are supported.
+      The supported files are:  Google Cloud Storage:
+      storage.googleapis.com/{bucket}/{object}
+      bucket.storage.googleapis.com/{object}
     transformNameMapping: Map of transform name prefixes of the job to be
       replaced to the corresponding name prefixes of the new job.
     type: The type of dataflow job.
@@ -833,8 +839,9 @@ class Job(_messages.Message):
   replacedByJobId = _messages.StringField(11)
   requestedState = _messages.EnumField('RequestedStateValueValuesEnum', 12)
   steps = _messages.MessageField('Step', 13, repeated=True)
-  transformNameMapping = _messages.MessageField('TransformNameMappingValue', 14)
-  type = _messages.EnumField('TypeValueValuesEnum', 15)
+  tempFiles = _messages.StringField(14, repeated=True)
+  transformNameMapping = _messages.MessageField('TransformNameMappingValue', 15)
+  type = _messages.EnumField('TypeValueValuesEnum', 16)
 
 
 class JobExecutionInfo(_messages.Message):

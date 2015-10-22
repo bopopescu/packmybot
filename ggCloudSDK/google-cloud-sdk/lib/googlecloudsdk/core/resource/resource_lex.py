@@ -58,6 +58,11 @@ Typical resource usage:
 from googlecloudsdk.core.resource import resource_exceptions
 
 
+# Reserved operator characters. Resource keys cannot contain unquoted operator
+# characters. This prevents key/operator clashes in expressions.
+_RESERVED_OPERATOR_CHARS = '[].(){},:=!<>+*/%&|^~@#;?'
+
+
 class Lexer(object):
   """Resource expression lexer.
 
@@ -85,7 +90,7 @@ class Lexer(object):
     """
     self._expr = expression or ''
     self._position = 0
-    self._aliases = aliases if aliases is not None else {}
+    self._aliases = aliases or {}
 
   def EndOfInput(self, position=None):
     """Checks if the current expression string position is at the end of input.
@@ -120,6 +125,8 @@ class Lexer(object):
   def Annotate(self, position=None):
     """Returns the expression string annotated for syntax error messages.
 
+    The current position is marked by '*HERE*' for visual effect.
+
     Args:
       position: Uses position instead of the current expression position.
 
@@ -127,7 +134,7 @@ class Lexer(object):
       The expression string with current position annotated.
     """
     here = position if position is not None else self._position
-    cursor = '*HERE*'
+    cursor = '*HERE*'  # For visual effect only.
     if here > 0 and not self._expr[here - 1].isspace():
       cursor = ' ' + cursor
     if here < len(self._expr) and not self._expr[here].isspace():
@@ -138,10 +145,13 @@ class Lexer(object):
     """Skips spaces in the expression string.
 
     Args:
-      token: The expected token description, None if end of input is OK.
+      token: The expected next token description string, None if end of input is
+        OK. This string is used in the exception message. It is not used to
+        validate the type of the next token.
 
     Raises:
-      ExpressionSyntaxError: End of input reached after skipping.
+      ExpressionSyntaxError: End of input reached after skipping and a token is
+        expected.
 
     Returns:
       True if the expression is not at end of input.
@@ -164,7 +174,7 @@ class Lexer(object):
       eoi_ok: True if end of input is OK. Returns None if at end of input.
 
     Raises:
-      ExpressionSyntaxError: End of input reached and peek is False.
+      ExpressionSyntaxError: End of input reached and peek and eoi_ok are False.
 
     Returns:
       The matching character or None if no match.
@@ -182,7 +192,9 @@ class Lexer(object):
     return c
 
   def IsString(self, name, peek=False):
-    """Checks if the next space or ( separated token is name.
+    """Skips leading space and checks if the next token is name.
+
+    One of space, '(', or end of input terminates the next token.
 
     Args:
       name: The token name to check.
@@ -204,12 +216,15 @@ class Lexer(object):
     return False
 
   def Token(self, terminators='', space=True, convert=False):
-    """Parses a possibliy quoted token from the current expression position.
+    """Parses a possibly quoted token from the current expression position.
 
     The quote characters are in _QUOTES. The _ESCAPE character can prefix
     an _ESCAPE or _QUOTE character to treat it as a normal character. If
     _ESCAPE is at end of input, or is followed by any other character, then it
     is treated as a normal character.
+
+    Quotes may be adjacent ("foo"" & ""bar" => "foo & bar") and they may appear
+    mid token (foo" & "bar => "foo & bar").
 
     Args:
       terminators: The characters that terminate the token. isspace() characters
@@ -228,9 +243,7 @@ class Lexer(object):
     quoted = False  # True if the token is constructed from quoted parts.
     token = None  # The token char list, None for no token, [] for empty token.
     i = self.GetPosition()
-    while True:
-      if self.EndOfInput(i):
-        break
+    while not self.EndOfInput(i):
       c = self._expr[i]
       if c == self._ESCAPE and not self.EndOfInput(i + 1):
         # Only _ESCAPE, the current quote or _QUOTES are escaped.
@@ -259,7 +272,7 @@ class Lexer(object):
         if token is None:
           token = []
         token.append(c)
-      elif token:
+      elif token is not None:
         # A space after any token characters is a terminator.
         break
       i += 1
@@ -286,7 +299,9 @@ class Lexer(object):
   def Args(self, convert=False):
     """Parses a ,-separated, )-terminated arg list.
 
-    The initial '(' has already been consumed by the caller.
+    The initial '(' has already been consumed by the caller. The arg list may
+    be empty. Otherwise the first ',' must be preceded by a non-empty argument,
+    and every ',' must be followed by a non-empty argument.
 
     Args:
       convert: Converts unquoted numeric string args to numbers if True.
@@ -297,7 +312,7 @@ class Lexer(object):
     Returns:
       [...]: The arg list.
     """
-    required = False
+    required = False  # True if there must be another argument token.
     args = []
     while True:
       here = self.GetPosition()
@@ -321,25 +336,31 @@ class Lexer(object):
     """Parses a resource key from the expression.
 
     A resource key is a '.' separated list of names with optional [] slice or
-    [NUMBER] array indices.
+    [NUMBER] array indices. A parsed key is encoded as an ordered list of
+    tokens, where each token may be:
+
+      KEY VALUE   PARSED VALUE  DESCRIPTION
+      ---------   ------------  -----------
+      name        string        A dotted name list element.
+      [NUMBER]    NUMBER        An array index.
+      []          None          An array slice.
+
+    For example, the key 'abc.def[123].ghi[].jkl' parses to this encoded list:
+      ['abc', 'def', 123, 'ghi', None, 'jkl']
 
     Raises:
       ExpressionSyntaxError: The expression has a syntax error.
 
     Returns:
-      The key which is a list of string, int and/or None elements.
+      The parsed key which is a list of string, int and/or None elements.
     """
     key = []
     while not self.EndOfInput():
       here = self.GetPosition()
-      # Key names may not contain any operator-ish characters. This prevents
-      # keys from clashing with expressions that may contain keys. The excluded
-      # characters are defined here for consistency.
-      name = self.Token('[].(){},:=!<>+*/%&|^~@#;?', space=False)
+      name = self.Token(_RESERVED_OPERATOR_CHARS, space=False)
       if name:
-        # The first key name could be an alias except functions are not aliased.
-        if (not key and not self.IsCharacter('(', peek=True, eoi_ok=True) and
-            name in self._aliases):
+        is_not_function = not self.IsCharacter('(', peek=True, eoi_ok=True)
+        if not key and is_not_function and name in self._aliases:
           key.extend(self._aliases[name])
         else:
           key.append(name)
@@ -359,6 +380,7 @@ class Lexer(object):
       if not self.IsCharacter('.'):
         break
       if self.EndOfInput():
+        # Dangling '.' is not allowed.
         raise resource_exceptions.ExpressionSyntaxError(
             'Non-empty key name expected [{0}].'.format(self.Annotate()))
     return key

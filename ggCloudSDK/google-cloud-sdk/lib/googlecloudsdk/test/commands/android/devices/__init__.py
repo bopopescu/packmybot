@@ -6,16 +6,18 @@ from googlecloudsdk.calliope import base
 
 
 class Devices(base.Group):
-  """Explore Android testing device environments and characteristics."""
+  """Explore Android devices available in the Test Environment catalog."""
 
   detailed_help = {
       'DESCRIPTION': '{description}',
       'EXAMPLES': """\
-          To list all Android devices available for running tests, run:
+          To list all Android devices available for running tests, along with
+          their basic characteristics and supported Android OS versions, run:
 
             $ {command} list
 
-          To display detailed information about a specific Android device, run:
+          To display more detailed information about a specific Android device,
+          run:
 
             $ {command} describe DEVICE_ID
           """,

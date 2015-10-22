@@ -28,6 +28,7 @@ from googlecloudsdk.core.resource import json_printer
 from googlecloudsdk.core.resource import list_printer
 from googlecloudsdk.core.resource import resource_printer_base
 from googlecloudsdk.core.resource import resource_projector
+from googlecloudsdk.core.resource import resource_property
 from googlecloudsdk.core.resource import resource_transform
 from googlecloudsdk.core.resource import table_printer
 from googlecloudsdk.core.resource import yaml_printer
@@ -129,19 +130,6 @@ def Printer(print_format, out=None, defaults=None):
   return printer
 
 
-def _IsListLike(resources):
-  """Checks if resources is a list-like iterable object.
-
-  Args:
-    resources: The object to check.
-
-  Returns:
-    True if resources is a list-like iterable object.
-  """
-  return (isinstance(resources, list) or
-          hasattr(resources, '__iter__') and hasattr(resources, 'next'))
-
-
 def Print(resources, print_format, out=None, defaults=None, single=False):
   """Prints the given resources.
 
@@ -169,7 +157,7 @@ def Print(resources, print_format, out=None, defaults=None, single=False):
   # given to the exception-handling code.
   try:
     if resources:
-      if single or not _IsListLike(resources):
+      if single or not resource_property.IsListLike(resources):
         printer.AddRecord(resources, delimit=False)
       else:
         for resource in resources:

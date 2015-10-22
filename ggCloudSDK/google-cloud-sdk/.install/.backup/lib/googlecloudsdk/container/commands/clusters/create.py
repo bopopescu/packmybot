@@ -5,12 +5,12 @@ import argparse
 import random
 import string
 
-from googlecloudsdk.core import log
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.compute.lib import constants
 from googlecloudsdk.container.lib import api_adapter
 from googlecloudsdk.container.lib import kubeconfig as kconfig
@@ -51,9 +51,14 @@ def _Args(parser):
       'Google Container Engine will use this network when creating routes '
       'and firewalls for the clusters. Defaults to the \'default\' network.')
   parser.add_argument(
-      '--container-ipv4-cidr',
-      help='The IP addresses of the container pods in this cluster in CIDR '
+      '--cluster-ipv4-cidr',
+      help='The IP address range for the pods in this cluster in CIDR '
       'notation (e.g. 10.0.0.0/14). Defaults to server-specified')
+  parser.add_argument(
+      '--container-ipv4-cidr',
+      help='The IP address range for the pods in this cluster in CIDR '
+      'notation (e.g. 10.0.0.0/14). Defaults to server-specified '
+      '(deprecated; use --cluster-ipv4-cidr instead)')
   parser.add_argument(
       '--password',
       help='The password to use for cluster auth. Defaults to a '
@@ -129,6 +134,11 @@ class Create(base.Command):
   def ParseCreateOptions(self, args):
     if not args.scopes:
       args.scopes = []
+    cluster_ipv4_cidr = args.cluster_ipv4_cidr
+    if args.container_ipv4_cidr:
+      log.warn('The `--container-ipv4-cidr` flag is deprecated. Please use the '
+               '`--cluster-ipv4-cidr` flag instead.')
+      cluster_ipv4_cidr = args.container_ipv4_cidr
     return api_adapter.CreateClusterOptions(
         node_machine_type=args.machine_type,
         scopes=args.scopes,
@@ -137,7 +147,7 @@ class Create(base.Command):
         password=args.password,
         cluster_version=args.cluster_version,
         network=args.network,
-        container_ipv4_cidr=args.container_ipv4_cidr,
+        cluster_ipv4_cidr=cluster_ipv4_cidr,
         node_disk_size_gb=args.disk_size,
         enable_cloud_logging=args.enable_cloud_logging,
         enable_cloud_monitoring=args.enable_cloud_monitoring)

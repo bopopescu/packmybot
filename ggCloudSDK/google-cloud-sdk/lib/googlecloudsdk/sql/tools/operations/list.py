@@ -16,21 +16,6 @@ from googlecloudsdk.sql.lib import validate
 class _BaseList(object):
   """Base class for sql list operations."""
 
-  @staticmethod
-  def Args(parser):
-    """Args is called by calliope to gather arguments for this command.
-
-    Args:
-      parser: An argparse parser that you can use to add arguments that go
-          on the command line after this command. Positional arguments are
-          allowed.
-    """
-    parser.add_argument(
-        '--limit',
-        type=int,
-        default=None,
-        help='Maximum number of operations to list.')
-
   @errors.ReraiseHttpException
   def Run(self, args):
     """Lists all instance operations that have been performed on an instance.
@@ -67,6 +52,21 @@ class _BaseList(object):
 class List(_BaseList, base.Command):
   """Lists all instance operations for the given Cloud SQL instance."""
 
+  @staticmethod
+  def Args(parser):
+    """Args is called by calliope to gather arguments for this command.
+
+    Args:
+      parser: An argparse parser that you can use to add arguments that go
+          on the command line after this command. Positional arguments are
+          allowed.
+    """
+    parser.add_argument(
+        '--limit',
+        type=int,
+        default=None,
+        help='Maximum number of operations to list.')
+
   def Display(self, unused_args, result):
     list_printer.PrintResourceList('sql.operations', result)
 
@@ -75,5 +75,27 @@ class List(_BaseList, base.Command):
 class ListBeta(_BaseList, base.Command):
   """Lists all instance operations for the given Cloud SQL instance."""
 
+  @staticmethod
+  def Args(parser):
+    """Args is called by calliope to gather arguments for this command.
+
+    Args:
+      parser: An argparse parser that you can use to add arguments that go
+          on the command line after this command. Positional arguments are
+          allowed.
+    """
+    parser.add_argument(
+        '--limit',
+        type=int,
+        default=None,
+        help='Maximum number of operations to list.')
+    parser.add_argument(
+        '--instance',
+        '-i',
+        completion_resource='sql.instances',
+        help='Cloud SQL instance ID.',
+        required=True)
+
   def Display(self, unused_args, result):
     list_printer.PrintResourceList('sql.operations.v1beta4', result)
+

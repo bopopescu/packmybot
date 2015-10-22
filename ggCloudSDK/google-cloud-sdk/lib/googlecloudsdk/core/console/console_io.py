@@ -637,6 +637,10 @@ class ProgressTracker(object):
       # If an exception was raised during progress tracking, exit silently here
       # and let the appropriate exception handler tell the user what happened.
       if ex_type:
+        # This is to prevent the tick character from appearing before 'failed.'
+        # (ex. 'message...failed' instead of 'message.../failed.')
+        self._Print()
+        sys.stderr.write('failed.\n')
         return False
       self._Print()
     sys.stderr.write('done.\n')
@@ -790,6 +794,8 @@ class ProgressBar(object):
     self._last = last
     attr = console_attr.ConsoleAttr()
     self._box = attr.GetBoxLineCharacters()
+    self._redraw = (self._box.d_dr != self._box.d_vr or
+                    self._box.d_dl != self._box.d_vl)
 
     max_label_width = self._total_ticks - 4
     if len(label) > max_label_width:
@@ -804,11 +810,12 @@ class ProgressBar(object):
 
   def Start(self):
     """Starts the progress bar by writing the top rule and label."""
-    left = self._box.d_dr if self._first else self._box.d_vr
-    right = self._box.d_dl if self._first else self._box.d_vl
-    rule = '{left}{middle}{right}\n'.format(
-        left=left, middle=self._box.d_h * self._total_ticks, right=right)
-    self._stream.write(rule)
+    if self._first or self._redraw:
+      left = self._box.d_dr if self._first else self._box.d_vr
+      right = self._box.d_dl if self._first else self._box.d_vl
+      rule = '{left}{middle}{right}\n'.format(
+          left=left, middle=self._box.d_h * self._total_ticks, right=right)
+      self._stream.write(rule)
     self._stream.write(self._label + '\n')
     self._stream.write(self._box.d_ur)
     self._ticks_written = 0
@@ -831,7 +838,7 @@ class ProgressBar(object):
       self._stream.write(self._box.d_h * new_ticks)
       self._ticks_written += new_ticks
       if expected_ticks == self._total_ticks:
-        end = '\n' if self._last else '\r'
+        end = '\n' if self._last or not self._redraw else '\r'
         self._stream.write(self._box.d_ul + end)
       self._stream.flush()
 

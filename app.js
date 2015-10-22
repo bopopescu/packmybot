@@ -10,17 +10,17 @@ var token = '125345847:AAFKJFwaETnTK_pEQXQ2Hqwx8bnLFV5oo2E';
 // Setup webhooks way
 var options = {
   webHook: {
-    port: 443,
-    key: __dirname+'/YOURPRIVATE.key',
-    cert: __dirname+'/YOURPUBLIC.pem'
+    port: 8080,
+    key: __dirname+'/key.pem',
+    cert: __dirname+'/cert.pem'
   }
 };
 
 // var bot = new TelegramBot('token', options);
 
 var bot = new TelegramBot(token, options);
-bot.setWebHook('');
-bot.setWebHook('https://infinite-ravine-7544.herokuapp.com'+':443/bot'+token,  __dirname+'/YOURPUBLIC.pem');
+//bot.setWebHook('');
+bot.setWebHook('146.148.119.94'+':8080/bot'+token,  __dirname+'/cert.pem');
 
 bot.getMe().then(function (me) {
   console.log('Hi my name is %s!', me.username);
@@ -64,4 +64,5 @@ var handleRequest = function(request, response) {
 }
 
 var www = http.createServer(handleRequest);
-www.listen(8080);
+www.listen(80);
+

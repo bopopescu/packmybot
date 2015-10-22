@@ -2,6 +2,7 @@
 """The gcloud datastore emulator group."""
 
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.emulators.lib import datastore_util
 
 

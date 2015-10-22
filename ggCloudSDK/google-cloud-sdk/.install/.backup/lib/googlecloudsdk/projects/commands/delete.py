@@ -4,10 +4,10 @@
 
 import textwrap
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core.console import console_io
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.projects.lib import util
 
 

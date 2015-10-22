@@ -86,6 +86,18 @@ service.
     def __init__(self, client):
       super(CloudfunctionsV1beta1.ProjectsRegionsFunctionsService, self).__init__(client)
       self._method_configs = {
+          'Call': base_api.ApiMethodInfo(
+              http_method=u'POST',
+              method_id=u'cloudfunctions.projects.regions.functions.call',
+              ordered_params=[u'name'],
+              path_params=[u'name'],
+              query_params=[u'data'],
+              relative_path=u'v1beta1/{+name}:call',
+              request_field='',
+              request_type_name=u'CloudfunctionsProjectsRegionsFunctionsCallRequest',
+              response_type_name=u'CallFunctionResponse',
+              supports_download=False,
+          ),
           'Create': base_api.ApiMethodInfo(
               http_method=u'POST',
               method_id=u'cloudfunctions.projects.regions.functions.create',
@@ -150,6 +162,20 @@ service.
 
       self._upload_configs = {
           }
+
+    def Call(self, request, global_params=None):
+      """Invokes synchronously deployed function. To be used for testing, very.
+limited traffic allowed.
+
+      Args:
+        request: (CloudfunctionsProjectsRegionsFunctionsCallRequest) input message
+        global_params: (StandardQueryParameters, default: None) global arguments
+      Returns:
+        (CallFunctionResponse) The response message.
+      """
+      config = self.GetMethodConfig('Call')
+      return self._RunMethod(
+          config, request, global_params=global_params)
 
     def Create(self, request, global_params=None):
       """Creates a new function. If a function with the given name already exists in.

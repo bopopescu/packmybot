@@ -137,7 +137,7 @@ class InvalidProjectError(InvalidValueError):
 
   def __init__(self, given):
     super(InvalidProjectError, self).__init__(
-        given + os.linesep + _SET_PROJECT_HELP)
+        given + '\n' + _SET_PROJECT_HELP)
 
 
 class RequiredPropertyError(Error):
@@ -450,7 +450,7 @@ class _SectionApp(_Section):
         hidden=True)
     self.use_appengine_api = self._Add(
         'use_appengine_api',
-        hidden=True)
+        callbacks=[lambda: True])
     self.suppress_change_warning = self._Add(
         'suppress_change_warning',
         hidden=True)

@@ -9,9 +9,8 @@ import StringIO
 import sys
 import textwrap
 
-from googlecloudsdk.core.console import console_io
-
 from googlecloudsdk.calliope import arg_parsers
+from googlecloudsdk.core.console import console_io
 
 LINE_WIDTH = 80
 HELP_INDENT = 25

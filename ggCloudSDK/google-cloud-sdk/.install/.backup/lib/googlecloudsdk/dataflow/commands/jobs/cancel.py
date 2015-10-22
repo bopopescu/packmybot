@@ -3,10 +3,10 @@
 """Implementation of gcloud dataflow jobs cancel command.
 """
 
-from googlecloudsdk.core import log
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import log
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.dataflow import commands
 from googlecloudsdk.dataflow.lib import job_utils
 

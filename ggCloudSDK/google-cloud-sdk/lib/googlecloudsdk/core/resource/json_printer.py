@@ -5,7 +5,6 @@
 
 
 import json
-import os
 
 from googlecloudsdk.core.resource import resource_printer_base
 
@@ -30,7 +29,7 @@ class JsonPrinter(resource_printer_base.ResourcePrinter):
         indent=resource_printer_base.STRUCTURED_INDENTATION,
         sort_keys=True,
         separators=(',', ': '))
-    self._out.write(os.linesep)
+    self._out.write('\n')
 
   def _AddRecord(self, record, delimit=True):
     """Adds a JSON-serializable Python object to the resource list.

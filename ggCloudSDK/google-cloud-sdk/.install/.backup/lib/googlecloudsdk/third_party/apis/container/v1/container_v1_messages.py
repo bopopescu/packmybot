@@ -409,6 +409,19 @@ class MasterAuth(_messages.Message):
 class NodeConfig(_messages.Message):
   """Per-node parameters.
 
+  Messages:
+    MetadataValue: The metadata key/value pairs assigned to instances in the
+      cluster.  Keys must conform to the regexp [a-zA-Z0-9-_]+ and be less
+      than 128 bytes in length. These are reflected as part of a URL in the
+      metadata server. Additionally, to avoid ambiguity, keys must not
+      conflict with any other metadata keys for the project or be one of the
+      four reserved keys: "instance-template", "kube-env", "startup-script",
+      and "user-data"  Values can be free-form strings, and only have meaning
+      as interpreted by the image running in the instance. The only
+      restriction placed on them is that each value's size must be less than
+      or equal to 32768 bytes.  The total size of all keys and values must be
+      less than 512 KB.
+
   Fields:
     diskSizeGb: Size of the disk attached to each node, specified in GB. The
       smallest allowed disk size is 10GB.  If unspecified, the default disk
@@ -416,6 +429,17 @@ class NodeConfig(_messages.Message):
     machineType: The name of a Google Compute Engine [machine
       type](/compute/docs/machine-types) (e.g. `n1-standard-1`).  If
       unspecified, the default machine type is `n1-standard-1`.
+    metadata: The metadata key/value pairs assigned to instances in the
+      cluster.  Keys must conform to the regexp [a-zA-Z0-9-_]+ and be less
+      than 128 bytes in length. These are reflected as part of a URL in the
+      metadata server. Additionally, to avoid ambiguity, keys must not
+      conflict with any other metadata keys for the project or be one of the
+      four reserved keys: "instance-template", "kube-env", "startup-script",
+      and "user-data"  Values can be free-form strings, and only have meaning
+      as interpreted by the image running in the instance. The only
+      restriction placed on them is that each value's size must be less than
+      or equal to 32768 bytes.  The total size of all keys and values must be
+      less than 512 KB.
     oauthScopes: The set of Google API scopes to be made available on all of
       the node VMs under the "default" service account.  The following scopes
       are recommended, but not required, and by default are not included:  *
@@ -426,9 +450,43 @@ class NodeConfig(_messages.Message):
       ](/container-registry/).  If unspecified, no scopes are added.
   """
 
+  @encoding.MapUnrecognizedFields('additionalProperties')
+  class MetadataValue(_messages.Message):
+    """The metadata key/value pairs assigned to instances in the cluster.
+    Keys must conform to the regexp [a-zA-Z0-9-_]+ and be less than 128 bytes
+    in length. These are reflected as part of a URL in the metadata server.
+    Additionally, to avoid ambiguity, keys must not conflict with any other
+    metadata keys for the project or be one of the four reserved keys:
+    "instance-template", "kube-env", "startup-script", and "user-data"  Values
+    can be free-form strings, and only have meaning as interpreted by the
+    image running in the instance. The only restriction placed on them is that
+    each value's size must be less than or equal to 32768 bytes.  The total
+    size of all keys and values must be less than 512 KB.
+
+    Messages:
+      AdditionalProperty: An additional property for a MetadataValue object.
+
+    Fields:
+      additionalProperties: Additional properties of type MetadataValue
+    """
+
+    class AdditionalProperty(_messages.Message):
+      """An additional property for a MetadataValue object.
+
+      Fields:
+        key: Name of the additional property.
+        value: A string attribute.
+      """
+
+      key = _messages.StringField(1)
+      value = _messages.StringField(2)
+
+    additionalProperties = _messages.MessageField('AdditionalProperty', 1, repeated=True)
+
   diskSizeGb = _messages.IntegerField(1, variant=_messages.Variant.INT32)
   machineType = _messages.StringField(2)
-  oauthScopes = _messages.StringField(3, repeated=True)
+  metadata = _messages.MessageField('MetadataValue', 3)
+  oauthScopes = _messages.StringField(4, repeated=True)
 
 
 class Operation(_messages.Message):

@@ -1,10 +1,10 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 
 """rolling-updates describe command."""
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.compute.lib import rolling_updates_util as updater_util
 
 

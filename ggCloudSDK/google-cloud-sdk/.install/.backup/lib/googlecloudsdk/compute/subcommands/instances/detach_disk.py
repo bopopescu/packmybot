@@ -1,7 +1,6 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for detaching a disk from an instance."""
 import copy
-
 from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import utils

@@ -75,6 +75,27 @@ class Projector(object):
     self._projection = projection
     self._by_columns = by_columns
 
+  def _ProjectTransform(self, obj, transforms):
+    """Applies transforms to obj.
+
+    Args:
+      obj: The object to transform.
+      transforms: The list of resource_projection_parser._Transform objects.
+
+    Returns:
+      The transformed object.
+    """
+    for transform in transforms:
+      if transform.map_transform and resource_property.IsListLike(obj):
+        # A transform mapped on a list - transform each list item.
+        items = obj
+        obj = []
+        for item in items:
+          obj.append(transform.func(item, *transform.args, **transform.kwargs))
+      elif obj or not transform.map_transform:
+        obj = transform.func(obj, *transform.args, **transform.kwargs)
+    return obj
+
   def _ProjectAttribute(self, obj, projection, flag):
     """Applies projection.attribute.transform in projection if any to obj.
 
@@ -91,8 +112,7 @@ class Projector(object):
       return None
     if projection and projection.attribute and projection.attribute.transform:
       # Transformed values end the DFS on this branch of the tree.
-      transform = projection.attribute.transform
-      return transform.func(obj, *transform.args, **transform.kwargs)
+      return self._ProjectTransform(obj, projection.attribute.transform)
     # leaf=True makes sure we don't get back here with the same obj.
     return self._Project(obj, projection, flag, leaf=True)
 
@@ -272,8 +292,7 @@ class Projector(object):
         return self._Project(obj, projection, flag, leaf)
       if projection and projection.attribute and projection.attribute.transform:
         # Transformed nodes prune here.
-        transform = projection.attribute.transform
-        return transform.func(obj, *transform.args, **transform.kwargs)
+        return self._ProjectTransform(obj, projection.attribute.transform)
       if ((flag >= self._projection.PROJECT or projection and projection.tree)
           and hasattr(obj, '__iter__')):
         if hasattr(obj, 'iteritems'):
@@ -283,7 +302,7 @@ class Projector(object):
     return obj if leaf else self._ProjectAttribute(obj, projection, flag)
 
   def SetByColumns(self, enable):
-    """Sets the projection to list-of-columns state.
+    """Sets the projection to list-of-columns mode.
 
     Args:
       enable: Enables projection to a list-of-columns if True.
@@ -311,9 +330,8 @@ class Projector(object):
     columns = []
     for column in self._projection.Columns():
       val = resource_property.Get(obj, column.key) if column.key else obj
-      transform = column.attribute.transform
-      if transform:
-        val = transform.func(val, *transform.args, **transform.kwargs)
+      if column.attribute.transform:
+        val = self._ProjectTransform(val, column.attribute.transform)
       columns.append(val)
     return columns
 

@@ -5,12 +5,11 @@
 import cStringIO
 import os
 
-from googlecloudsdk.core.document_renderers import render_document
-from googlecloudsdk.core.util import files
-
 from googlecloudsdk.calliope import cli_tree
 from googlecloudsdk.calliope import markdown
 from googlecloudsdk.calliope import walker
+from googlecloudsdk.core.document_renderers import render_document
+from googlecloudsdk.core.util import files
 
 
 class DevSiteGenerator(walker.Walker):

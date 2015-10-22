@@ -8,10 +8,10 @@ import re
 import subprocess
 import textwrap
 
-from googlecloudsdk.core import config
 from googlecloudsdk.core import log
 from googlecloudsdk.core.util import compat26
 from googlecloudsdk.core.util import files
+from googlecloudsdk.core.util import platforms
 import uritemplate
 
 
@@ -126,25 +126,34 @@ def _GetRepositoryURI(project, alias):
 def _GetCredentialHelper():
   """Get a path to the credential helper.
 
-  Tries to find the credential helper installed with this version of gcloud,
-  but falls back to system path.
+  Tries to find the credential helper installed with this version of gcloud.
+  If the credential helper is not in PATH, it throws an error instructing the
+  user to add the Cloud SDK on PATH. If the helper is in PATH, it returns the
+  relative git suffix for the helper. Git adds the 'git-credential-' prefix
+  automatically.
 
   Returns:
-    str, an absolute path to a credential helper
+    str, credential helper command name without 'git-credential-' prefix
 
   Raises:
     MissingCredentialHelper: if the credential helper cannot be found
   """
-  path = os.pathsep.join([
-      config.Paths().sdk_bin_path or '',
-      os.environ['PATH'] or ''])
-  helper = files.FindExecutableOnPath('git-credential-gcloud', path=path)
+  if (platforms.OperatingSystem.Current() ==
+      platforms.OperatingSystem.WINDOWS):
+    helper_ext = '.cmd'
+  else:
+    helper_ext = '.sh'
+  helper_name = 'gcloud'
+  helper_prefix = 'git-credential-'
+  helper = files.FindExecutableOnPath(helper_prefix + helper_name,
+                                      pathext=[helper_ext])
 
   if not helper:
     raise MissingCredentialHelper(
-        'Could not find gcloud\'s git credential helper.')
+        'Could not find gcloud\'s git credential helper. '
+        'Please make sure the Cloud SDK bin folder is in PATH.')
 
-  return helper
+  return helper_name + helper_ext
 
 
 class Git(object):
@@ -241,7 +250,7 @@ class Git(object):
         else:
           cmd = ['git', 'clone', self._uri, abs_repository_path,
                  '--config',
-                 'credential.helper={0}'.format(_GetCredentialHelper())]
+                 'credential.helper="{0}"'.format(_GetCredentialHelper())]
           log.debug('Executing %s', cmd)
           subprocess.check_call(cmd)
       else:

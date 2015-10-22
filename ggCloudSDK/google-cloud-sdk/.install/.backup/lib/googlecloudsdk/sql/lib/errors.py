@@ -5,10 +5,9 @@
 import json
 import sys
 
-from googlecloudsdk.core import exceptions as core_exceptions
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import exceptions as calliope_exceptions
+from googlecloudsdk.core import exceptions as core_exceptions
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
 
 class OperationError(core_exceptions.Error):

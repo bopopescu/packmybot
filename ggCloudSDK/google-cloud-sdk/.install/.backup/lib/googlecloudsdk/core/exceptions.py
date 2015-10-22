@@ -2,6 +2,8 @@
 
 """Base exceptions for the Cloud SDK."""
 
+import os
+
 from googlecloudsdk.core.util import platforms
 
 
@@ -59,6 +61,9 @@ class RequiresAdminRightsError(Error):
           'that window, or re-run the command with elevated privileges by '
           'right-clicking cmd.exe and selecting "Run as Administrator".')
     else:
+      # Specify the full path because sudo often uses secure_path and won't
+      # respect the user's $PATH settings.
+      gcloud_path = os.path.join(sdk_root, 'bin', 'gcloud')
       message += (
-          'Re-run the command with sudo: sudo gcloud ...')
+          'Re-run the command with sudo: sudo {0} ...'.format(gcloud_path))
     super(RequiresAdminRightsError, self).__init__(message)

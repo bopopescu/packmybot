@@ -7,12 +7,12 @@ import os
 import random
 import string
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.util import archive
 from googlecloudsdk.core.util import files as file_utils
-
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-from googlecloudsdk.calliope import base
+
 from googlecloudsdk.functions.lib import cloud_storage as storage
 from googlecloudsdk.functions.lib import exceptions
 from googlecloudsdk.functions.lib import operations
@@ -30,11 +30,40 @@ class Deploy(base.Command):
         type=util.ParseFunctionName)
     parser.add_argument(
         '--source', default='.',
-        help='Path to directory with source code.',
-        type=util.ParseDirectory)
-    parser.add_argument(
-        '--bucket', required=True,
-        help='Name of GCS bucket in which source code will be stored.',
+        help=('Path to directory with source code, either local or in Cloud '
+              'Repositories. The latter must be of the form: '
+              'https://source.developers.google.com/p/{project_id}/'
+              'repo/{repo_name}/{path_inside_repo}, where you should '
+              'substitute your data for values inside the curly brackets. '
+              'At most one of the parameters --source-revision, '
+              '--source-branch or --source-tag must be given if the '
+              '--source parameter refers to a Cloud Repository. If none of '
+              'them are provided, the last revision from the master branch '
+              'is used. None of them is allowed when the --source parameter '
+              'refers to a local directory; instead, --bucket is required.'
+              ''),
+        type=util.ParseDirectoryOrCloudRepoPath)
+    source_group = parser.add_mutually_exclusive_group()
+    source_group.add_argument(
+        '--source-revision',
+        help=('The revision ID (for instance, git tag) that will be used to '
+              'get the source code of the function. See also the documentation '
+              'for --source parameter.'))
+    source_group.add_argument(
+        '--source-branch',
+        help=('The branch that will be used to get the source code of the '
+              'function.  The Most recent revision on this branch will be '
+              'used.  See also the documentation for --source parameter.'))
+    source_group.add_argument(
+        '--source-tag',
+        help=('The revision tag for the source that will be used as the source '
+              'code of the function. See also the documentation for '
+              '--source parameter.'))
+    source_group.add_argument(
+        '--bucket',
+        help=('Name of GCS bucket in which source code will be stored. '
+              'Required if the --source parameter refers to a local directory. '
+              'Must not be given if it refers to a Cloud Repository.'),
         type=util.ParseBucketUri)
     parser.add_argument(
         '--entry-point',
@@ -69,9 +98,6 @@ class Deploy(base.Command):
         return None
       raise
 
-  def _GenerateBucketName(self, args):
-    return args.bucket
-
   def _GenerateFileName(self, args):
     sufix = ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
     return '{0}-{1}-{2}'.format(args.region, args.name, sufix)
@@ -84,12 +110,11 @@ class Deploy(base.Command):
     archive.MakeZipFromDir(zip_file_name, args.source)
     return zip_file_name
 
-  def _GenerateFunction(self, name, gcs_url, args):
-    """Creates a function object.
+  def _PrepareFunctionWithoutSources(self, name, args):
+    """Creates a function object without filling in the sources properties.
 
     Args:
       name: funciton name
-      gcs_url: the location of the code
       args: an argparse namespace. All the arguments that were provided to this
         command invocation.
 
@@ -106,20 +131,31 @@ class Deploy(base.Command):
     function.name = name
     if args.entry_point:
       function.entryPoint = args.entry_point
-    function.gcsUrl = gcs_url
     function.triggers = [trigger]
     return function
 
   def _DeployFunction(self, name, location, args, deploy_method):
+    function = self._PrepareFunctionWithoutSources(name, args)
+    if util.IsCloudRepoPath(args.source):
+      messages = self.context['functions_messages']
+      # At most one of [args.source_tag, args.source_branch,
+      # args.source_revision] is set: enforced by the arg parser.
+      function.sourceRepository = messages.SourceRepository(
+          tag=args.source_tag, branch=args.source_branch,
+          revision=args.source_revision, sourceUrl=args.source)
+    else:
+      function.gcsUrl = self._PrepareSourcesOnGcs(args)
+    return deploy_method(location, function)
+
+  def _PrepareSourcesOnGcs(self, args):
     remote_zip_file = self._GenerateFileName(args)
-    bucket_name = self._GenerateBucketName(args)
-    gcs_url = storage.BuildRemoteDestination(bucket_name, remote_zip_file)
-    function = self._GenerateFunction(name, gcs_url, args)
+    # args.bucket is not None: Enforced in _CheckArgs().
+    gcs_url = storage.BuildRemoteDestination(args.bucket, remote_zip_file)
     with file_utils.TemporaryDirectory() as tmp_dir:
       zip_file = self._CreateZipFile(tmp_dir, args)
       if self._UploadFile(zip_file, gcs_url) != 0:
         raise exceptions.FunctionsError('Function upload failed.')
-    return deploy_method(location, function)
+    return gcs_url
 
   @util.CatchHTTPErrorRaiseHTTPException
   def _CreateFunction(self, location, function):
@@ -141,6 +177,23 @@ class Deploy(base.Command):
     operations.Wait(op, messages, client)
     return self._GetExistingFunction(function.name)
 
+  def _CheckArgs(self, args):
+    # This function should raise ArgumentParsingError, but:
+    # 1. ArgumentParsingError requires the  argument returned from add_argument)
+    #    and Args() method is static. So there is no elegant way to save it
+    #    to be reused here.
+    # 2. _CheckArgs() is invoked from Run() and ArgumentParsingError thrown
+    #    from Run are not caught.
+    if util.IsCloudRepoPath(args.source):
+      if args.bucket is not None:
+        raise exceptions.FunctionsError(
+            'argument --bucket: not allowed when argument --source points '
+            'to a repository')
+    elif args.bucket is None:
+      raise exceptions.FunctionsError(
+          'argument --bucket: required when argument --source points '
+          'to a local directory')
+
   def Run(self, args):
     """This is what gets called when the user runs this command.
 
@@ -150,7 +203,15 @@ class Deploy(base.Command):
 
     Returns:
       The specified function with its description and configured filter.
+
+    Raises:
+      FunctionsError if command line parameters are not valid.
     """
+    # TODO(b/24723761): This should be invoked as a hook method after arguments
+    # are parsed, but unfortunately gcloud framework doesn't support such a
+    # hook.
+    self._CheckArgs(args)
+
     project = properties.VALUES.core.project.Get(required=True)
     location = 'projects/{0}/regions/{1}'.format(project, args.region)
     name = 'projects/{0}/regions/{1}/functions/{2}'.format(

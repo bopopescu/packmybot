@@ -6,12 +6,12 @@ import json
 import sys
 import time
 
+from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.calliope.exceptions import HttpException
 from googlecloudsdk.core import log
 from googlecloudsdk.core import resource_printer
 from googlecloudsdk.core.console import console_io
 from googlecloudsdk.third_party.apitools.base import py as apitools_base
-from googlecloudsdk.calliope import exceptions
-from googlecloudsdk.calliope.exceptions import HttpException
 from googlecloudsdk.deployment_manager.lib.exceptions import DeploymentManagerError
 
 

@@ -4,7 +4,6 @@ import collections
 import cStringIO
 import difflib
 import json
-import os
 import sys
 
 from googlecloudsdk.third_party.apitools.base.py import encoding
@@ -306,7 +305,7 @@ class TablePrinter(ResourcePrinter):
   def Print(self):
     """Prints the actual table."""
     if not self._rows:
-      self._out.write(os.linesep)
+      self._out.write('\n')
       return
 
     rows = [[_Stringify(cell) for cell in row] for row in self._rows]
@@ -323,7 +322,7 @@ class TablePrinter(ResourcePrinter):
       if row:
         line.write(row[len(row) - 1])
       self._out.write(line.getvalue().strip())
-      self._out.write(os.linesep)
+      self._out.write('\n')
 
 
 _FORMATTERS = {

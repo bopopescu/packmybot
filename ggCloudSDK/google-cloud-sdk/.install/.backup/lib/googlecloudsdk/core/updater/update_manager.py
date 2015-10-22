@@ -4,6 +4,7 @@
 
 import hashlib
 import os
+import shutil
 import subprocess
 import sys
 import textwrap
@@ -65,8 +66,6 @@ _SHELL_RCFILES = [
     'gcfilesys.bash.inc',
     'gcfilesys.zsh.inc'
 ]
-
-_MAX_RELEASE_NOTES = 10
 
 
 class Error(exceptions.Error):
@@ -447,7 +446,10 @@ class UpdateManager(object):
     except snapshots.IncompatibleSchemaVersionError as e:
       return self._ReinstallOnError(e)
 
-    self._PrintVersions(diff, is_update=False)
+    # Only show the latest version if we are not pinned.
+    latest_msg = ('The latest available version is: '
+                  if not self.__fixed_version else None)
+    self._PrintVersions(diff, latest_msg=latest_msg)
     to_print = [diff.AvailableUpdates(), diff.Removed(),
                 diff.AvailableToInstall(), diff.UpToDate()]
 
@@ -508,26 +510,22 @@ class UpdateManager(object):
           printer.AddRecord(c)
     printer.Finish()
 
-  def _PrintVersions(self, diff, is_update):
+  def _PrintVersions(self, diff, latest_msg=None):
     """Prints the current and latest version.
 
     Args:
       diff: snapshots.ComponentSnapshotDiff, The snapshot diff we are working
         with.
-      is_update: bool, True if we are doing an update, False if just listing
-        components.
+      latest_msg: str, The message to print when displaying the latest version.
+        If None, nothing about the latest version is printed.
     """
     current_version = config.INSTALLATION_CONFIG.version
     latest_version = diff.latest.version
 
     self.__Write(log.status,
                  '\nYour current Cloud SDK version is: ' + current_version)
-    if latest_version and (is_update or not self.__fixed_version):
-      # Print if we are updating or if we are just listing and we have not
-      # pinned to a version.
-      msg = ('You will be upgraded to version: ' if is_update else
-             'The latest available version is: ')
-      self.__Write(log.status, msg + latest_version)
+    if latest_version and latest_msg:
+      self.__Write(log.status, latest_msg + latest_version)
     self.__Write(log.status)
 
   def _HashRcfiles(self, shell_rc_files):
@@ -630,14 +628,13 @@ class UpdateManager(object):
     md5dict1 = self._HashRcfiles(_SHELL_RCFILES)
     self._EnsureNotDisabled()
 
-    old_release_notes = release_notes.GetReleaseNotes(self.__sdk_root)
-
     try:
       install_state, diff = self._GetStateAndDiff(
           command_path='components.update')
     except snapshots.IncompatibleSchemaVersionError as e:
       return self._ReinstallOnError(e)
 
+    original_update_seed = update_seed
     if update_seed:
       invalid_seeds = diff.InvalidUpdateSeeds(update_seed)
       if invalid_seeds:
@@ -673,7 +670,26 @@ class UpdateManager(object):
                                      platform_filter=self.__platform_filter)
       return True
 
-    self._PrintVersions(diff, is_update=True)
+    current_os = platforms.OperatingSystem.Current()
+    if (current_os is platforms.OperatingSystem.WINDOWS and
+        file_utils.IsDirAncestorOf(self.__sdk_root, sys.executable)):
+      # On Windows, you can't use a Python installed within a directory to move
+      # that directory, which means that with a bundled Python, updates will
+      # fail. To get around this, we copy the Python interpreter to a temporary
+      # directory and run it there.
+      # There's no issue that the `.py` files themselves are inside the install
+      # directory, because the Python interpreter loads them into memory and
+      # closes them immediately.
+      RestartCommand(python=_CopyPython(), block=False)
+      sys.exit(0)
+
+    # If explicitly listing components, you are probably installing and not
+    # doing a full udpate, change the message to be more clear.
+    if original_update_seed:
+      latest_msg = 'Installing components from version: '
+    else:
+      latest_msg = 'You will be upgraded to version: '
+    self._PrintVersions(diff, latest_msg=latest_msg)
 
     disable_backup = self._ShouldDoFastUpdate(allow_no_backup=allow_no_backup)
     self._PrintPendingAction(diff.DetailsForCurrent(to_remove - to_install),
@@ -684,10 +700,10 @@ class UpdateManager(object):
                              'installed')
     self.__Write(log.status)
 
-    if diff.latest.sdk_definition.release_notes_url:
-      self.__Write(log.status,
-                   'For the latest full release notes, please visit:\n  {0}'
-                   .format(diff.latest.sdk_definition.release_notes_url))
+    release_notes.PrintReleaseNotesDiff(
+        diff.latest.sdk_definition.release_notes_url,
+        config.INSTALLATION_CONFIG.version,
+        diff.latest.version)
 
     message = self._GetDontCancelMessage(disable_backup)
     if not console_io.PromptContinue(
@@ -746,21 +762,6 @@ Please remove the following to avoid accidentally invoking these old tools:
 {0}
 
 """.format('\n'.join(bad_commands)))
-
-    new_release_notes = release_notes.GetReleaseNotes(self.__sdk_root)
-    changed_entries = release_notes.ChangesBetween(old_release_notes,
-                                                   new_release_notes)
-    # If there are more changes than we want to print, just don't do anything.
-    # People can follow the link to visit the notes online and this probably
-    # mean that we changed the format of the release notes file.
-    # This logic is going to be replaced by the markdown rendered in the next
-    # release (b/23757402).
-    if changed_entries and len(changed_entries) < _MAX_RELEASE_NOTES:
-      log.status.Print('The following release notes are new in this upgrade. '
-                       'Please read carefully for information about new '
-                       'features, breaking changes, and bugs fixed:\n')
-      log.status.Print('\n\n'.join(changed_entries))
-
     return True
 
   def FindAllOldToolsOnPath(self, path=None):
@@ -1036,17 +1037,32 @@ prompt, or run:
     RestartCommand(command)
 
 
-def RestartCommand(command=None):
+def _CopyPython():
+  """Copy the current Python to temporary directory and return its path."""
+  # We don't want to clean this up when we're done, because we use it later.
+  temp_dir = file_utils.TemporaryDirectory()
+  temp_python_install_dir = os.path.join(temp_dir.path, 'python')
+  shutil.copytree(os.path.dirname(sys.executable), temp_python_install_dir)
+  return os.path.join(temp_python_install_dir,
+                      os.path.basename(sys.executable))
+
+
+def RestartCommand(command=None, python=None, block=True):
   """Calls command again with the same arguments as this invocation and exit.
 
   Args:
     command: str, the command to run (full path to Python file). If not
       specified, defaults to current `gcloud` installation.
+    python: str or None, the path to the Python interpreter to use for the new
+      command invocation (if None, uses the current Python interpreter)
+    block: bool, whether to wait for the restarted command invocation to
+      terminate before continuing.
   """
   command = command or os.path.join(
       os.path.dirname(googlecloudsdk.__file__), 'gcloud', 'gcloud.py')
   command_args = sys.argv[1:]
-  args = execution_utils.ArgsForPythonTool(command, *command_args)
+  args = execution_utils.ArgsForPythonTool(command, *command_args,
+                                           python=python)
 
   short_command = os.path.basename(command)
   if short_command == 'gcloud.py':
@@ -1057,4 +1073,15 @@ def RestartCommand(command=None):
   log.out.flush()
   log.err.flush()
 
-  execution_utils.Exec(args)
+  if block:
+    execution_utils.Exec(args)
+  else:
+    if platforms.OperatingSystem.Current() is platforms.OperatingSystem.WINDOWS:
+      # Open in a new cmd window, and wait for the user to hit enter at the end.
+      # Otherwise, the output is either lost (without `pause`) or comes out
+      # asynchronously over the next commands (without the new window).
+      def Quote(s):
+        return '"' + s + '"'
+      args = 'cmd.exe /c "{0} && pause"'.format(' '.join(map(Quote, args)))
+    subprocess.Popen(args, shell=True,
+                     **platforms.Platform.Current().AsyncPopenArgs())

@@ -462,6 +462,19 @@ class DeviceDetails(_messages.Message):
   gceInstanceDetails = _messages.MessageField('GceInstanceDetails', 2)
 
 
+class DeviceFile(_messages.Message):
+  """A single device file description.
+
+  Fields:
+    obbFile: Opaque Binary Blob (OBB) file(s) to install on the device File
+      names must conform to the format as specified by Android e.g.
+      [main|patch].0300110.com.example.android.obb which will be installed
+      into   <shared-storage>/Android/obb/<package-name>/ on the device
+  """
+
+  obbFile = _messages.MessageField('FileReference', 1)
+
+
 class DeviceStateDetails(_messages.Message):
   """Additional details about the status of the device.
 
@@ -941,6 +954,16 @@ class TestMatrix(_messages.Message):
   timestamp = _messages.StringField(9)
 
 
+class TestSetup(_messages.Message):
+  """A description of how to set up the device prior to running the test
+
+  Fields:
+    filesToPush: A DeviceFile attribute.
+  """
+
+  filesToPush = _messages.MessageField('DeviceFile', 1, repeated=True)
+
+
 class TestSpecification(_messages.Message):
   """A description of how to run the test.
 
@@ -948,6 +971,13 @@ class TestSpecification(_messages.Message):
     androidInstrumentationTest: An Android instrumentation test.
     androidMonkeyTest: An Android monkey test.
     androidRoboTest: An Android robo test.
+    autoGoogleLogin: Enables automatic Google account login. If set, the
+      service will automatically generate a Google test account and use it to
+      log into the device, before executing the test. Note that test accounts
+      might be reused. Many applications can be tested more effectively in the
+      context of such an account. Default is false. Optional
+    testSetup: Test setup requirements e.g. files to install, bootstrap
+      scripts
     testTimeout: Max time a test execution is allowed to run before it is
       automatically cancelled.
   """
@@ -955,7 +985,9 @@ class TestSpecification(_messages.Message):
   androidInstrumentationTest = _messages.MessageField('AndroidInstrumentationTest', 1)
   androidMonkeyTest = _messages.MessageField('AndroidMonkeyTest', 2)
   androidRoboTest = _messages.MessageField('AndroidRoboTest', 3)
-  testTimeout = _messages.StringField(4)
+  autoGoogleLogin = _messages.BooleanField(4)
+  testSetup = _messages.MessageField('TestSetup', 5)
+  testTimeout = _messages.StringField(6)
 
 
 class TestingProjectsDevicesCreateRequest(_messages.Message):

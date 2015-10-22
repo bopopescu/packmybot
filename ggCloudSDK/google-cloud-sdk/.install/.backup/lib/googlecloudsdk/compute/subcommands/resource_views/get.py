@@ -3,10 +3,10 @@
 """resourceviews get command."""
 
 from apiclient import errors
-from googlecloudsdk.core import properties
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import properties
+
 from googlecloudsdk.compute.lib import rolling_updates_util as util
 
 

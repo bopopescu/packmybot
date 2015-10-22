@@ -4,10 +4,10 @@
 
 import types
 
-from googlecloudsdk.core import log
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+
 from googlecloudsdk.test.lib import arg_file
 from googlecloudsdk.test.lib import arg_validate
 
@@ -340,7 +340,7 @@ def _GetSetOfAllTestArgs(type_rules, shared_rules):
   """Build a set of all possible 'gcloud test run' args.
 
   We need this set to test for invalid arg combinations because gcloud core
-  adds many args to our args.__dict__ that we don't care about and don't want
+  adds many args to our args.Namespace that we don't care about and don't want
   to validate. We also need this to validate args coming from an arg-file.
 
   Args:
@@ -375,15 +375,15 @@ def _ApplyArgDefaults(args, defaults_dict, issue_warning=False):
       specified in the file are lower-priority than the CLI args.).
   """
   for arg in defaults_dict:
-    if not hasattr(args, arg) or not args.__dict__[arg]:
+    if getattr(args, arg, None) is None:
       log.debug('Applying default {0}: {1}'
                 .format(arg, str(defaults_dict[arg])))
       setattr(args, arg, defaults_dict[arg])
-    elif issue_warning and args.__dict__[arg] != defaults_dict[arg]:
+    elif issue_warning and getattr(args, arg) != defaults_dict[arg]:
       ext_name = arg_validate.ExternalArgNameFrom(arg)
       log.warning(
           'Command-line argument "--{0} {1}" overrides file argument "{2}: {3}"'
-          .format(ext_name, _FormatArgValue(args.__dict__[arg]),
+          .format(ext_name, _FormatArgValue(getattr(args, arg)),
                   ext_name, _FormatArgValue(defaults_dict[arg])))
 
 

@@ -2,8 +2,8 @@
 
 """Implementation of gcloud genomics callsets describe.
 """
-
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.genomics.lib import genomics_util
 
 

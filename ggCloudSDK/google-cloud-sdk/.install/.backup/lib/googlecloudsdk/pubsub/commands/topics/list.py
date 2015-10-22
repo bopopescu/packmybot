@@ -2,11 +2,11 @@
 """Cloud Pub/Sub topics list command."""
 import re
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as sdk_ex
 from googlecloudsdk.core import log
 from googlecloudsdk.core.console import console_io as io
 
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as sdk_ex
 from googlecloudsdk.pubsub.lib import util
 
 MAX_TOPICS_RESULTS = 1000

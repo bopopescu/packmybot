@@ -5,12 +5,12 @@
 
 import textwrap
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as c_exc
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.credentials import store as c_store
 
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as c_exc
 from googlecloudsdk.source.lib import git
 
 
@@ -20,26 +20,21 @@ class Clone(base.Command):
   detailed_help = {
       'DESCRIPTION': """\
           This command clones git repository for the currently active
-          Google Cloud Platform project into specified folder in current
-          directory.
-
-          If you have enabled push-to-deploy in the Cloud Console,
-          this `{command}` will clone the Google-hosted git repository
-          associated with PROJECT. This repository will automatically be
-          connected to Google, and it will use the credentials indicated as
-          _active_ by `gcloud auth list`. Pushing to the origin's _master_
-          branch will trigger an App Engine deployment using the contents
-          of that branch.
+          Google Cloud Platform project into the specified folder in the
+          current directory.
       """,
       'EXAMPLES': textwrap.dedent("""\
-          To perform a simple `"Hello, world!"` App Engine deployment with this
-          command, run the following command lines with MYPROJECT replaced by
-          a project you own and can use for this experiment.
+          To use the default Google Cloud repository for development, use the
+          following commands. We recommend that you use your project name as
+          TARGET_DIR to make it apparent which directory is used for which
+          project. We also recommend to clone the repository named 'default'
+          since it is automatically created for each project, and its
+          contents can be browsed and edited in the Developers Console.
 
-            $ gcloud source repos clone REPOSITORY_NAME
-            $ cd REPOSITORY_NAME
-            $ git pull
-              https://github.com/GoogleCloudPlatform/appengine-helloworld-python
+            $ gcloud init
+            $ gcloud source repos clone default TARGET_DIR
+            $ cd TARGET_DIR
+            ... create/edit files and create one or more commits ...
             $ git push origin master
       """),
   }
@@ -56,11 +51,12 @@ class Clone(base.Command):
         'dst',
         metavar='DIRECTORY_NAME',
         nargs='?',
-        help='Directory name for the cloned repo. Defaults repo name.')
+        help=('Directory name for the cloned repo. Defaults to the repository '
+              'name.'))
 
   @c_exc.RaiseToolExceptionInsteadOf(git.Error, c_store.Error)
   def Run(self, args):
-    """Clone GCP repo to current directory.
+    """Clone a GCP repository to the current directory.
 
     Args:
       args: argparse.Namespace, the arguments this command is run with.
@@ -69,7 +65,7 @@ class Clone(base.Command):
       ToolException: on project initialization errors.
 
     Returns:
-      The path to the new git repo.
+      The path to the new git repository.
     """
     # Ensure that we're logged in.
     c_store.Load()

@@ -1,6 +1,5 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Command for setting size of instance group manager."""
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import base
 from googlecloudsdk.compute.lib import base_classes

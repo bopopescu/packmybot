@@ -405,6 +405,10 @@ COLLECTION_COLUMNS = {
         ('STATE', _Select('state')),
         ('CREATE_TIME', _Select('createTime')),
     ),
+    'source.snapshots.list': (
+        ('PROJECT_ID ', _Select('project_id')),
+        ('SNAPSHOT_ID', _Select('id')),
+    ),
 
     # Cloud Updater
     'replicapoolupdater.rollingUpdates': (

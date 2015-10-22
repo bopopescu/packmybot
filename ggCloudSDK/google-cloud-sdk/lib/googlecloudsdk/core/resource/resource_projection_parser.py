@@ -37,6 +37,8 @@ class Parser(object):
     _root: The projection _Tree tree root node.
   """
 
+  _BOOLEAN_ATTRIBUTES = ['reverse']
+
   def __init__(self, defaults=None, symbols=None):
     """Constructor.
 
@@ -75,6 +77,7 @@ class Parser(object):
       order: The column sort order, None if not ordered. Lower values have
         higher sort precedence.
       label: A string associated with each projection key.
+      reverse: Reverse column sort if True.
       align: The column alignment name: left, center, or right.
       transform: obj = func(obj,...) function applied during projection.
     """
@@ -84,8 +87,9 @@ class Parser(object):
       self.ordinal = None
       self.order = None
       self.label = None
+      self.reverse = None
       self.align = resource_projection_spec.ALIGN_DEFAULT
-      self.transform = None
+      self.transform = []
 
     def __str__(self):
       return (
@@ -96,7 +100,7 @@ class Parser(object):
               order=('UNORDERED' if self.order is None else str(self.order)),
               label=repr(self.label),
               align=self.align,
-              transform=self.transform))
+              transform='[{0}]'.format('; '.join(map(str, self.transform)))))
 
   class _Transform(object):
     """A key transform function with actual args.
@@ -104,13 +108,15 @@ class Parser(object):
     Attributes:
       name: The transform function name.
       func: The transform function.
+      map_transform: If r is a list then apply the transform to each list item.
       args: List of function call actual arg strings.
       kwargs: List of function call actual keyword arg strings.
     """
 
-    def __init__(self, name, func, args, kwargs):
+    def __init__(self, name, func, map_transform, args, kwargs):
       self.name = name
       self.func = func
+      self.map_transform = map_transform
       self.args = args
       self.kwargs = kwargs
 
@@ -118,10 +124,10 @@ class Parser(object):
       return '{0}({1})'.format(self.name, ','.join(self.args))
 
   def _AngrySnakeCase(self, key):
-    """Returns an ANGRY_SNAKE_CASE string representation of key.
+    """Returns an ANGRY_SNAKE_CASE string representation of a parsed key.
 
     Args:
-        key: Resource key.
+        key: A parsed resource key.
 
     Returns:
       The ANGRY_SNAKE_CASE string representation of key, adding components
@@ -129,7 +135,7 @@ class Parser(object):
         strings.
     """
     if self._snake_re is None:
-      self._snake_re = re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
+      self._snake_re = re.compile('((?<=[a-z0-9])[A-Z]+|(?!^)[A-Z](?=[a-z]))')
     label = ''
     for index in reversed(key):
       if isinstance(index, str):
@@ -189,7 +195,11 @@ class Parser(object):
       attribute.label = self._AngrySnakeCase(key)
     if attribute_add.align != resource_projection_spec.ALIGN_DEFAULT:
       attribute.align = attribute_add.align
-    if attribute_add.transform is not None:
+    if attribute_add.reverse is not None:
+      attribute.reverse = attribute_add.reverse
+    elif attribute.reverse is None:
+      attribute.reverse = False
+    if attribute_add.transform:
       attribute.transform = attribute_add.transform
     self._projection.AddAlias(attribute.label, key)
 
@@ -202,6 +212,40 @@ class Parser(object):
     elif not name_in_tree:
       # This is a new attributes only key.
       attribute.flag = self._projection.DEFAULT
+
+  def _ParseTransform(self, func_name, map_transform):
+    """Parses a transform function call.
+
+    Args:
+      func_name: The transform function name.
+      map_transform: Apply the transform to each resource list item.
+
+    Returns:
+      A _Transform call item. The caller appends these to a list that is used
+      to apply the transform functions.
+
+    Raises:
+      ExpressionSyntaxError: The expression has a syntax error.
+    """
+    here = self._lex.GetPosition()
+    if (not self._projection.symbols or
+        func_name not in self._projection.symbols):
+      raise resource_exceptions.ExpressionSyntaxError(
+          'Unknown transform function {0} [{1}].'.format(
+              func_name, self._lex.Annotate(here)))
+    kwargs = {}
+    if func_name == 'format':
+      args = [self._projection] + self._lex.Args()
+    else:
+      args = []
+      for arg in self._lex.Args():
+        name, sep, val = arg.partition('=')
+        if sep:
+          kwargs[name] = val
+        else:
+          args.append(arg)
+    return self._Transform(func_name, self._projection.symbols[func_name],
+                           map_transform, args, kwargs)
 
   def _ParseKeyAttributes(self, key, attribute):
     """Parses one or more key attributes and adds them to attribute.
@@ -216,13 +260,31 @@ class Parser(object):
       ExpressionSyntaxError: The expression has a syntax error.
     """
     while True:
+      name = self._lex.Token('=:,)', space=False)
       here = self._lex.GetPosition()
-      name = self._lex.Token('=', space=False)
-      if not self._lex.IsCharacter('=', eoi_ok=True):
+      if self._lex.IsCharacter('=', eoi_ok=True):
+        boolean_value = False
+        value = self._lex.Token(':,)', space=False, convert=True)
+      else:
+        boolean_value = True
+        if name.startswith('no-'):
+          name = name[3:]
+          value = False
+        else:
+          value = True
+      if name in self._BOOLEAN_ATTRIBUTES:
+        if not boolean_value:
+          # A Boolean attribute with a non-Boolean value.
+          raise resource_exceptions.ExpressionSyntaxError(
+              'value not expected [{0}].'.format(self._lex.Annotate(here)))
+      elif boolean_value:
+        # A non-Boolean attribute without a value or a no- prefix.
         raise resource_exceptions.ExpressionSyntaxError(
-            'name=value expected [{0}].'.format(self._lex.Annotate(here)))
-      value = self._lex.Token(':,)', space=False, convert=True)
+            'value expected [{0}].'.format(self._lex.Annotate(here)))
       if name == 'alias':
+        if not value:
+          raise resource_exceptions.ExpressionSyntaxError(
+              'Cannot unset alias [{0}].'.format(self._lex.Annotate(here)))
         self._projection.AddAlias(value, key)
       elif name == 'align':
         if value not in resource_projection_spec.ALIGNMENTS:
@@ -230,7 +292,9 @@ class Parser(object):
               'Unknown alignment [{0}].'.format(self._lex.Annotate(here)))
         attribute.align = value
       elif name == 'label':
-        attribute.label = value
+        attribute.label = value or ''
+      elif name == 'reverse':
+        attribute.reverse = value
       elif name == 'sort':
         attribute.order = value
       else:
@@ -254,26 +318,36 @@ class Parser(object):
     here = self._lex.GetPosition()
     attribute = self._Attribute(self._projection.PROJECT)
     if self._lex.IsCharacter('(', eoi_ok=True):
-      args = []
-      kwargs = {}
-      for arg in self._lex.Args():
-        name, sep, val = arg.partition('=')
-        if sep:
-          kwargs[name] = val
+      func_name = key.pop()
+      map_transform = False
+      while True:
+        transform = self._ParseTransform(func_name, map_transform)
+        if func_name == 'map':
+          map_transform = True
+          func_name = None
         else:
-          args.append(arg)
-      fun = key.pop()
-      if not self._projection.symbols or fun not in self._projection.symbols:
-        raise resource_exceptions.ExpressionSyntaxError(
-            'Unknown filter function [{0}].'.format(self._lex.Annotate(here)))
-      attribute.transform = self._Transform(fun, self._projection.symbols[fun],
-                                            args, kwargs)
+          map_transform = False
+          attribute.transform.append(transform)
+        if not self._lex.IsCharacter('.', eoi_ok=True):
+          break
+        call = self._lex.Key()
+        here = self._lex.GetPosition()
+        if not self._lex.IsCharacter('('):
+          raise resource_exceptions.ExpressionSyntaxError(
+              'Transform function expected [{0}].'.format(
+                  self._lex.Annotate(here)))
+        if len(call) != 1:
+          raise resource_exceptions.ExpressionSyntaxError(
+              'Unknown transform function {0} [{1}].'.format(
+                  '.'.join(call), self._lex.Annotate(here)))
+        func_name = call.pop()
     else:
-      fun = None
+      func_name = None
+    self._lex.SkipSpace()
     if self._lex.IsCharacter(':'):
       self._ParseKeyAttributes(key, attribute)
-    if fun and attribute.label is None and not key:
-      attribute.label = self._AngrySnakeCase([fun])
+    if func_name and attribute.label is None and not key:
+      attribute.label = self._AngrySnakeCase([func_name])
     self._AddKey(key, attribute)
 
   def _ParseKeys(self):
@@ -289,6 +363,7 @@ class Parser(object):
       return
     while True:
       self._ParseKey()
+      self._lex.SkipSpace()
       if self._lex.IsCharacter(')'):
         break
       if not self._lex.IsCharacter(','):

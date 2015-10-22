@@ -5,9 +5,8 @@ import functools
 import json
 import sys
 
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
-
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
 
 def GetError(error, verbose=False):

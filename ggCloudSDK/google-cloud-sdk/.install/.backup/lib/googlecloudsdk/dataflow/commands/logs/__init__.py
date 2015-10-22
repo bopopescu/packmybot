@@ -2,7 +2,6 @@
 
 """The command group for gcloud dataflow logs.
 """
-
 from googlecloudsdk.calliope import base
 
 

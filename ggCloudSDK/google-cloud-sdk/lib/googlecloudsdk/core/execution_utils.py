@@ -24,6 +24,8 @@ def GetPythonExecutable():
 # From https://en.wikipedia.org/wiki/Unix_shell#Bourne_shell_compatible
 # Many scripts that we execute via execution_utils are bash scripts, and we need
 # a compatible shell to run them.
+# zsh, was initially on this list, but it doesn't work 100% without running it
+# in `emulate sh` mode.
 _BORNE_COMPATIBLE_SHELLS = [
     'ash',
     'bash',
@@ -33,7 +35,6 @@ _BORNE_COMPATIBLE_SHELLS = [
     'mksh',
     'pdksh',
     'sh',
-    'zsh',
 ]
 
 

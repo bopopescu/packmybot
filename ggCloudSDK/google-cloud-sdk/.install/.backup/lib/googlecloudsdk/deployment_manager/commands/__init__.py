@@ -2,13 +2,12 @@
 
 """The command group for the DeploymentManager CLI."""
 
-from googlecloudsdk.core import properties
-from googlecloudsdk.core.credentials import store
-
-from googlecloudsdk.third_party.apis.deploymentmanager import v2 as deploymentmanager_v2
-from googlecloudsdk.third_party.apis.deploymentmanager.v2 import deploymentmanager_v2_messages as v2_messages
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import properties
+from googlecloudsdk.core.credentials import store
+from googlecloudsdk.third_party.apis.deploymentmanager import v2 as deploymentmanager_v2
+from googlecloudsdk.third_party.apis.deploymentmanager.v2 import deploymentmanager_v2_messages as v2_messages
 
 
 @base.ReleaseTracks(base.ReleaseTrack.GA)

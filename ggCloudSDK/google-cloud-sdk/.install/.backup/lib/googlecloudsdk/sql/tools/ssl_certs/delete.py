@@ -1,10 +1,10 @@
 # Copyright 2013 Google Inc. All Rights Reserved.
 """Deletes an SSL certificate for a Cloud SQL instance."""
 
-from googlecloudsdk.core import log
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+
 from googlecloudsdk.sql.lib import cert
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import operations

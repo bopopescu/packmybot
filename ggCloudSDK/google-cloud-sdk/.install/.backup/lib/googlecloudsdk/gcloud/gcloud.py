@@ -119,36 +119,22 @@ def CreateCLI():
   pkg_root = os.path.dirname(googlecloudsdk.__file__)
   loader = cli.CLILoader(
       name='gcloud',
-      command_root_directory=os.path.join(
-          pkg_root, 'gcloud', 'sdktools', 'root'),
+      command_root_directory=os.path.join(pkg_root, 'surface'),
       allow_non_existing_modules=True,
       version_func=VersionFunc)
-
   loader.AddReleaseTrack(base.ReleaseTrack.ALPHA,
-                         os.path.join(pkg_root, 'gcloud', 'sdktools', 'alpha'),
+                         os.path.join(pkg_root, 'surface', 'alpha'),
                          component='alpha')
   loader.AddReleaseTrack(base.ReleaseTrack.BETA,
-                         os.path.join(pkg_root, 'gcloud', 'sdktools', 'beta'),
+                         os.path.join(pkg_root, 'surface', 'beta'),
                          component='beta')
 
-  loader.AddModule('auth',
-                   os.path.join(pkg_root, 'gcloud', 'sdktools', 'auth'),
-                   component='core')
   loader.AddModule('bigquery',
                    os.path.join(pkg_root, 'bigquery', 'commands'),
                    component='gcloud')
-  loader.AddModule('bigtable',
-                   os.path.join(pkg_root, 'bigtable', 'commands'),
-                   component='gcloud')
-  loader.AddModule('components',
-                   os.path.join(pkg_root, 'gcloud', 'sdktools', 'components'),
-                   component='core')
   loader.AddModule('compute',
                    os.path.join(pkg_root, 'compute', 'subcommands'),
                    component='gcloud')
-  loader.AddModule('config',
-                   os.path.join(pkg_root, 'gcloud', 'sdktools', 'config'),
-                   component='core')
   loader.AddModule('container',
                    os.path.join(pkg_root, 'container', 'commands'),
                    component='gcloud')
@@ -176,9 +162,6 @@ def CreateCLI():
   loader.AddModule('internal',
                    os.path.join(pkg_root, 'internal', 'commands'),
                    component=None)
-  loader.AddModule('meta',
-                   os.path.join(pkg_root, 'gcloud', 'sdktools', 'meta'),
-                   component='gcloud')
   loader.AddModule('preview',
                    os.path.join(pkg_root, 'appengine', 'preview'),
                    component='app')
@@ -233,7 +216,7 @@ def main():
     log.err.Print('Traceback (most recent call last):')
     unused_ex_type, unused_ex, tb = sys.exc_info()
     traceback.print_tb(tb, file=log.err)
-    log.err.Print('{0}: {1}'.format(type(e).__name__, e))
+    log.err.Print(type(e).__name__ + ': ' + _cli.SafeExceptionToString(e))
 
     log.err.Print('\nIf you would like to report this issue, please run the '
                   'following command:')

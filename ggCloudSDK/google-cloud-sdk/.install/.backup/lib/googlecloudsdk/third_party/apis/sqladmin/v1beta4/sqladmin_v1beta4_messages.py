@@ -308,6 +308,20 @@ class ExportContext(_messages.Message):
   uri = _messages.StringField(6)
 
 
+class FailoverContext(_messages.Message):
+  """Database instance failover context.
+
+  Fields:
+    kind: This is always sql#failoverContext.
+    settingsVersion: The current settings version of this instance. Request
+      will be rejected if this version doesn't match the current settings
+      version.
+  """
+
+  kind = _messages.StringField(1, default=u'sql#failoverContext')
+  settingsVersion = _messages.IntegerField(2)
+
+
 class Flag(_messages.Message):
   """A Google Cloud SQL service flag resource.
 
@@ -404,6 +418,16 @@ class InstancesExportRequest(_messages.Message):
   """
 
   exportContext = _messages.MessageField('ExportContext', 1)
+
+
+class InstancesFailoverRequest(_messages.Message):
+  """Instance failover request.
+
+  Fields:
+    failoverContext: Failover Context.
+  """
+
+  failoverContext = _messages.MessageField('FailoverContext', 1)
 
 
 class InstancesImportRequest(_messages.Message):
@@ -643,6 +667,12 @@ class ReplicaConfiguration(_messages.Message):
   """Read-replica configuration for connecting to the master.
 
   Fields:
+    failoverTarget: Specifies if the replica is the failover target. If the
+      field is set to true the replica will be designated as a failover
+      replica. In case the master instance fails, the replica instance will be
+      promoted as the new master instance. Only one replica can be specified
+      as failover target, and the replica has to be in different zone with the
+      master instance.
     kind: This is always sql#replicaConfiguration.
     mysqlReplicaConfiguration: MySQL specific configuration when replicating
       from a MySQL on-premises master. Replication configuration information
@@ -652,8 +682,9 @@ class ReplicaConfiguration(_messages.Message):
       master.info in the data directory.
   """
 
-  kind = _messages.StringField(1, default=u'sql#replicaConfiguration')
-  mysqlReplicaConfiguration = _messages.MessageField('MySqlReplicaConfiguration', 2)
+  failoverTarget = _messages.BooleanField(1)
+  kind = _messages.StringField(2, default=u'sql#replicaConfiguration')
+  mysqlReplicaConfiguration = _messages.MessageField('MySqlReplicaConfiguration', 3)
 
 
 class RestoreBackupContext(_messages.Message):
@@ -686,6 +717,8 @@ class Settings(_messages.Message):
     crashSafeReplicationEnabled: Configuration specific to read replica
       instances. Indicates whether database flags for crash-safe replication
       are enabled.
+    dataDiskSize: The size of data disk for the performance instance,
+      specified in bytes.
     databaseFlags: The database flags passed to the instance at startup.
     databaseReplicationEnabled: Configuration specific to read replica
       instances. Indicates whether replication is enabled or not.
@@ -712,15 +745,16 @@ class Settings(_messages.Message):
   authorizedGaeApplications = _messages.StringField(2, repeated=True)
   backupConfiguration = _messages.MessageField('BackupConfiguration', 3)
   crashSafeReplicationEnabled = _messages.BooleanField(4)
-  databaseFlags = _messages.MessageField('DatabaseFlags', 5, repeated=True)
-  databaseReplicationEnabled = _messages.BooleanField(6)
-  ipConfiguration = _messages.MessageField('IpConfiguration', 7)
-  kind = _messages.StringField(8, default=u'sql#settings')
-  locationPreference = _messages.MessageField('LocationPreference', 9)
-  pricingPlan = _messages.StringField(10)
-  replicationType = _messages.StringField(11)
-  settingsVersion = _messages.IntegerField(12)
-  tier = _messages.StringField(13)
+  dataDiskSize = _messages.IntegerField(5)
+  databaseFlags = _messages.MessageField('DatabaseFlags', 6, repeated=True)
+  databaseReplicationEnabled = _messages.BooleanField(7)
+  ipConfiguration = _messages.MessageField('IpConfiguration', 8)
+  kind = _messages.StringField(9, default=u'sql#settings')
+  locationPreference = _messages.MessageField('LocationPreference', 10)
+  pricingPlan = _messages.StringField(11)
+  replicationType = _messages.StringField(12)
+  settingsVersion = _messages.IntegerField(13)
+  tier = _messages.StringField(14)
 
 
 class SqlBackupRunsDeleteRequest(_messages.Message):
@@ -895,11 +929,14 @@ class SqlInstancesFailoverRequest(_messages.Message):
 
   Fields:
     instance: Cloud SQL instance ID. This does not include the project ID.
+    instancesFailoverRequest: A InstancesFailoverRequest resource to be passed
+      as the request body.
     project: ID of the project that contains the read replica.
   """
 
   instance = _messages.StringField(1, required=True)
-  project = _messages.StringField(2, required=True)
+  instancesFailoverRequest = _messages.MessageField('InstancesFailoverRequest', 2)
+  project = _messages.StringField(3, required=True)
 
 
 class SqlInstancesGetRequest(_messages.Message):

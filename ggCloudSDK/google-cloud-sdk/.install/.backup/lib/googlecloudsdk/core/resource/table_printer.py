@@ -6,7 +6,6 @@
 import cStringIO
 import json
 import operator
-import os
 
 from googlecloudsdk.core import log
 from googlecloudsdk.core.console import console_attr
@@ -57,7 +56,7 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
     _rows: The list of all resource columns indexed by row.
   """
   _WRITERS = {
-      'status': lambda x: log.status.write(x + os.linesep),
+      'status': lambda x: log.status.write(x + '\n'),
       'debug': log.debug,
       'info': log.info,
       'warn': log.warn,
@@ -91,11 +90,11 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
     The legend is one or more lines of text printed after the table data.
     """
     writer = self._WRITERS.get(self._attributes.get('log'),
-                               lambda x: self._out.write(x + os.linesep))
+                               lambda x: self._out.write(x + '\n'))
     if self._rows:
       legend = self._attributes.get('legend')
       if legend and 'log' not in self._attributes:
-        legend = os.linesep + legend
+        legend = '\n' + legend
     else:
       legend = self._attributes.get('empty-legend')
       if legend is None and 'no-empty-legend' not in self._attributes:
@@ -123,7 +122,7 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
     rows = [[_Stringify(cell) for cell in row] for row in self._rows]
     heading = []
     if 'no-heading' not in self._attributes:
-      labels = self._heading or self._column_attributes.Labels()
+      labels = self._heading or self.column_attributes.Labels()
       if labels:
         heading = [[_Stringify(cell) for cell in labels]]
     col_widths = [0] * max(len(x) for x in rows + heading)
@@ -155,12 +154,12 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
         width += 3 * len(col_widths) - 1
         line += box.dl
         self._out.write(line)
-        self._out.write(os.linesep)
+        self._out.write('\n')
         line = box.v + title.center(width) + box.v
       else:
         line = title.center(width)
       self._out.write(line)
-      self._out.write(os.linesep)
+      self._out.write('\n')
 
     # Set up box borders.
     if box:
@@ -182,7 +181,7 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
       m_rule += box.vl
       b_rule += box.ul
       self._out.write(t_rule)
-      self._out.write(os.linesep)
+      self._out.write('\n')
       if heading:
         line = cStringIO.StringIO()
         row = heading[0]
@@ -193,16 +192,32 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
           line.write(' ')
         line.write(box.v)
         self._out.write(line.getvalue())
-        self._out.write(os.linesep)
+        self._out.write('\n')
         self._out.write(m_rule)
-        self._out.write(os.linesep)
+        self._out.write('\n')
 
     # Sort by columns if requested.
-    if self._column_attributes:
-      order = self._column_attributes.Order()
-      if order:
-        rows = sorted(rows, key=operator.itemgetter(*order))
-      align = self._column_attributes.Alignments()
+    if self.column_attributes:
+      # Order() is a list of (key,reverse) tuples from highest to lowest key
+      # precedence. This loop partitions the keys into groups with the same
+      # reverse value. The groups are then applied in reverse order to maintain
+      # the original precedence.
+      groups = []  # [(keys, reverse)] LIFO to preserve precedence
+      keys = []  # keys for current group
+      for key_index, key_reverse in self.column_attributes.Order():
+        if not keys:
+          # This only happens the first time through the loop.
+          reverse = key_reverse
+        if reverse != key_reverse:
+          groups.insert(0, (keys, reverse))
+          keys = []
+          reverse = key_reverse
+        keys.append(key_index)
+      if keys:
+        groups.insert(0, (keys, reverse))
+      for keys, reverse in groups:
+        rows = sorted(rows, key=operator.itemgetter(*keys), reverse=reverse)
+      align = self.column_attributes.Alignments()
     else:
       align = None
 
@@ -247,10 +262,10 @@ class TablePrinter(resource_printer_base.ResourcePrinter):
             pad += table_column_pad + len(value)
       if box:
         self._out.write(box.v)
-      self._out.write(os.linesep)
+      self._out.write('\n')
     if box:
       self._out.write(b_rule)
-      self._out.write(os.linesep)
+      self._out.write('\n')
 
     # Print the legend if any.
     self._Legend()

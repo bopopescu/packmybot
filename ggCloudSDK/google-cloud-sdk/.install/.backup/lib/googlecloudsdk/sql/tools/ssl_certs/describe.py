@@ -3,6 +3,7 @@
 """Retrieves information about an SSL cert for a Cloud SQL instance."""
 
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.sql.lib import cert
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import validate

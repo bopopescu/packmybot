@@ -2,9 +2,8 @@
 
 """The 'gcloud test android devices list' command."""
 
-from googlecloudsdk.core import list_printer
-
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import list_printer
 
 
 class List(base.Command):

@@ -3,9 +3,9 @@
 """Implementation of gcloud genomics datasets update.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.genomics import lib
 from googlecloudsdk.genomics.lib import genomics_util
 

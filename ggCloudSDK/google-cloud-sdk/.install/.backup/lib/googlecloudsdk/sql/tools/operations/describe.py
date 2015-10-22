@@ -3,6 +3,7 @@
 """Retrieves information about a Cloud SQL instance operation."""
 
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import validate
 
@@ -32,6 +33,11 @@ class _BaseGet(object):
       request was successful.
     """
     self.format(result)
+
+
+@base.ReleaseTracks(base.ReleaseTrack.GA)
+class Get(_BaseGet, base.Command):
+  """Retrieves information about a Cloud SQL instance operation."""
 
   @errors.ReraiseHttpException
   def Run(self, args):
@@ -65,13 +71,34 @@ class _BaseGet(object):
     return result
 
 
-@base.ReleaseTracks(base.ReleaseTrack.GA)
-class Get(_BaseGet, base.Command):
-  """Retrieves information about a Cloud SQL instance operation."""
-  pass
-
-
 @base.ReleaseTracks(base.ReleaseTrack.BETA)
 class GetBeta(_BaseGet, base.Command):
   """Retrieves information about a Cloud SQL instance operation."""
-  pass
+
+  @errors.ReraiseHttpException
+  def Run(self, args):
+    """Retrieves information about a Cloud SQL instance operation.
+
+    Args:
+      args: argparse.Namespace, The arguments that this command was invoked
+          with.
+
+    Returns:
+      A dict object representing the operations resource if the api request was
+      successful.
+    Raises:
+      HttpException: A http error response was received while executing api
+          request.
+      ToolException: An error other than http error occured while executing the
+          command.
+    """
+    sql_client = self.context['sql_client']
+    resources = self.context['registry']
+
+    operation_ref = resources.Parse(
+        args.operation, collection='sql.operations',
+        params={'project': args.project})
+
+    result = sql_client.operations.Get(operation_ref.Request())
+    return result
+

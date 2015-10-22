@@ -5,11 +5,11 @@ import collections
 import getpass
 import logging
 
-from googlecloudsdk.core import properties
-
 from googlecloudsdk.calliope import actions
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import properties
+
 from googlecloudsdk.compute.lib import ssh_utils
 
 

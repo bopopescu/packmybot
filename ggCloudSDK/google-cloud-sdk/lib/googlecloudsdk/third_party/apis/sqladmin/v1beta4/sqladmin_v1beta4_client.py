@@ -382,7 +382,7 @@ class SqladminV1beta4(base_api.BaseApiClient):
               path_params=[u'instance', u'project'],
               query_params=[],
               relative_path=u'projects/{project}/instances/{instance}/failover',
-              request_field='',
+              request_field=u'instancesFailoverRequest',
               request_type_name=u'SqlInstancesFailoverRequest',
               response_type_name=u'Operation',
               supports_download=False,

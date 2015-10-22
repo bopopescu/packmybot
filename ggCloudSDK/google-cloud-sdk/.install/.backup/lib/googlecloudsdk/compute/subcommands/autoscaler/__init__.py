@@ -4,6 +4,9 @@
 
 import argparse
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
@@ -12,9 +15,6 @@ from googlecloudsdk.core.credentials import store
 from googlecloudsdk.third_party.apis.autoscaler import v1beta2 as autoscaler_v1beta2
 from googlecloudsdk.third_party.apis.autoscaler.v1beta2 import autoscaler_v1beta2_messages as messages_v2
 
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
 
 
 @base.ReleaseTracks(base.ReleaseTrack.ALPHA)

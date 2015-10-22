@@ -305,12 +305,12 @@ class ProjectionSpec(object):
         rows = sorted(rows, key=itemgetter(*order))
 
     Returns:
-      The list of sort key indices, None if projection is None or if all sort
-        order indices in the projection are None (unordered).
+      The list of (sort-key-index, reverse), [] if projection is None
+      or if all sort order indices in the projection are None (unordered).
     """
-    return [column - 1 for column, order, _ in
+    return [(column - 1, attr.reverse) for column, order, attr in
             sorted(self._Ordering(), key=lambda x: x[1])
-            if order is not None] or None
+            if order is not None]
 
   def Print(self, out=sys.stdout):
     """Prints the projection with indented nesting.

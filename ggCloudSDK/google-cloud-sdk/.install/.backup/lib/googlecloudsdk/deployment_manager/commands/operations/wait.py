@@ -2,10 +2,10 @@
 
 """operations wait command."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.deployment_manager.lib import dm_v2_util
 from googlecloudsdk.deployment_manager.lib.exceptions import DeploymentManagerError
 

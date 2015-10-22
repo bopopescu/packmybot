@@ -11,6 +11,10 @@ import sys
 import textwrap
 
 from enum import Enum
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import arg_parsers
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions as calliope_exceptions
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resource_printer
@@ -22,10 +26,6 @@ from googlecloudsdk.third_party.apitools.base.py import encoding
 import protorpc.messages
 import yaml
 
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import arg_parsers
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions as calliope_exceptions
 from googlecloudsdk.compute.lib import constants
 from googlecloudsdk.compute.lib import lister
 from googlecloudsdk.compute.lib import metadata_utils

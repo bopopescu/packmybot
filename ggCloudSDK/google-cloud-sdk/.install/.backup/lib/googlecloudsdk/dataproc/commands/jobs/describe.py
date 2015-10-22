@@ -2,8 +2,8 @@
 
 """Describe job command."""
 
-
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.dataproc.lib import util
 
 

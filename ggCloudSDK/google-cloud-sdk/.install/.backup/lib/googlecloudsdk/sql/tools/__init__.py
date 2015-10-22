@@ -10,6 +10,9 @@ import argparse
 import os
 import re
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import config
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
@@ -18,10 +21,6 @@ from googlecloudsdk.core.credentials import store as c_store
 from googlecloudsdk.third_party.apis.sqladmin import v1beta3 as sql_v1beta3
 from googlecloudsdk.third_party.apis.sqladmin import v1beta4 as sql_v1beta4
 
-
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
 
 
 _ACTIVE_VERSIONS = [

@@ -5,10 +5,9 @@ These utility functions enable easy replacement of parameters into
 ReplicaPool template files.
 """
 
-import yaml
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
+import yaml
 
 
 def AddTemplateParamArgs(parser):

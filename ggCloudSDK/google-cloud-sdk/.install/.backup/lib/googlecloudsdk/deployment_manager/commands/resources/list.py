@@ -4,12 +4,11 @@
 
 import types
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 from googlecloudsdk.third_party.apitools.base.py import list_pager
-
-from googlecloudsdk.calliope import base
 
 
 class List(base.Command):

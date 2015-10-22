@@ -30,7 +30,7 @@ executed.
   ${command} myproject:instance-foo myproject:instance-bar
 OR
   ${command} myproject:instance-foo myproject:instance-bar
-        --bin-log-file mysql-bin.000020 --bin-log-position 170
+        --bin-log-file-name mysql-bin.000020 --bin-log-position 170
 """,
   }
 
@@ -108,12 +108,13 @@ OR
   def _UpdateRequestFromArgs(self, request, args):
     sql_messages = self.context['sql_messages']
     if args.bin_log_file_name and args.bin_log_position:
-      request.cloneContext.binLogCoordinates = sql_messages.BinLogCoordinates(
+      clone_context = request.instancesCloneRequest.cloneContext
+      clone_context.binLogCoordinates = sql_messages.BinLogCoordinates(
           binLogFileName=args.bin_log_file_name,
           binLogPosition=args.bin_log_position)
     elif args.bin_log_file_name or args.bin_log_position:
       raise exceptions.ToolException(
-          'Both --bin-log-file and --bin-log-file-name must be specified to'
+          'Both --bin-log-file-name and --bin-log-position must be specified to'
           ' represent a valid binary log coordinate up to which the source is'
           ' cloned.')
 

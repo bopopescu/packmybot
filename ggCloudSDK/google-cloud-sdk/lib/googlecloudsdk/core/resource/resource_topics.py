@@ -25,26 +25,21 @@ def ResourceDescription(name):
     A detailed_help DESCRIPTION markdown string.
   """
   description = """\
-  All *gcloud* commands return a list of resources on success (there are a few
-  legacy exceptions, but these are being addressed command by command). By
-  default the resources are pretty-printed on the standard output.
+  Most *gcloud* commands return a list of resources on success. By default they
+  are pretty-printed on the standard output.
 
-  There are two ways *gcloud* resource output is controlled, applied in this
-  order:
+  The *--format* flag controls resource output:
 
-  *resource projections*::
-  A resource _projection_, specified by _PROJECTION_ in the
-  --format=_NAME_[_DOC_ATTRIBUTES_](_PROJECTION_) flag, controls the amount of
-  output produced for each resource in the output resource list. _PROJECTION_
-  selects the resource keys listed for each resource. {see_projection}
+    --format=_NAME_[_ATTRIBUTES_](_PROJECTION_)
 
-  *resource formats*::
-  A resource _format_, specified by _NAME_ and optional [_DOC_ATTRIBUTES_] in the
-  --format=_NAME_[_DOC_ATTRIBUTES_](_PROJECTION_) flag, controls the output type of
-  projected resources. {see_format}
+  where _NAME_ is the format name and _ATTRIBUTES_ are format specific
+  attributes. {see_format}
 
-  Projections and formats use *resource keys* to name resource data
-  values. {see_key}
+  _PROJECTION_ is a list of resource keys that selects the data listed for each
+  resource.
+  {see_projection}
+
+  *resource keys* name resource data values. {see_key}
   """
   topics = ['format', 'key', 'projection']
   if name not in topics:
@@ -106,9 +101,6 @@ def _ParseFormatDocString(printer):
   attribute = None
   attribute_description = []
   for line in textwrap.dedent(doc).split('\n'):
-    line = line.replace('{', '{{')
-    line = line.replace('}', '}}')
-
     if not line.startswith(' ') and line.endswith(':'):
       # The start of a new section.
       if attribute:
@@ -209,8 +201,6 @@ def _ParseTransformDocString(func):
   arg_description = []
   formals = []
   for line in textwrap.dedent(doc).split('\n'):
-    line = line.replace('{', '{{')
-    line = line.replace('}', '}}')
     if line == 'Args:':
       # Now collecting Args: section lines.
       collect = _DOC_ARGS

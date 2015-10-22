@@ -1,8 +1,6 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 
 """gcloud dns record-sets command group."""
-from googlecloudsdk.core import remote_completion
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
 

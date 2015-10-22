@@ -2,8 +2,8 @@
 
 """Implementation of gcloud dataflow jobs show command.
 """
-
 from googlecloudsdk.calliope import base
+
 from googlecloudsdk.dataflow import commands
 from googlecloudsdk.dataflow.lib import job_display
 from googlecloudsdk.dataflow.lib import job_utils

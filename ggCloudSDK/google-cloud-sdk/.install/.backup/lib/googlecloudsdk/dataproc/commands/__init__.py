@@ -4,13 +4,13 @@
 
 import argparse
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resolvers
 from googlecloudsdk.core import resources
-
 from googlecloudsdk.third_party.apis.dataproc.v1beta1 import dataproc_v1beta1_client
 from googlecloudsdk.third_party.apis.dataproc.v1beta1 import dataproc_v1beta1_messages
-from googlecloudsdk.calliope import base
+
 
 
 @base.ReleaseTracks(base.ReleaseTrack.BETA)

@@ -2,9 +2,9 @@
 
 """'functions describe' command."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import properties
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.functions.lib import util
 
 

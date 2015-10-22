@@ -740,6 +740,19 @@ _SPECS_ALPHA['healthChecks'] = _InternalSpec(
     transformations=[],
     editables=None,
     )
+_SPECS_ALPHA['routers'] = _InternalSpec(
+    message_class_name='Router',
+    table_cols=[
+        ('NAME', 'name'),
+        ('REGION', 'region'),
+        ('NETWORK', 'network'),
+        ],
+    transformations=[
+        ('network', path_simplifier.Name),
+        ('region', path_simplifier.Name),
+        ],
+    editables=None,
+    )
 
 
 def _GetSpecsForVersion(api_version):

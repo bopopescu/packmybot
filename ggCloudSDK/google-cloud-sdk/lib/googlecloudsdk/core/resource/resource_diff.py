@@ -5,7 +5,6 @@
 
 import cStringIO
 import difflib
-import os
 
 from googlecloudsdk.core import log
 from googlecloudsdk.core.resource import resource_printer
@@ -56,4 +55,4 @@ class ResourceDiff(object):
     lines_diff = difflib.unified_diff(lines_original, lines_changed)
     out = out or log.out
     for line in lines_diff:
-      out.write(line + os.linesep)
+      out.write(line + '\n')

@@ -307,7 +307,10 @@ class _ProtoJsonApiTools(protojson.ProtoJson):
       return _CUSTOM_MESSAGE_CODECS[type(message)].encoder(message)
     message = _EncodeUnknownFields(message)
     result = super(_ProtoJsonApiTools, self).encode_message(message)
-    return _EncodeCustomFieldNames(message, result)
+    result = _EncodeCustomFieldNames(message, result)
+    # Sort the keys here in order to ensure that @type of Any fields shows up
+    # first when received by One Platform services. See b/24262683 for context.
+    return json.dumps(json.loads(result), sort_keys=True)
 
   def encode_field(self, field, value):
     """Encode the given value as JSON.

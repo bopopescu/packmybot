@@ -3,12 +3,12 @@
 
 import os
 
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import list_printer
 from googlecloudsdk.core import log
 from googlecloudsdk.core.util import files
 
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.sql.lib import errors
 from googlecloudsdk.sql.lib import validate
 

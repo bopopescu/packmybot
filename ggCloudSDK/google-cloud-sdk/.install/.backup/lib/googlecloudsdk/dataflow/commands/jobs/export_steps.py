@@ -2,9 +2,9 @@
 
 """Implementation of gcloud dataflow jobs export-steps command."""
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.dataflow.lib import job_utils
 from googlecloudsdk.dataflow.lib import step_graph
 from googlecloudsdk.dataflow.lib import step_json

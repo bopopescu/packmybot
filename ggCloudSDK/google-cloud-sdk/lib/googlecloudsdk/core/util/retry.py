@@ -159,7 +159,12 @@ class Retryer(object):
         return should_retry_if(exc_info[0], exc_info[1], exc_info[2], state)
       should_retry = ShouldRetryFunc
 
-    return self.RetryOnResult(TryFunc, [], {}, should_retry, sleep_ms)[0]
+    result, exc_info = self.RetryOnResult(
+        TryFunc, should_retry_if=should_retry, sleep_ms=sleep_ms)
+    if exc_info:
+      # Exception that was not retried was raised. Re-raise.
+      raise exc_info[0], exc_info[1], exc_info[2]
+    return result
 
   def RetryOnResult(self, func, args=None, kwargs=None,
                     should_retry_if=None, sleep_ms=None):

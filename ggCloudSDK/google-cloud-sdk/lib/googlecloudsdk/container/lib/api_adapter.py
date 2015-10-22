@@ -251,7 +251,7 @@ class CreateClusterOptions(object):
                password=None,
                cluster_version=None,
                network=None,
-               container_ipv4_cidr=None,
+               cluster_ipv4_cidr=None,
                enable_cloud_logging=None,
                enable_cloud_monitoring=None):
     self.node_machine_type = node_machine_type
@@ -263,7 +263,7 @@ class CreateClusterOptions(object):
     self.password = password
     self.cluster_version = cluster_version
     self.network = network
-    self.container_ipv4_cidr = container_ipv4_cidr
+    self.cluster_ipv4_cidr = cluster_ipv4_cidr
     self.enable_cloud_logging = enable_cloud_logging
     self.enable_cloud_monitoring = enable_cloud_monitoring
 
@@ -322,8 +322,8 @@ class V1Adapter(APIAdapter):
       cluster.initialClusterVersion = options.cluster_version
     if options.network:
       cluster.network = options.network
-    if options.container_ipv4_cidr:
-      cluster.clusterIpv4Cidr = options.container_ipv4_cidr
+    if options.cluster_ipv4_cidr:
+      cluster.clusterIpv4Cidr = options.cluster_ipv4_cidr
     if not options.enable_cloud_logging:
       cluster.loggingService = 'none'
     if not options.enable_cloud_monitoring:

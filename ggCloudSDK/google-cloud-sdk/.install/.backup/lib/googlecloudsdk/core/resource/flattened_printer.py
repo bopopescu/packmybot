@@ -3,8 +3,6 @@
 
 """Flattened tree resource printer."""
 
-import os
-
 from googlecloudsdk.core.resource import resource_printer_base
 
 
@@ -93,7 +91,7 @@ class FlattenedPrinter(resource_printer_base.ResourcePrinter):
       delimit: Prints resource delimiters if True.
     """
     if delimit:
-      self._out.write('---' + os.linesep)
+      self._out.write('---\n')
     flattened_record = _Flatten(record)
     if flattened_record:
       pad = 'no-pad' not in self._attributes
@@ -107,5 +105,4 @@ class FlattenedPrinter(resource_printer_base.ResourcePrinter):
         # Value must be one text line with leading/trailing space quoted.
         if '\n' in val or val[0:1].isspace() or val[-1:].isspace():
           val = "'" + val.encode('string-escape') + "'"
-        self._out.write(val)
-        self._out.write(os.linesep)
+        self._out.write(val + '\n')

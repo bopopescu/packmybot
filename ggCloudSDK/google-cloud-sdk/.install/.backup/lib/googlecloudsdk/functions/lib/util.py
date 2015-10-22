@@ -8,17 +8,18 @@ import os
 import re
 import sys
 
-from googlecloudsdk.core import properties
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions as base_exceptions
+from googlecloudsdk.core import properties
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
 
 _ENTRY_POINT_NAME_RE = re.compile(r'^[_a-zA-Z0-9]{1,128}$')
 _FUNCTION_NAME_RE = re.compile(r'^[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?$')
 _TOPIC_NAME_RE = re.compile(r'^[a-zA-Z][\-\._~%\+a-zA-Z0-9]{2,254}$')
 _BUCKET_URI_RE = re.compile(
     r'^gs://[a-z\d][a-z\d\._-]{1,230}[a-z\d]/$')
+# keep it lowercase - we make the user string lowercase before we compare
+_CLOUD_REPO_PREFIX = 'https://source.developers.google.com/'
 
 
 def GetHttpErrorMessage(error):
@@ -141,22 +142,34 @@ def ParsePubsubTopicName(topic):
   return 'projects/{0}/topics/{1}'.format(project, topic)
 
 
-def ParseDirectory(directory):
-  """Checks if a source directory provided by user is valid.
+def ParseDirectoryOrCloudRepoPath(directory_or_cloud_repo_path):
+  """Checks if a source directory or cloud repo path provided by user is valid.
 
   Args:
-    directory: Path do directory provided by user.
+    directory_or_cloud_repo_path: A string: a local path do directory provided
+                                  by user, or a path to a Cloud Repository.
   Returns:
-    Path to directory.
+    The argument provided, if found valid.
   Raises:
-    ArgumentTypeError: If the directory provided by user is not valid.
+    ArgumentTypeError: If the user provided a directory which is not valid.
   """
+  if IsCloudRepoPath(directory_or_cloud_repo_path):
+    return directory_or_cloud_repo_path
+
+  directory = directory_or_cloud_repo_path
   if not os.path.exists(directory):
-    raise arg_parsers.ArgumentTypeError('Provided directory does not exist.')
+    raise arg_parsers.ArgumentTypeError(
+        'Provided directory does not exist. If you intended to provide a path '
+        'to Google Cloud Repository, it must start with "{0}"'
+        .format(_CLOUD_REPO_PREFIX))
   if not os.path.isdir(directory):
     raise arg_parsers.ArgumentTypeError(
         'Provided path does not point to a directory.')
   return directory
+
+
+def IsCloudRepoPath(source_path):
+  return source_path.lower().startswith(_CLOUD_REPO_PREFIX)
 
 
 def _GetViolationsFromError(error_info):

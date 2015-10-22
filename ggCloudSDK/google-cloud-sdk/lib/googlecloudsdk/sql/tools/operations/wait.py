@@ -92,14 +92,10 @@ class WaitBeta(_BaseWait, base.Command):
     sql_client = self.context['sql_client']
     resources = self.context['registry']
 
-    validate.ValidateInstanceName(args.instance)
-    instance_ref = resources.Parse(args.instance, collection='sql.instances')
-
     for op in args.operation:
       operation_ref = resources.Parse(
           op, collection='sql.operations',
-          params={'project': instance_ref.project,
-                  'instance': instance_ref.instance})
+          params={'project': args.project})
 
       operations.OperationsV1Beta4.WaitForOperation(
           sql_client, operation_ref,

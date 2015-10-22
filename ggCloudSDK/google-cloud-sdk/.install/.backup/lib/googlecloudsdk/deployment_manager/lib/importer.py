@@ -3,8 +3,11 @@
 """Library that handles importing files for Deployment Manager."""
 
 import os
-import yaml
+import posixpath
+import urlparse
 from googlecloudsdk.calliope import exceptions
+import requests
+import yaml
 from googlecloudsdk.deployment_manager.lib.exceptions import DeploymentManagerError
 
 IMPORTS = 'imports'
@@ -12,17 +15,8 @@ PATH = 'path'
 NAME = 'name'
 
 
-class _ImportFile(object):
-  """Performs common operations on an imported file."""
-
-  def __init__(self, full_path, name=None, content=None):
-    self.full_path = full_path
-    self.name = name if name else full_path
-
-    self.content = content
-    self.base_path = None
-    self.base_name = None
-    self.is_template = None
+class _BaseImport(object):
+  """Shared parent class for _ImportFile and _ImportUrl."""
 
   def GetFullPath(self):
     return self.full_path
@@ -30,10 +24,26 @@ class _ImportFile(object):
   def GetName(self):
     return self.name
 
-  def GetBasePath(self):
-    if self.base_path is None:
-      self.base_path = os.path.dirname(self.full_path)
-    return self.base_path
+  def SetContent(self, content):
+    self.content = content
+    return self
+
+  def IsTemplate(self):
+    if self.is_template is None:
+      self.is_template = self.full_path.endswith(('.jinja', '.py'))
+    return self.is_template
+
+
+class _ImportFile(_BaseImport):
+  """Performs common operations on an imported file."""
+
+  def __init__(self, full_path, name=None):
+    self.full_path = full_path
+    self.name = name if name else full_path
+
+    self.content = None
+    self.base_name = None
+    self.is_template = None
 
   def GetBaseName(self):
     if self.base_name is None:
@@ -53,17 +63,102 @@ class _ImportFile(object):
                                           % (self.full_path, e.message))
     return self.content
 
-  def IsTemplate(self):
-    if self.is_template is None:
-      self.is_template = self.full_path.endswith(('.jinja', '.py'))
-    return self.is_template
+  def BuildChildPath(self, child_path):
+    return os.path.normpath(
+        os.path.join(os.path.dirname(self.full_path), child_path))
+
+
+class _ImportUrl(_BaseImport):
+  """Class to perform operations on a URL import."""
+
+  def __init__(self, full_path, name=None):
+    self.full_path = self._ValidateUrl(full_path)
+    self.name = name if name else full_path
+
+    self.content = None
+    self.base_name = None
+    self.is_template = None
+
+  def GetBaseName(self):
+    if self.base_name is None:
+      # We must use posixpath explicitly so this will work on Windows.
+      self.base_name = posixpath.basename(
+          urlparse.urlparse(self.full_path).path)
+    return self.base_name
+
+  def Exists(self):
+    if self.content:
+      return True
+    return self._RetrieveContent(raise_exceptions=False)
+
+  def GetContent(self):
+    if self.content is None:
+      self._RetrieveContent()
+    return self.content
+
+  def _RetrieveContent(self, raise_exceptions=True):
+    """Helper function for both Exists and GetContent.
+
+    Args:
+      raise_exceptions: Set to false if you just want to know if the file
+          actually exists.
+
+    Returns:
+      True if we successfully got the content of the URL. Returns False is
+      raise_exceptions is False.
+
+    Raises:
+      HTTPError: If raise_exceptions is True, will raise exceptions for 4xx or
+          5xx response codes instead of returning False.
+    """
+    r = requests.get(self.full_path)
+
+    try:
+      r.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+      if raise_exceptions:
+        raise e
+      return False
+
+    self.content = r.text
+    return True
 
   def BuildChildPath(self, child_path):
-    return os.path.normpath(os.path.join(self.GetBasePath(), child_path))
+    return urlparse.urljoin(self.full_path, child_path)
+
+  @staticmethod
+  def _ValidateUrl(url):
+    """Make sure the url fits the format we expect."""
+    parsed_url = urlparse.urlparse(url)
+
+    if parsed_url.scheme != 'http' and parsed_url.scheme != 'https':
+      raise exceptions.BadFileException(
+          "URL '%s' scheme was '%s'; it must be either 'https' or 'http'."
+          % (url, parsed_url.scheme))
+
+    if not parsed_url.path or parsed_url.path == '/':
+      raise exceptions.BadFileException("URL '%s' doesn't have a path." % url)
+
+    if parsed_url.params or parsed_url.query or parsed_url.fragment:
+      raise exceptions.BadFileException(
+          "URL '%s' should only have a path, no params, queries, or fragments."
+          % url)
+
+    return url
 
 
-def _BuildImportObject(full_path, name=None, content=None):
-  return _ImportFile(full_path, name, content)
+def _IsFile(resource_handle):
+  """Returns true if the passed resource_handle is a filepath, not a url."""
+  parsed = urlparse.urlparse(resource_handle)
+
+  return not (parsed.scheme and parsed.netloc)
+
+
+def _BuildImportObject(full_path, name=None):
+  if _IsFile(full_path):
+    return _ImportFile(full_path, name)
+  else:
+    return _ImportUrl(full_path, name)
 
 
 def _GetYamlImports(import_object):
@@ -219,7 +314,7 @@ def _SanitizeBaseName(base_name):
   # Remove periods and underscores.
   sanitized = base_name.replace('.', '-').replace('_', '-')
 
-  # Lower case the first character
+  # Lower case the first character.
   return sanitized[0].lower() + sanitized[1:]
 
 
@@ -261,7 +356,8 @@ def _BuildConfig(full_path, properties):
   # Dump using default_flow_style=False to use spacing instead of '{ }'
   custom_content = yaml.dump(custom_dict, default_flow_style=False)
 
-  return _BuildImportObject(full_path, content=custom_content)
+  # Override the template_object with it's new config_content
+  return config_obj.SetContent(custom_content)
 
 
 def BuildTargetConfig(messages, full_path, properties=None):

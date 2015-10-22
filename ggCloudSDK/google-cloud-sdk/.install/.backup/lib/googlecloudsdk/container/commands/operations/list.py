@@ -1,11 +1,11 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 
 """List operations command."""
-from googlecloudsdk.core import properties
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import properties
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.container.lib import util
 
 

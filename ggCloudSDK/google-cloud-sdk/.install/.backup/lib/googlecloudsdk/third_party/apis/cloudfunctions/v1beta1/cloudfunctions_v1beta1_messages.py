@@ -13,6 +13,23 @@ from googlecloudsdk.third_party.apitools.base.py import encoding
 package = 'cloudfunctions'
 
 
+class CallFunctionResponse(_messages.Message):
+  """Response of CallFunction method.
+
+  Fields:
+    error: Either system or user-function generated error. Set if execution
+      was not successful.
+    executionId: Execution id of function invocation.
+    result: Result populated for successful execution of synchronous function.
+      Will not be populated if function does not return a result through
+      context.
+  """
+
+  error = _messages.StringField(1)
+  executionId = _messages.StringField(2)
+  result = _messages.BytesField(3)
+
+
 class CloudfunctionsOperationsGetRequest(_messages.Message):
   """A CloudfunctionsOperationsGetRequest object.
 
@@ -21,6 +38,18 @@ class CloudfunctionsOperationsGetRequest(_messages.Message):
   """
 
   name = _messages.StringField(1, required=True)
+
+
+class CloudfunctionsProjectsRegionsFunctionsCallRequest(_messages.Message):
+  """A CloudfunctionsProjectsRegionsFunctionsCallRequest object.
+
+  Fields:
+    data: Input to be passed to the function.
+    name: The name of the function to be called.
+  """
+
+  data = _messages.BytesField(1)
+  name = _messages.StringField(2, required=True)
 
 
 class CloudfunctionsProjectsRegionsFunctionsCreateRequest(_messages.Message):
@@ -89,7 +118,8 @@ class FunctionTrigger(_messages.Message):
 
 
 class HostedFunction(_messages.Message):
-  """Describes a function containing user computation.
+  """Describes a cloud function that contains user computation executed in
+  response to an event. It encapsulate function and triggers configurations.
 
   Enums:
     StatusValueValuesEnum: [Output only] Status of the function deployment.
@@ -101,16 +131,17 @@ class HostedFunction(_messages.Message):
       the system will try to use function named 'function'. For Node.js this
       is name of a function exported by the module specified in
       source_location.
-    gcsUrl: GCS url containing the function.
+    gcsUrl: GCS URL pointing to the zip archive which contains the function.
     latestOperation: [Output only] Name of the most recent operation modifying
       the function. If the function status is DEPLOYING or DELETING, then it
       points to the active operation.
     name: A user-defined name of the function. Function names must be unique
-      globally and match regexp: projects/*/regions/*/functions/*
+      globally and match pattern: projects/*/regions/*/functions/*
     oauthScopes: The set of Google API scopes to be made available to the
       function while it is being executed. Values should be in the format of
       scope developer codes, for example:
       "https://www.googleapis.com/auth/compute".
+    sourceRepository: The hosted repository where the function is defined.
     status: [Output only] Status of the function deployment.
     triggers: List of triggers.
   """
@@ -137,8 +168,9 @@ class HostedFunction(_messages.Message):
   latestOperation = _messages.StringField(3)
   name = _messages.StringField(4)
   oauthScopes = _messages.StringField(5, repeated=True)
-  status = _messages.EnumField('StatusValueValuesEnum', 6)
-  triggers = _messages.MessageField('FunctionTrigger', 7, repeated=True)
+  sourceRepository = _messages.MessageField('SourceRepository', 6)
+  status = _messages.EnumField('StatusValueValuesEnum', 7)
+  triggers = _messages.MessageField('FunctionTrigger', 8, repeated=True)
 
 
 class ListFunctionsResponse(_messages.Message):
@@ -320,6 +352,33 @@ class OperationMetadata(_messages.Message):
   request = _messages.MessageField('RequestValue', 1)
   target = _messages.StringField(2)
   type = _messages.EnumField('TypeValueValuesEnum', 3)
+
+
+class SourceRepository(_messages.Message):
+  """Describes the location of the function source in a remote repository.
+
+  Fields:
+    branch: The name of the branch from which the function should be fetched.
+    deployedRevision: [Output only] The id of the revision that was resolved
+      at the moment of function creation or update. For example when a user
+      deployed from a branch, it will be the revision id of the latest change
+      on this branch at that time. If user deployed from revision then this
+      value will be always equal to the revision specified by the user.
+    revision: The id of the revision that captures the state of the repository
+      from which the function should be fetched.
+    sourceUrl: URL to the hosted repository where the function is defined. The
+      URL should include the path to the directory within the repository where
+      the function is located. Only paths in
+      https://source.developers.google.com domain are supported.
+    tag: The name of the tag that captures the state of the repository from
+      which the function should be fetched.
+  """
+
+  branch = _messages.StringField(1)
+  deployedRevision = _messages.StringField(2)
+  revision = _messages.StringField(3)
+  sourceUrl = _messages.StringField(4)
+  tag = _messages.StringField(5)
 
 
 class StandardQueryParameters(_messages.Message):

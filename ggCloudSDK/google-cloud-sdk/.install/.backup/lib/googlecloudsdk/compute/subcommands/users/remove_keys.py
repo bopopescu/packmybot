@@ -1,6 +1,7 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 """Command for removing public keys to users."""
 from googlecloudsdk.calliope import arg_parsers
+
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import gaia_utils
 from googlecloudsdk.compute.lib import user_utils

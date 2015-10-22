@@ -3,7 +3,7 @@
 """Resource property Get."""
 
 
-def GetMetaData(resource, name, value, default=None):
+def _GetMetaData(resource, name, value, default=None):
   """Gets the metadata dict in resource that contains {name: value, ...}.
 
   A metadata object is a list of dicts of the form:
@@ -12,7 +12,7 @@ def GetMetaData(resource, name, value, default=None):
       {'name': key-name-2, 'field_1': field-1-value-2, ...},
       ...
     ]
-  Get() on the key 'name.foo.field_1' calls GetMetaData(resource, 'name', 'foo')
+  Get() on key 'name.foo.field_1' calls _GetMetaData(resource, 'name', 'foo')
   to find the dict in resource with 'name'=='foo' and then looks up 'field_1' in
   that dict.
 
@@ -64,18 +64,18 @@ def Get(resource, key, default=None):
   metadata = None
   for i, index in enumerate(key):
 
+    # This if-ladder ordering checks builtin object attributes last. For
+    # example, with resource = {'items': ...}, Get() treats 'items' as a dict
+    # key rather than the builtin 'items' attribute of resource.
+
     if metadata:
       # MetaData-like
-      resource = GetMetaData(resource, metadata, index)
+      resource = _GetMetaData(resource, metadata, index)
       metadata = None
 
     elif resource is None:
       # None is different than an empty dict or list.
       return default
-
-    elif isinstance(index, str) and hasattr(resource, index):
-      # class-like -- done here to catch metadata
-      resource = getattr(resource, index, default)
 
     elif hasattr(resource, 'iteritems'):
       # dict-like
@@ -91,7 +91,11 @@ def Get(resource, key, default=None):
       else:
         return default
 
-    elif hasattr(resource, '__iter__') or isinstance(resource, str):
+    elif isinstance(index, basestring) and hasattr(resource, index):
+      # class-like -- done here to catch metadata
+      resource = getattr(resource, index, default)
+
+    elif hasattr(resource, '__iter__') or isinstance(resource, basestring):
       # list-like
       if index is None:
         if i + 1 < len(key):
@@ -101,8 +105,8 @@ def Get(resource, key, default=None):
         else:
           # Trailing slice: *.[]
           return resource
-      elif isinstance(index, str):
-        # Try GetMetaData() index lookup on the next iteration.
+      elif isinstance(index, basestring):
+        # Try _GetMetaData() index lookup on the next iteration.
         metadata = index
       elif not isinstance(index, (int, long)):
         # Index mismatch.
@@ -120,3 +124,16 @@ def Get(resource, key, default=None):
     return default
 
   return resource
+
+
+def IsListLike(resource):
+  """Checks if resource is a list-like iterable object.
+
+  Args:
+    resource: The object to check.
+
+  Returns:
+    True if resource is a list-like iterable object.
+  """
+  return (isinstance(resource, list) or
+          hasattr(resource, '__iter__') and hasattr(resource, 'next'))

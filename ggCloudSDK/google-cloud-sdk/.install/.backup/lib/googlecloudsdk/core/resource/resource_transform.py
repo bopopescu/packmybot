@@ -212,12 +212,9 @@ def TransformFirstOf(r, *args):
     x.BarFoo, and x.BAR_FOO in order for the first non-empty value.
   """
   for name in args:
-    try:
-      v = r.get(name, None)
-      if v is not None:
-        return v
-    except AttributeError:
-      pass
+    v = resource_property.Get(r, [name], None)
+    if v is not None:
+      return v
   return ''
 
 
@@ -316,17 +313,45 @@ def TransformLen(r):
     return 0
 
 
-def TransformList(r, undefined=''):
-  """Formats a comma separated list.
+def TransformList(r, undefined='', separator=','):
+  """Formats a dict or list into a compact comma separated list.
 
   Args:
     r: A JSON-serializable object.
     undefined: Return this if r is empty.
+    separator: The list item separator string.
 
   Returns:
-    The comma separated formatted list, undefined if r is empty.
+    The key=value pairs for a dict or list values for a list, separated by
+    separator. Returns undefined if r is empty, or r if it is not a dict or
+    list.
   """
-  return ','.join(map(str, r)) if r else undefined
+  if isinstance(r, dict):
+    return separator.join(['{key}={value}'.format(key=key, value=value)
+                           for key, value in sorted(r.iteritems())])
+  if isinstance(r, list):
+    return separator.join(map(str, r))
+  return r or undefined
+
+
+def TransformMap(r):
+  """Applies the next transform in the sequence to each item in list resource r.
+
+  Example:
+    list_field.map().foo().bar() applies foo() to each item in list_field and
+    then bar() to the resulting value. list_field.map().foo().map().bar()
+    applies foo() to each item in list_field and then bar() to each item in the
+    resulting list.
+
+  Args:
+    r: A resource.
+
+  Returns:
+    r.
+  """
+  # This method is used as a decorator in transform expressions. It is
+  # recognized at parse time and discarded.
+  return r
 
 
 def TransformResolution(r, undefined='', transpose=False):
@@ -396,6 +421,7 @@ def TransformScope(r, *args):
 
   Example:
     scope('https://abc/foo/projects/bar/zyx', 'projects') returns 'bar/xyz'.
+    scope("https://abc/foo/rergions/abc") returns 'abc'.
   """
   if not r:
     return ''
@@ -577,6 +603,7 @@ _BUILTIN_TRANSFORMS = {
     'iso': TransformIso,
     'len': TransformLen,
     'list': TransformList,
+    'map': TransformMap,
     'resolution': TransformResolution,
     'scope': TransformScope,
     'segment': TransformSegment,

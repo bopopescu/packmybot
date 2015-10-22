@@ -2,12 +2,12 @@
 
 """'logging sinks delete' command."""
 
-from googlecloudsdk.core import log
-from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.third_party.apitools.base import py as apitools_base
 from googlecloudsdk.calliope import base
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.core import log
+from googlecloudsdk.core.console import console_io
+from googlecloudsdk.third_party.apitools.base import py as apitools_base
+
 from googlecloudsdk.logging.lib import util
 
 

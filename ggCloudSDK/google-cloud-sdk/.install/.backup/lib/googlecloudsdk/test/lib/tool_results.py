@@ -7,10 +7,9 @@ import time
 import urllib
 import urlparse
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import properties
 from googlecloudsdk.core.console import console_io
-
-from googlecloudsdk.calliope import exceptions
 
 
 STATUS_INTERVAL_SECS = 3
@@ -85,9 +84,10 @@ def GetToolResultsIds(matrix, testing_api_helper,
 
       if matrix.state in testing_api_helper.completed_matrix_states:
         raise BadMatrixException(
-            'Matrix [{m}] unexpectedly reached status {s} before a results URL '
-            'was provided for the Developers Console. This may have been a '
-            'transient error. Please check your test parameters and try again.'
+            '\nMatrix [{m}] unexpectedly reached final status {s} without '
+            'returning a URL to any test results in the Developers Console. '
+            'Please re-check the validity of your APK file(s) and test '
+            'parameters and try again.'
             .format(m=matrix.testMatrixId, s=matrix.state))
 
       time.sleep(status_interval)

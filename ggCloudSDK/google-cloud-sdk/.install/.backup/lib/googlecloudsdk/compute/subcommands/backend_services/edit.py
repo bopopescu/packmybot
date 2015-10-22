@@ -1,9 +1,9 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Command for modifying backend services."""
 
+from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.core import resources
 
-from googlecloudsdk.calliope import exceptions
 from googlecloudsdk.compute.lib import base_classes
 
 
@@ -118,6 +118,13 @@ Edit.detailed_help = {
         editor. After the file is saved and closed, this command will
         update the resource. Only fields that can be modified are
         displayed in the editor.
+
+        Backends are named by their associated instances groups, and one
+        of the ``--group'' or ``--instance-group'' flags is required to
+        identify the backend that you are modifying.  You cannot "change"
+        the instance group associated with a backend, but you can accomplish
+        something similar with ``backend-services remove-backend'' and
+        ``backend-services add-backend''.
 
         The editor used to modify the resource is chosen by inspecting
         the ``EDITOR'' environment variable.

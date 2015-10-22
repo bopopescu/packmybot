@@ -24,24 +24,35 @@ _MAX_TIME_BETWEEN_POLLS_SEC = 5
 # In our status reporting, we use the following
 # mapping. Anything not in the map is reported as "Updated".
 _HUMAN_FRIENDLY_OPERATION_TYPE_SUFFIXES = {
-    'createSnapshot': 'Created',
-    'insert': 'Created',
-    'delete': 'Deleted',
-    'update': 'Updated',
-    'invalidateCache': 'Completed invalidation for',
-}
+    'createSnapshot': {'past': 'created', 'present': 'create'},
+    'recreateInstancesInstanceGroupManager': {
+        'past': 'recreated', 'present': 'recreate'},
+    'insert': {'past': 'created', 'present': 'create'},
+    'delete': {'past': 'deleted', 'present': 'delete'},
+    'update': {'past': 'updated', 'present': 'update'},
+    'invalidateCache': {
+        'past': 'completed invalidation for',
+        'present': 'complete invalidation for'}}
 
 
-def _HumanFrieldlyNameForOp(op_type):
+def _HumanFrieldlyNamesForOp(op_type):
   for s in _HUMAN_FRIENDLY_OPERATION_TYPE_SUFFIXES:
     if op_type.endswith(s):
       return _HUMAN_FRIENDLY_OPERATION_TYPE_SUFFIXES.get(s)
 
-  return 'Updated'
+  return {'past': 'updated', 'present': 'update'}
+
+
+def _HumanFrieldlyNameForOpPastTense(op_type):
+  return _HumanFrieldlyNamesForOp(op_type)['past']
+
+
+def _HumanFrieldlyNameForOpPresentTense(op_type):
+  return _HumanFrieldlyNamesForOp(op_type)['present']
 
 
 def _IsDeleteOp(op_type):
-  return _HumanFrieldlyNameForOp(op_type) == 'Deleted'
+  return _HumanFrieldlyNameForOpPastTense(op_type) == 'deleted'
 
 
 def _RecordProblems(operation, warnings, errors):
@@ -63,7 +74,8 @@ def _RecordUnfinishedOperations(operations, errors):
               'and describe commands or '
               'https://console.developers.google.com/ to '
               'check resource state').format(
-                  action=operations[0].operationType,
+                  action=_HumanFrieldlyNameForOpPresentTense(
+                      operations[0].operationType),
                   timeout=_POLLING_TIMEOUT_SEC,
                   links=', '.join(pending_resources))))
 
@@ -154,7 +166,8 @@ def WaitForOperations(operations, project, operation_service, resource_service,
           resource_requests.append((resource_service, 'Get', request))
 
         log.status.write('{0} [{1}].\n'.format(
-            _HumanFrieldlyNameForOp(operation.operationType),
+            _HumanFrieldlyNameForOpPastTense(
+                operation.operationType).capitalize(),
             target_link))
 
       else:

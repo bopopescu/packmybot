@@ -1,9 +1,9 @@
 # Copyright 2015 Google Inc. All Rights Reserved.
 
 """Command to remove IAM policy binding for a resource."""
-
 from googlecloudsdk.calliope import base
 from googlecloudsdk.core.iam import iam_util
+
 from googlecloudsdk.projects.lib import util
 
 

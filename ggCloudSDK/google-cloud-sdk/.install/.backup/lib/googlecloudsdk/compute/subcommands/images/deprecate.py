@@ -2,10 +2,10 @@
 """Command for deprecating images."""
 import datetime
 
-from googlecloudsdk.third_party.apis.compute.v1 import compute_v1_messages
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions as calliope_exceptions
+from googlecloudsdk.third_party.apis.compute.v1 import compute_v1_messages
+
 from googlecloudsdk.compute.lib import base_classes
 
 

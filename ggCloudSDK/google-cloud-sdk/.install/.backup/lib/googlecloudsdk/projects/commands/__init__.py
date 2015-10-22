@@ -5,11 +5,10 @@
 import textwrap
 import urlparse
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import properties
 from googlecloudsdk.core import resources
-
 from googlecloudsdk.third_party.apis.cloudresourcemanager import v1beta1
-from googlecloudsdk.calliope import base
 
 
 @base.ReleaseTracks(base.ReleaseTrack.ALPHA, base.ReleaseTrack.BETA)

@@ -2,7 +2,6 @@
 
 """Provide commands for managing Cloud SQL instances."""
 
-
 from googlecloudsdk.calliope import base
 
 

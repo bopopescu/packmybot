@@ -2,9 +2,45 @@
 
 Copyright 2014-2015 Google Inc. All rights reserved.
 
+## 0.9.82 (2015/10/14)
+
+### App Engine
+
+*   The App Engine Admin API is now the default path for deployments in the
+    `gcloud preview app deploy` command. This transition should be transparent,
+    but if you experience any issues and would like to revert to the old
+    behavior, please run `gcloud config set app/use_appengine_api false`.
+
+    See <https://cloud.google.com/appengine/docs/admin-api/> for more
+    information about this API.
+
+*   With `env: 2`, valid python runtimes are `python` and `python-compat`.
+
+*   Implemented fingerprinting support for python.
+
+### Container Engine
+
+*   `gcloud container clusters create`: The flag `--container-ipv4-cidr` has
+    been deprecated; `--cluster-ipv4-cidr` should be used instead.
+
+### SQL
+
+*   `gcloud beta sql operations describe` and `gcloud beta sql operations wait`
+    no longer need `--instance` flag (`gcloud beta sql operations list` still
+    does).
+
+*   Fixed issue with `gcloud sql instances clone` when `--bin-log-file-name` and
+    `--bin-log-position` are set.
+    (<https://code.google.com/p/google-cloud-sdk/issues/detail?id=201>).
+
 ## 0.9.81 (2015/10/07)
 
 ### Breaking Changes
+
+*   If you are using a service account to run commands under
+    `gcloud preview app`, you must enable the "App Engine Admin API" in the
+    Developers Console (<https://console.developers.google.com>; navigate to
+    **APIs and Auth > APIs**).
 
 *   In a future Cloud SDK release, deployments that promote the new version to
     receive all traffic will stop the previous version by default.
@@ -12,7 +48,7 @@ Copyright 2014-2015 Google Inc. All rights reserved.
     To keep the current behavior, pass the `--no-stop-previous-version`
     flag, or run the following command:
 
-       $ gcloud config set app/stop_previous_version true
+       $ gcloud config set app/stop_previous_version false
 
 *   Removed `app get-resource-limits` command.
 
@@ -80,7 +116,7 @@ Copyright 2014-2015 Google Inc. All rights reserved.
 *   The following commands have been promoted from beta to GA:
     *   gcloud config configurations ...
     *   gcloud source repos clone
-    *   gcloud beta init. Old [gcloud init] behavior has been removed, and
+    *   gcloud beta init. Old `gcloud init` behavior has been removed, and
         partially replaced by new gcloud init or directly via gcloud source
         repos clone.
 *   Release gcloud beta dataproc.

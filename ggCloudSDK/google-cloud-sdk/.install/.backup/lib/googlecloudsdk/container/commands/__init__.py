@@ -5,10 +5,10 @@
 import argparse
 import os
 
-from googlecloudsdk.core import properties
-
 from googlecloudsdk.calliope import actions
 from googlecloudsdk.calliope import base
+from googlecloudsdk.core import properties
+
 from googlecloudsdk.container.lib import api_adapter
 
 

@@ -4617,6 +4617,170 @@ class ComputeRegionsListRequest(_messages.Message):
   project = _messages.StringField(5, required=True)
 
 
+class ComputeRoutersAggregatedListRequest(_messages.Message):
+  """A ComputeRoutersAggregatedListRequest object.
+
+  Fields:
+    filter: Sets a filter expression for filtering listed resources, in the
+      form filter={expression}. Your {expression} must be in the format:
+      FIELD_NAME COMPARISON_STRING LITERAL_STRING.  The FIELD_NAME is the name
+      of the field you want to compare. Only atomic field types are supported
+      (string, number, boolean). The COMPARISON_STRING must be either eq
+      (equals) or ne (not equals). The LITERAL_STRING is the string value to
+      filter to. The literal value must be valid for the type of field
+      (string, number, boolean). For string fields, the literal value is
+      interpreted as a regular expression using RE2 syntax. The literal value
+      must match the entire field.  For example, filter=name ne example-
+      instance.
+    maxResults: Maximum count of results to be returned.
+    orderBy: Sorts list results by a certain order. By default, results are
+      returned in alphanumerical order based on the resource name.  You can
+      also sort results in descending order based on the creation timestamp
+      using orderBy="creationTimestamp desc". This sorts results based on the
+      creationTimestamp field in reverse chronological order (newest result
+      first). Use this to sort resources like operations so that the newest
+      operation is returned first.  Currently, only sorting by name or
+      creationTimestamp desc is supported.
+    pageToken: Specifies a page token to use. Use this parameter if you want
+      to list the next page of results. Set pageToken to the nextPageToken
+      returned by a previous list request.
+    project: Name of the project scoping this request.
+  """
+
+  filter = _messages.StringField(1)
+  maxResults = _messages.IntegerField(2, variant=_messages.Variant.UINT32, default=500)
+  orderBy = _messages.StringField(3)
+  pageToken = _messages.StringField(4)
+  project = _messages.StringField(5, required=True)
+
+
+class ComputeRoutersDeleteRequest(_messages.Message):
+  """A ComputeRoutersDeleteRequest object.
+
+  Fields:
+    project: Project ID for this request.
+    region: The name of the region for this request.
+    router: Name of the Router resource to delete.
+  """
+
+  project = _messages.StringField(1, required=True)
+  region = _messages.StringField(2, required=True)
+  router = _messages.StringField(3, required=True)
+
+
+class ComputeRoutersGetRequest(_messages.Message):
+  """A ComputeRoutersGetRequest object.
+
+  Fields:
+    project: Project ID for this request.
+    region: The name of the region for this request.
+    router: Name of the Router resource to return.
+  """
+
+  project = _messages.StringField(1, required=True)
+  region = _messages.StringField(2, required=True)
+  router = _messages.StringField(3, required=True)
+
+
+class ComputeRoutersGetRouterStatusRequest(_messages.Message):
+  """A ComputeRoutersGetRouterStatusRequest object.
+
+  Fields:
+    project: Project ID for this request.
+    region: The name of the region for this request.
+    router: Name of the Router resource to query.
+  """
+
+  project = _messages.StringField(1, required=True)
+  region = _messages.StringField(2, required=True)
+  router = _messages.StringField(3, required=True)
+
+
+class ComputeRoutersInsertRequest(_messages.Message):
+  """A ComputeRoutersInsertRequest object.
+
+  Fields:
+    project: Project ID for this request.
+    region: The name of the region for this request.
+    router: A Router resource to be passed as the request body.
+  """
+
+  project = _messages.StringField(1, required=True)
+  region = _messages.StringField(2, required=True)
+  router = _messages.MessageField('Router', 3)
+
+
+class ComputeRoutersListRequest(_messages.Message):
+  """A ComputeRoutersListRequest object.
+
+  Fields:
+    filter: Sets a filter expression for filtering listed resources, in the
+      form filter={expression}. Your {expression} must be in the format:
+      FIELD_NAME COMPARISON_STRING LITERAL_STRING.  The FIELD_NAME is the name
+      of the field you want to compare. Only atomic field types are supported
+      (string, number, boolean). The COMPARISON_STRING must be either eq
+      (equals) or ne (not equals). The LITERAL_STRING is the string value to
+      filter to. The literal value must be valid for the type of field
+      (string, number, boolean). For string fields, the literal value is
+      interpreted as a regular expression using RE2 syntax. The literal value
+      must match the entire field.  For example, filter=name ne example-
+      instance.
+    maxResults: Maximum count of results to be returned.
+    orderBy: Sorts list results by a certain order. By default, results are
+      returned in alphanumerical order based on the resource name.  You can
+      also sort results in descending order based on the creation timestamp
+      using orderBy="creationTimestamp desc". This sorts results based on the
+      creationTimestamp field in reverse chronological order (newest result
+      first). Use this to sort resources like operations so that the newest
+      operation is returned first.  Currently, only sorting by name or
+      creationTimestamp desc is supported.
+    pageToken: Specifies a page token to use. Use this parameter if you want
+      to list the next page of results. Set pageToken to the nextPageToken
+      returned by a previous list request.
+    project: Project ID for this request.
+    region: The name of the region for this request.
+  """
+
+  filter = _messages.StringField(1)
+  maxResults = _messages.IntegerField(2, variant=_messages.Variant.UINT32, default=500)
+  orderBy = _messages.StringField(3)
+  pageToken = _messages.StringField(4)
+  project = _messages.StringField(5, required=True)
+  region = _messages.StringField(6, required=True)
+
+
+class ComputeRoutersPatchRequest(_messages.Message):
+  """A ComputeRoutersPatchRequest object.
+
+  Fields:
+    project: Project ID for this request.
+    region: The name of the region for this request.
+    router: Name of the Router resource to update.
+    routerResource: A Router resource to be passed as the request body.
+  """
+
+  project = _messages.StringField(1, required=True)
+  region = _messages.StringField(2, required=True)
+  router = _messages.StringField(3, required=True)
+  routerResource = _messages.MessageField('Router', 4)
+
+
+class ComputeRoutersUpdateRequest(_messages.Message):
+  """A ComputeRoutersUpdateRequest object.
+
+  Fields:
+    project: Project ID for this request.
+    region: The name of the region for this request.
+    router: Name of the Router resource to update.
+    routerResource: A Router resource to be passed as the request body.
+  """
+
+  project = _messages.StringField(1, required=True)
+  region = _messages.StringField(2, required=True)
+  router = _messages.StringField(3, required=True)
+  routerResource = _messages.MessageField('Router', 4)
+
+
 class ComputeRoutesDeleteRequest(_messages.Message):
   """A ComputeRoutesDeleteRequest object.
 
@@ -9451,6 +9615,11 @@ class Network(_messages.Message):
     IPv4Range: The range of internal addresses that are legal on this network.
       This range is a CIDR specification, for example: 192.168.0.0/16.
       Provided by the client when the network is created.
+    autoCreateSubnetworks: When set to true, the subnetwork is created in
+      "auto subnet mode". When set to false, the subnetwork is in "custom
+      subnet mode".  In "auto subnet mode", a newly created network is
+      assigned the default CIDR of 10.128.0.0/9 and it automatically creates
+      one subnetwork per region.
     creationTimestamp: [Output Only] Creation timestamp in RFC3339 text
       format.
     description: An optional textual description of the resource. Provided by
@@ -9470,16 +9639,20 @@ class Network(_messages.Message):
       be a dash, lowercase letter, or digit, except the last character, which
       cannot be a dash.
     selfLink: [Output Only] Server-defined URL for the resource.
+    subnetworks: [Output Only] Server-defined fully-qualified URLs for all
+      subnetworks in this network.
   """
 
   IPv4Range = _messages.StringField(1)
-  creationTimestamp = _messages.StringField(2)
-  description = _messages.StringField(3)
-  gatewayIPv4 = _messages.StringField(4)
-  id = _messages.IntegerField(5, variant=_messages.Variant.UINT64)
-  kind = _messages.StringField(6, default=u'compute#network')
-  name = _messages.StringField(7)
-  selfLink = _messages.StringField(8)
+  autoCreateSubnetworks = _messages.BooleanField(2)
+  creationTimestamp = _messages.StringField(3)
+  description = _messages.StringField(4)
+  gatewayIPv4 = _messages.StringField(5)
+  id = _messages.IntegerField(6, variant=_messages.Variant.UINT64)
+  kind = _messages.StringField(7, default=u'compute#network')
+  name = _messages.StringField(8)
+  selfLink = _messages.StringField(9)
+  subnetworks = _messages.StringField(10, repeated=True)
 
 
 class NetworkInterface(_messages.Message):
@@ -9502,12 +9675,21 @@ class NetworkInterface(_messages.Message):
       projects/project/global/networks/network  - global/networks/default
     networkIP: [Output Only] An optional IPV4 internal network address
       assigned to the instance for this network interface.
+    subnetwork: URL of the subnetwork resource for this instance. This should
+      not be provided if the network resource is in legacy mode. If the
+      network is in auto subnet mode, providing the subnetwork is optional. If
+      the network is in custom subnet mode then the field should be specified.
+      If you specify this property, you can specify the subnetwork as a full
+      or partial URL. For example, the following are all valid URLs:   - https
+      ://www.googleapis.com/compute/v1/projects/project/zones/zone/subnetworks
+      /subnetwork  - projects/project/zones/zone/networks/network
   """
 
   accessConfigs = _messages.MessageField('AccessConfig', 1, repeated=True)
   name = _messages.StringField(2)
   network = _messages.StringField(3)
   networkIP = _messages.StringField(4)
+  subnetwork = _messages.StringField(5)
 
 
 class NetworkList(_messages.Message):
@@ -10286,6 +10468,313 @@ class RouteList(_messages.Message):
   selfLink = _messages.StringField(5)
 
 
+class Router(_messages.Message):
+  """Router resource.
+
+  Fields:
+    bgp: A RouterBgp attribute.
+    bgpPeers: A RouterBgpPeer attribute.
+    creationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+      format.
+    description: An optional textual description of the resource. Provided by
+      the client when the resource is created.
+    id: [Output Only] Unique identifier for the resource. Defined by the
+      server.
+    interfaces: A RouterInterface attribute.
+    kind: [Output Only] Type of resource. Always compute#router for routers.
+    name: Name of the resource. Provided by the client when the resource is
+      created. The name must be 1-63 characters long and comply with RFC1035.
+    network: URI of the network to which this router belongs.
+    region: [Output Only] URI of the region where the router resides.
+    selfLink: [Output Only] Server-defined URL for the resource.
+  """
+
+  bgp = _messages.MessageField('RouterBgp', 1)
+  bgpPeers = _messages.MessageField('RouterBgpPeer', 2, repeated=True)
+  creationTimestamp = _messages.StringField(3)
+  description = _messages.StringField(4)
+  id = _messages.IntegerField(5, variant=_messages.Variant.UINT64)
+  interfaces = _messages.MessageField('RouterInterface', 6, repeated=True)
+  kind = _messages.StringField(7, default=u'compute#router')
+  name = _messages.StringField(8)
+  network = _messages.StringField(9)
+  region = _messages.StringField(10)
+  selfLink = _messages.StringField(11)
+
+
+class RouterAggregatedList(_messages.Message):
+  """Contains a list of RoutersScopedList.
+
+  Messages:
+    ItemsValue: A map of scoped Router lists.
+
+  Fields:
+    id: [Output Only] Unique identifier for the resource; defined by the
+      server.
+    items: A map of scoped Router lists.
+    kind: Type of resource.
+    nextPageToken: [Output Only] A token used to continue a truncated list
+      request.
+    selfLink: [Output Only] Server-defined URL for this resource.
+  """
+
+  @encoding.MapUnrecognizedFields('additionalProperties')
+  class ItemsValue(_messages.Message):
+    """A map of scoped Router lists.
+
+    Messages:
+      AdditionalProperty: An additional property for a ItemsValue object.
+
+    Fields:
+      additionalProperties: Name of the scope containing this set of Routers.
+    """
+
+    class AdditionalProperty(_messages.Message):
+      """An additional property for a ItemsValue object.
+
+      Fields:
+        key: Name of the additional property.
+        value: A RoutersScopedList attribute.
+      """
+
+      key = _messages.StringField(1)
+      value = _messages.MessageField('RoutersScopedList', 2)
+
+    additionalProperties = _messages.MessageField('AdditionalProperty', 1, repeated=True)
+
+  id = _messages.StringField(1)
+  items = _messages.MessageField('ItemsValue', 2)
+  kind = _messages.StringField(3, default=u'compute#routerAggregatedList')
+  nextPageToken = _messages.StringField(4)
+  selfLink = _messages.StringField(5)
+
+
+class RouterBgp(_messages.Message):
+  """A RouterBgp object.
+
+  Fields:
+    asn: Local BGP Autonomous System Number (ASN) Can be a constant public ASN
+      value for google, or a customer-specified private ASN. In either case,
+      the value will be fixed for this router resource. All VPN tunnels that
+      link to this router will have the same local ASN.
+  """
+
+  asn = _messages.IntegerField(1, variant=_messages.Variant.UINT32)
+
+
+class RouterBgpPeer(_messages.Message):
+  """BGP information that needs to be configured into the routing stack to
+  establish the BGP peering. It must specify peer ASN and either interface
+  name, IP, or peer IP. Reference: https://tools.ietf.org/html/rfc4273
+
+  Fields:
+    interfaceName: Name of the interface it is associated with.
+    ipAddress: IP address of the interface inside Google cloud.
+    name: Name of this BGP Peer. The name must be 1-63 characters long and
+      comply with RFC1035.
+    peerAsn: Peer BGP Autonomous System Number (ASN). For VPN use case, this
+      value can be different for every tunnel.
+    peerIpAddress: IP address of the BGP interface outside Google cloud.
+  """
+
+  interfaceName = _messages.StringField(1)
+  ipAddress = _messages.StringField(2)
+  name = _messages.StringField(3)
+  peerAsn = _messages.IntegerField(4, variant=_messages.Variant.UINT32)
+  peerIpAddress = _messages.StringField(5)
+
+
+class RouterInterface(_messages.Message):
+  """Router interfaces. Each interface requires either one linked resource
+  (e.g. linked_vpn_tunnel) or IP address + range (specified in ip_range).
+
+  Fields:
+    ipRange: IP address and range of the interface. The value should be a CIDR
+      formatted string, for example: 169.254.0.1/30. NOTE: Do NOT trucate
+      address, as it represents IP address of interface.
+    linkedVpnTunnel: URI of linked VPN tunnel. It must be in the same region
+      as the router. Each interface can have at most one linked resource.
+    name: Name of this interface entry. The name must be 1-63 characters long
+      and comply with RFC1035.
+  """
+
+  ipRange = _messages.StringField(1)
+  linkedVpnTunnel = _messages.StringField(2)
+  name = _messages.StringField(3)
+
+
+class RouterList(_messages.Message):
+  """Contains a list of Router resources.
+
+  Fields:
+    id: [Output Only] Unique identifier for the resource; defined by the
+      server.
+    items: A list of Router resources.
+    kind: [Output Only] Type of resource. Always compute#router for routers.
+    nextPageToken: [Output Only] A token used to continue a truncated list
+      request.
+    selfLink: [Output Only] Server-defined URL for the resource.
+  """
+
+  id = _messages.StringField(1)
+  items = _messages.MessageField('Router', 2, repeated=True)
+  kind = _messages.StringField(3, default=u'compute#routerList')
+  nextPageToken = _messages.StringField(4)
+  selfLink = _messages.StringField(5)
+
+
+class RouterStatus(_messages.Message):
+  """A RouterStatus object.
+
+  Fields:
+    bestRoutes: Best routes for this Router.
+    bgpPeerStatus: A RouterStatusBgpPeerStatus attribute.
+    network: URI of the network to which this router belongs.
+  """
+
+  bestRoutes = _messages.MessageField('Route', 1, repeated=True)
+  bgpPeerStatus = _messages.MessageField('RouterStatusBgpPeerStatus', 2, repeated=True)
+  network = _messages.StringField(3)
+
+
+class RouterStatusBgpPeerStatus(_messages.Message):
+  """A RouterStatusBgpPeerStatus object.
+
+  Enums:
+    StatusValueValuesEnum: Status of the BgpPeer: {UP, DOWN}
+
+  Fields:
+    advertisedRoutes: Routes that were advertised to the remote BgpPeer
+    ipAddress: IP address of the local BGP interface.
+    linkedVpnTunnel: URL of the VPN tunnel that this BgpPeer controls.
+    name: Name of this BgpPeer which is unique within the Router resource.
+    numLearnedRoutes: Number of routes learned from the remote BGP Peer.
+    peerIpAddress: IP address of the remote BGP interface.
+    state: BGP state as specified in RFC-1771.
+    status: Status of the BgpPeer: {UP, DOWN}
+    uptime: Time this session has been up. Format: 1 second < uptime < 1 day =
+      "23:59:59" 1 day <= uptime < 1 week = "6d:23h:59m" 1 week <= uptime =
+      "123w:6d:23h"
+  """
+
+  class StatusValueValuesEnum(_messages.Enum):
+    """Status of the BgpPeer: {UP, DOWN}
+
+    Values:
+      DOWN: <no description>
+      UNKNOWN: <no description>
+      UP: <no description>
+    """
+    DOWN = 0
+    UNKNOWN = 1
+    UP = 2
+
+  advertisedRoutes = _messages.MessageField('Route', 1, repeated=True)
+  ipAddress = _messages.StringField(2)
+  linkedVpnTunnel = _messages.StringField(3)
+  name = _messages.StringField(4)
+  numLearnedRoutes = _messages.IntegerField(5, variant=_messages.Variant.UINT32)
+  peerIpAddress = _messages.StringField(6)
+  state = _messages.StringField(7)
+  status = _messages.EnumField('StatusValueValuesEnum', 8)
+  uptime = _messages.StringField(9)
+
+
+class RouterStatusResponse(_messages.Message):
+  """A RouterStatusResponse object.
+
+  Fields:
+    kind: Type of resource.
+    result: A RouterStatus attribute.
+  """
+
+  kind = _messages.StringField(1, default=u'compute#routerStatusResponse')
+  result = _messages.MessageField('RouterStatus', 2)
+
+
+class RoutersScopedList(_messages.Message):
+  """A RoutersScopedList object.
+
+  Messages:
+    WarningValue: Informational warning which replaces the list of routers
+      when the list is empty.
+
+  Fields:
+    routers: List of Routers contained in this scope.
+    warning: Informational warning which replaces the list of routers when the
+      list is empty.
+  """
+
+  class WarningValue(_messages.Message):
+    """Informational warning which replaces the list of routers when the list
+    is empty.
+
+    Enums:
+      CodeValueValuesEnum: [Output Only] The warning type identifier for this
+        warning.
+
+    Messages:
+      DataValueListEntry: A DataValueListEntry object.
+
+    Fields:
+      code: [Output Only] The warning type identifier for this warning.
+      data: [Output Only] Metadata for this warning in key: value format.
+      message: [Output Only] Optional human-readable details for this warning.
+    """
+
+    class CodeValueValuesEnum(_messages.Enum):
+      """[Output Only] The warning type identifier for this warning.
+
+      Values:
+        DEPRECATED_RESOURCE_USED: <no description>
+        DISK_SIZE_LARGER_THAN_IMAGE_SIZE: <no description>
+        INJECTED_KERNELS_DEPRECATED: <no description>
+        NEXT_HOP_ADDRESS_NOT_ASSIGNED: <no description>
+        NEXT_HOP_CANNOT_IP_FORWARD: <no description>
+        NEXT_HOP_INSTANCE_NOT_FOUND: <no description>
+        NEXT_HOP_INSTANCE_NOT_ON_NETWORK: <no description>
+        NEXT_HOP_NOT_RUNNING: <no description>
+        NOT_CRITICAL_ERROR: <no description>
+        NO_RESULTS_ON_PAGE: <no description>
+        REQUIRED_TOS_AGREEMENT: <no description>
+        RESOURCE_NOT_DELETED: <no description>
+        SINGLE_INSTANCE_PROPERTY_TEMPLATE: <no description>
+        UNREACHABLE: <no description>
+      """
+      DEPRECATED_RESOURCE_USED = 0
+      DISK_SIZE_LARGER_THAN_IMAGE_SIZE = 1
+      INJECTED_KERNELS_DEPRECATED = 2
+      NEXT_HOP_ADDRESS_NOT_ASSIGNED = 3
+      NEXT_HOP_CANNOT_IP_FORWARD = 4
+      NEXT_HOP_INSTANCE_NOT_FOUND = 5
+      NEXT_HOP_INSTANCE_NOT_ON_NETWORK = 6
+      NEXT_HOP_NOT_RUNNING = 7
+      NOT_CRITICAL_ERROR = 8
+      NO_RESULTS_ON_PAGE = 9
+      REQUIRED_TOS_AGREEMENT = 10
+      RESOURCE_NOT_DELETED = 11
+      SINGLE_INSTANCE_PROPERTY_TEMPLATE = 12
+      UNREACHABLE = 13
+
+    class DataValueListEntry(_messages.Message):
+      """A DataValueListEntry object.
+
+      Fields:
+        key: [Output Only] A key for the warning data.
+        value: [Output Only] A warning data value corresponding to the key.
+      """
+
+      key = _messages.StringField(1)
+      value = _messages.StringField(2)
+
+    code = _messages.EnumField('CodeValueValuesEnum', 1)
+    data = _messages.MessageField('DataValueListEntry', 2, repeated=True)
+    message = _messages.StringField(3)
+
+  routers = _messages.MessageField('Router', 1, repeated=True)
+  warning = _messages.MessageField('WarningValue', 2)
+
+
 class Rule(_messages.Message):
   """A rule to be applied in a Policy.
 
@@ -10345,10 +10834,10 @@ class SSLHealthCheck(_messages.Message):
     request: The application data to send once the SSL connection has been
       established (default value is empty). If both request and response are
       empty, the connection establishment alone will indicate health. The
-      request data can be ASCII or binary.
+      request data can only be ASCII.
     response: The bytes to match against the beginning of the response data.
       If left empty (the default value), any response will indicate health.
-      The response data can be ASCII or binary.
+      The response data can only be ASCII.
   """
 
   port = _messages.IntegerField(1, variant=_messages.Variant.INT32)
@@ -10653,10 +11142,10 @@ class TCPHealthCheck(_messages.Message):
     request: The application data to send once the TCP connection has been
       established (default value is empty). If both request and response are
       empty, the connection establishment alone will indicate health. The
-      request data can be ASCII or binary.
+      request data can only be ASCII.
     response: The bytes to match against the beginning of the response data.
       If left empty (the default value), any response will indicate health.
-      The response data can be ASCII or binary.
+      The response data can only be ASCII.
   """
 
   port = _messages.IntegerField(1, variant=_messages.Variant.INT32)

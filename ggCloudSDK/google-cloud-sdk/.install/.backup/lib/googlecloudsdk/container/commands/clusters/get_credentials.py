@@ -2,11 +2,11 @@
 
 """Fetch cluster credentials."""
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core import properties
 
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import base
 from googlecloudsdk.container.lib import util
 
 

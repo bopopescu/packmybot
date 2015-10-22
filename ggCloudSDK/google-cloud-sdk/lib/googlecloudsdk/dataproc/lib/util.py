@@ -100,7 +100,7 @@ def WaitForOperation(
         if operation.done:
           break
       except apitools_base.HttpError as error:
-        log.debug('GetOperation failed:\n' + error)
+        log.debug('GetOperation failed:\n' + FormatHttpError(error))
         # Keep trying until we timeout in case error is transient.
       time.sleep(poll_period_s)
   # TODO(user): Parse operation metadata.

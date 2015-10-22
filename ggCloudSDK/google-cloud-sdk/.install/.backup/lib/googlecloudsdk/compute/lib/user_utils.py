@@ -2,9 +2,9 @@
 """Common functions for users."""
 from socket import gethostname
 
+from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.core import exceptions as core_exceptions
 
-from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.compute.lib import request_helper
 from googlecloudsdk.compute.lib import time_utils
 from googlecloudsdk.compute.lib import utils

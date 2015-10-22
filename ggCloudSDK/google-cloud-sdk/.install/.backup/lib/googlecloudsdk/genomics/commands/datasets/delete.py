@@ -3,10 +3,10 @@
 """Implementation of gcloud genomics datasets delete.
 """
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.core import log
 from googlecloudsdk.core.console import console_io
 
-from googlecloudsdk.calliope import base
 from googlecloudsdk.genomics import lib
 from googlecloudsdk.genomics.lib import genomics_util
 from googlecloudsdk.genomics.lib.exceptions import GenomicsError

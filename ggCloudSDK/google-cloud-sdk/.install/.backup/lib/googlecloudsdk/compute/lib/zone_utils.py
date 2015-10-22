@@ -1,9 +1,9 @@
 # Copyright 2014 Google Inc. All Rights Reserved.
 """Common classes and functions for zones."""
 
+from googlecloudsdk.calliope import exceptions as calliope_exceptions
 from googlecloudsdk.core.console import console_io
 
-from googlecloudsdk.calliope import exceptions as calliope_exceptions
 from googlecloudsdk.compute.lib import request_helper
 from googlecloudsdk.compute.lib import utils
 

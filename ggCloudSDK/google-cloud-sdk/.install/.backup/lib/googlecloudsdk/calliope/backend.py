@@ -11,6 +11,12 @@ import os
 import re
 import sys
 
+from googlecloudsdk.calliope import actions
+from googlecloudsdk.calliope import arg_parsers
+from googlecloudsdk.calliope import base
+from googlecloudsdk.calliope import display
+from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.calliope import usage_text
 from googlecloudsdk.core import cli as core_cli
 from googlecloudsdk.core import log
 from googlecloudsdk.core import metrics
@@ -18,13 +24,6 @@ from googlecloudsdk.core import properties
 from googlecloudsdk.core import remote_completion
 from googlecloudsdk.core.updater import update_manager
 from googlecloudsdk.core.util import pkg_resources
-
-from googlecloudsdk.calliope import actions
-from googlecloudsdk.calliope import arg_parsers
-from googlecloudsdk.calliope import base
-from googlecloudsdk.calliope import display
-from googlecloudsdk.calliope import exceptions
-from googlecloudsdk.calliope import usage_text
 
 
 def LowerCaseWithDashes(name):
@@ -396,14 +395,14 @@ class ArgumentInterceptor(object):
   # pylint: disable=g-bad-name
   def add_argument(self, *args, **kwargs):
     """add_argument intercepts calls to the parser to track arguments."""
-    # TODO(user): do not allow short-options without long-options.
+    # TODO(jasmuth): do not allow short-options without long-options.
 
     # we will choose the first option as the name
     name = args[0]
 
     positional = not name.startswith('-')
     if positional and not self.allow_positional:
-      # TODO(user): More informative error message here about which group
+      # TODO(markpell): More informative error message here about which group
       # the problem is in.
       raise ArgumentException('Illegal positional argument: ' + name)
 
@@ -636,7 +635,7 @@ class CommandCommon(object):
       # Propagate down the hidden attribute.
       if parent_group.IsHidden():
         self._common_type._is_hidden = True
-      # TODO(user): This is going to go away once we remove the explicit
+      # TODO(markpell): This is going to go away once we remove the explicit
       # Alpha and Beta decorators for commands.  Once the commands show up
       # under the correct track, the help will use the regular release track
       # for annotations (b/19406151).
@@ -693,7 +692,7 @@ class CommandCommon(object):
     if tag:
       self.short_help = tag + self.short_help
       self.long_help = tag + self.long_help
-      # TODO(user):b/21208128: Drop these 4 lines.
+      # TODO(gsfowler):b/21208128: Drop these 4 lines.
       prefix = self.ReleaseTrack(for_help=True).prefix
       if len(self._path) < 2 or self._path[1] != prefix:
         self.index_help = tag + self.index_help

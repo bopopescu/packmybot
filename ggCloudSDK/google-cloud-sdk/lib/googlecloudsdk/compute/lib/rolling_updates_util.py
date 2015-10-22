@@ -106,8 +106,8 @@ def PrintTable(resources, resource_type):
     for resource in resources:
       row = []
       row.append(resource['name'])
-      row.append(resource['status']['templateVersion'])
       row.append(resource['status']['state'])
+      row.append(resource['status']['templateVersion'])
       printer.AddRow(row)
   elif resource_type == 'replica-pool':
     header = ['name', 'currentNumReplicas']
@@ -116,40 +116,6 @@ def PrintTable(resources, resource_type):
       row = []
       row.append(resource['name'])
       row.append(str(resource['currentNumReplicas']))
-      printer.AddRow(row)
-  elif resource_type == 'zone-operation':
-    header = ['name', 'type', 'target', 'httpStatus', 'status', 'timestamp']
-    printer.AddRow(header)
-    for resource in resources:
-      row = []
-      row.append(resource['name'])
-      row.append(resource['operationType'])
-
-      # get the last two parts of the targetLink. e.g. instances/instance-foo
-      target_link = resource['targetLink'].split('/', 9)[-1]
-      row.append(target_link)
-
-      # extract http status
-      http_status = ''
-      if resource['status'] == 'DONE':
-        http_status = resource.get('httpErrorStatusCode') or '200'
-      row.append(http_status)
-
-      row.append(resource['status'])
-      row.append(resource['insertTime'])
-
-      printer.AddRow(row)
-  elif resource_type == 'managed-instance-group':
-    header = ['name', 'instanceTemplate', 'currentSize', 'targetSize']
-    printer.AddRow(header)
-    for resource in resources:
-      row = []
-      row.append(resource['name'])
-      template = resource['instanceTemplate'].split('/')[-1]
-      row.append(template)
-      row.append(str(resource['currentSize']))
-      row.append(str(resource['targetSize']))
-
       printer.AddRow(row)
   else:
     raise ValueError('Unsupported resource_type: {0}'.format(resource_type))

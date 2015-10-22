@@ -62,7 +62,10 @@ class _BaseOperations(object):
                               sleep_ms=2000)
       except retry.WaitException:
         raise errors.OperationError(
-            'Operation {0} is taking too long'.format(operation_ref))
+            ('Operation {0} is taking longer than expected. You can continue '
+             'waiting for the operation by running `{1}`').format(
+                 operation_ref,
+                 cls.GetOperationWaitCommand(operation_ref)))
 
 
 class OperationsV1Beta3(_BaseOperations):
@@ -102,6 +105,11 @@ class OperationsV1Beta3(_BaseOperations):
       return True
     return False
 
+  @staticmethod
+  def GetOperationWaitCommand(operation_ref):
+    return 'gcloud sql operations wait -i {0} --project {1} {2}'.format(
+        operation_ref.instance, operation_ref.project, operation_ref.operation)
+
 
 class OperationsV1Beta4(_BaseOperations):
   """Common utility functions for sql operations V1Beta4."""
@@ -139,3 +147,8 @@ class OperationsV1Beta4(_BaseOperations):
     if op.status == 'DONE':
       return True
     return False
+
+  @staticmethod
+  def GetOperationWaitCommand(operation_ref):
+    return 'gcloud beta sql operations wait --project {0} {1}'.format(
+        operation_ref.project, operation_ref.operation)

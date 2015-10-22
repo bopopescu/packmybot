@@ -28,6 +28,7 @@ from googlecloudsdk.core.resource import json_printer
 from googlecloudsdk.core.resource import list_printer
 from googlecloudsdk.core.resource import resource_printer_base
 from googlecloudsdk.core.resource import resource_projector
+from googlecloudsdk.core.resource import resource_property
 from googlecloudsdk.core.resource import resource_transform
 from googlecloudsdk.core.resource import table_printer
 from googlecloudsdk.core.resource import yaml_printer
@@ -38,7 +39,11 @@ class Error(core_exceptions.Error):
 
 
 class UnknownFormatError(Error):
-  """UnknownFormatError is thrown for unknown format names."""
+  """UnknownFormatError for unknown format names."""
+
+
+class ProjectionRequiredError(Error):
+  """ProjectionRequiredError for format with no projection that needs one."""
 
 
 class DefaultPrinter(yaml_printer.YamlPrinter):
@@ -125,19 +130,6 @@ def Printer(print_format, out=None, defaults=None):
   return printer
 
 
-def _IsListLike(resources):
-  """Checks if resources is a list-like iterable object.
-
-  Args:
-    resources: The object to check.
-
-  Returns:
-    True if resources is a list-like iterable object.
-  """
-  return (isinstance(resources, list) or
-          hasattr(resources, '__iter__') and hasattr(resources, 'next'))
-
-
 def Print(resources, print_format, out=None, defaults=None, single=False):
   """Prints the given resources.
 
@@ -148,8 +140,16 @@ def Print(resources, print_format, out=None, defaults=None, single=False):
     defaults: Optional resource_projection_spec.ProjectionSpec defaults.
     single: If True then resources is a single item and not a list.
       For example, use this to print a single object as JSON.
+
+  Raises:
+    ProjectionRequiredError: If a format requires a projection and one is not
+      provided.
   """
   printer = Printer(print_format, out=out, defaults=defaults)
+  if printer.ByColumns() and not printer.column_attributes.Columns():
+    raise ProjectionRequiredError(
+        'Format [{0}] requires a non-empty projection.'.format(
+            printer.column_attributes.Name()))
 
   # Resources may be a generator and since generators can raise exceptions, we
   # have to call Finish() in the finally block to make sure that the resources
@@ -157,7 +157,7 @@ def Print(resources, print_format, out=None, defaults=None, single=False):
   # given to the exception-handling code.
   try:
     if resources:
-      if single or not _IsListLike(resources):
+      if single or not resource_property.IsListLike(resources):
         printer.AddRecord(resources, delimit=False)
       else:
         for resource in resources:

@@ -3,10 +3,10 @@
 
 import argparse
 
-from googlecloudsdk.third_party.apis.compute.v1 import compute_v1_messages
-
 from googlecloudsdk.calliope import arg_parsers
 from googlecloudsdk.calliope import exceptions
+from googlecloudsdk.third_party.apis.compute.v1 import compute_v1_messages
+
 from googlecloudsdk.compute.lib import constants
 from googlecloudsdk.compute.lib import image_utils
 

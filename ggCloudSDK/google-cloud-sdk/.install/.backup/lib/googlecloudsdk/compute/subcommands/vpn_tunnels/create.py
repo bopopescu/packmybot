@@ -4,6 +4,7 @@
 import argparse
 import re
 
+from googlecloudsdk.calliope import base
 from googlecloudsdk.compute.lib import base_classes
 from googlecloudsdk.compute.lib import utils
 
@@ -38,7 +39,7 @@ def ValidateSimpleSharedSecret(possible_secret):
       'non-printable charcters.')
 
 
-class Create(base_classes.BaseAsyncCreator):
+class _BaseCreate(object):
   """Create a VPN Tunnel."""
 
   # Placeholder to indicate that a detailed_help field exists and should
@@ -105,6 +106,19 @@ class Create(base_classes.BaseAsyncCreator):
   def resource_type(self):
     return 'vpnTunnels'
 
+_BaseCreate.detailed_help = {
+    'brief': 'Create a VPN tunnel',
+    'DESCRIPTION': """
+        *{command}* is used to create a VPN tunnel between a VPN Gateway
+        in Google Cloud Platform and an external gateway that is
+        identified by --peer-address.
+     """
+    }
+
+
+@base.ReleaseTracks(base.ReleaseTrack.GA, base.ReleaseTrack.BETA)
+class CreateGA(_BaseCreate, base_classes.BaseAsyncCreator):
+
   def CreateRequests(self, args):
     """Builds API requests to construct VPN Tunnels.
 
@@ -152,13 +166,74 @@ class Create(base_classes.BaseAsyncCreator):
             peerIp=args.peer_address,
             sharedSecret=args.shared_secret,
             targetVpnGateway=target_vpn_gateway_ref.SelfLink()))
+
     return [request]
 
-Create.detailed_help = {
-    'brief': 'Create a VPN tunnel',
-    'DESCRIPTION': """
-        *{command}* is used to create a VPN tunnel between a VPN Gateway
-        in Google Cloud Platform and an external gateway that is
-        identified by --peer-address.
-     """
-    }
+
+@base.ReleaseTracks(base.ReleaseTrack.ALPHA)
+class CreateAlpha(_BaseCreate, base_classes.BaseAsyncCreator):
+
+  @staticmethod
+  def Args(parser):
+    _BaseCreate.Args(parser)
+    parser.add_argument(
+        '--router',
+        help='The Router to use for dynamic routing.')
+
+  def CreateRequests(self, args):
+    """Builds API requests to construct VPN Tunnels.
+
+    Args:
+      args: argparse.Namespace, The arguments received by this command.
+
+    Returns:
+      [protorpc.messages.Message], A list of requests to be executed
+      by the compute API.
+    """
+
+    vpn_tunnel_ref = self.CreateRegionalReference(
+        args.name, args.region, resource_type='vpnTunnels')
+
+    # The below is a hack.  The code below ensures that the following two
+    # properties hold:
+    #   1) scope prompting occurs at most once for the vpn tunnel and gateway
+    #   2) if the user gives exactly one of the vpn tunnel and gateway as a URL
+    #        and one as short name we do still check --region or prompt as
+    #        usual.
+    #
+    # TODO(user) Change the semantics of the scope prompter so that a
+    # single prompt can set the region for resources of multiple types with a
+    # single user prompt.  See b/18313268.
+
+    # requested by args or prompt?
+    if args.region:
+      requested_region = args.region
+    elif not args.name.startswith('https://'):
+      requested_region = vpn_tunnel_ref.region
+    else:
+      requested_region = None
+
+    target_vpn_gateway_ref = self.CreateRegionalReference(
+        args.target_vpn_gateway, requested_region,
+        resource_type='targetVpnGateways')
+
+    router_link = None
+    if args.router is not None:
+      router_ref = self.CreateRegionalReference(
+          args.router, requested_region,
+          resource_type='routers')
+      router_link = router_ref.SelfLink()
+
+    request = self.messages.ComputeVpnTunnelsInsertRequest(
+        project=self.project,
+        region=vpn_tunnel_ref.region,
+        vpnTunnel=self.messages.VpnTunnel(
+            description=args.description,
+            router=router_link,
+            ikeVersion=args.ike_version,
+            name=vpn_tunnel_ref.Name(),
+            peerIp=args.peer_address,
+            sharedSecret=args.shared_secret,
+            targetVpnGateway=target_vpn_gateway_ref.SelfLink()))
+
+    return [request]
