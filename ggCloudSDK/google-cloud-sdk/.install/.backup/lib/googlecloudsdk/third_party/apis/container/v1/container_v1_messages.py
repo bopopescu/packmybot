@@ -26,18 +26,18 @@ class Cluster(_messages.Message):
       automatically chosen or specify a `/14` block in `10.0.0.0/8`.
     createTime: [Output only] The time the cluster was created, in
       [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
-    currentMasterVersion: [Output only] The current software version of the
-      master endpoint.
+    currentMainVersion: [Output only] The current software version of the
+      main endpoint.
     currentNodeVersion: [Output only] The current version of the node software
       components. If they are currently at different versions because they're
       in the process of being upgraded, this reflects the minimum version of
       any of them.
     description: An optional description of this cluster.
-    endpoint: [Output only] The IP address of this cluster's master endpoint.
+    endpoint: [Output only] The IP address of this cluster's main endpoint.
       The endpoint can be accessed from the internet at
-      `https://username:password@endpoint/`.  See the `masterAuth` property of
+      `https://username:password@endpoint/`.  See the `mainAuth` property of
       this resource for username and password information.
-    initialClusterVersion: [Output only] The software version of the master
+    initialClusterVersion: [Output only] The software version of the main
       and kubelets used in the cluster when it was first created. The version
       can be upgraded over time.
     initialNodeCount: The number of nodes to create in this cluster. You must
@@ -50,7 +50,7 @@ class Cluster(_messages.Message):
       Currently available options:  * `logging.googleapis.com` - the Google
       Cloud Logging service. * `none` - no logs will be exported from the
       cluster. * "" - default value: the default is `logging.googleapis.com`.
-    masterAuth: The authentication information for accessing the master.
+    mainAuth: The authentication information for accessing the main.
     monitoringService: The monitoring service that the cluster should write
       metrics to. Currently available options:  * `monitoring.googleapis.com`
       - the Google Cloud Monitoring service. * `none` - no metrics will be
@@ -91,7 +91,7 @@ class Cluster(_messages.Message):
       RUNNING: The RUNNING state indicates the cluster has been created and is
         fully usable.
       RECONCILING: The RECONCILING state indicates that some work is actively
-        being done on the cluster, such as upgrading the master or node
+        being done on the cluster, such as upgrading the main or node
         software. Details can be found in the `statusMessage` field.
       STOPPING: The STOPPING state indicates the cluster is being deleted.
       ERROR: The ERROR state indicates the cluster may be unusable. Details
@@ -106,7 +106,7 @@ class Cluster(_messages.Message):
 
   clusterIpv4Cidr = _messages.StringField(1)
   createTime = _messages.StringField(2)
-  currentMasterVersion = _messages.StringField(3)
+  currentMainVersion = _messages.StringField(3)
   currentNodeVersion = _messages.StringField(4)
   description = _messages.StringField(5)
   endpoint = _messages.StringField(6)
@@ -114,7 +114,7 @@ class Cluster(_messages.Message):
   initialNodeCount = _messages.IntegerField(8, variant=_messages.Variant.INT32)
   instanceGroupUrls = _messages.StringField(9, repeated=True)
   loggingService = _messages.StringField(10)
-  masterAuth = _messages.MessageField('MasterAuth', 11)
+  mainAuth = _messages.MessageField('MainAuth', 11)
   monitoringService = _messages.StringField(12)
   name = _messages.StringField(13)
   network = _messages.StringField(14)
@@ -133,7 +133,7 @@ class ClusterUpdate(_messages.Message):
   provided.
 
   Fields:
-    desiredMasterVersion: The Kubernetes version to change the master to
+    desiredMainVersion: The Kubernetes version to change the main to
       (typically an upgrade). Use "-" to upgrade to the latest version
       supported by the server.
     desiredMonitoringService: The monitoring service that the cluster should
@@ -145,42 +145,42 @@ class ClusterUpdate(_messages.Message):
       supported by the server.
   """
 
-  desiredMasterVersion = _messages.StringField(1)
+  desiredMainVersion = _messages.StringField(1)
   desiredMonitoringService = _messages.StringField(2)
   desiredNodeVersion = _messages.StringField(3)
 
 
-class ContainerMasterProjectsZonesSignedUrlsCreateRequest(_messages.Message):
-  """A ContainerMasterProjectsZonesSignedUrlsCreateRequest object.
+class ContainerMainProjectsZonesSignedUrlsCreateRequest(_messages.Message):
+  """A ContainerMainProjectsZonesSignedUrlsCreateRequest object.
 
   Fields:
     createSignedUrlsRequest: A CreateSignedUrlsRequest resource to be passed
       as the request body.
-    masterProjectId: The hosted master project in which this master resides.
+    mainProjectId: The hosted main project in which this main resides.
       This can be either a [project ID or project
       number](https://developers.google.com/console/help/new/#projectnumber).
-    zone: The zone of this master's cluster.
+    zone: The zone of this main's cluster.
   """
 
   createSignedUrlsRequest = _messages.MessageField('CreateSignedUrlsRequest', 1)
-  masterProjectId = _messages.StringField(2, required=True)
+  mainProjectId = _messages.StringField(2, required=True)
   zone = _messages.StringField(3, required=True)
 
 
-class ContainerMasterProjectsZonesTokensCreateRequest(_messages.Message):
-  """A ContainerMasterProjectsZonesTokensCreateRequest object.
+class ContainerMainProjectsZonesTokensCreateRequest(_messages.Message):
+  """A ContainerMainProjectsZonesTokensCreateRequest object.
 
   Fields:
     createTokenRequest: A CreateTokenRequest resource to be passed as the
       request body.
-    masterProjectId: The hosted master project in which this master resides.
+    mainProjectId: The hosted main project in which this main resides.
       This can be either a [project ID or project
       number](https://developers.google.com/console/help/new/#projectnumber).
-    zone: The zone of this master's cluster.
+    zone: The zone of this main's cluster.
   """
 
   createTokenRequest = _messages.MessageField('CreateTokenRequest', 1)
-  masterProjectId = _messages.StringField(2, required=True)
+  mainProjectId = _messages.StringField(2, required=True)
   zone = _messages.StringField(3, required=True)
 
 
@@ -326,14 +326,14 @@ class CreateClusterRequest(_messages.Message):
 
 class CreateSignedUrlsRequest(_messages.Message):
   """A request for signed URLs that allow for writing a file to a private GCS
-  bucket for storing backups of hosted master data.
+  bucket for storing backups of hosted main data.
 
   Fields:
-    clusterId: The name of this master's cluster.
+    clusterId: The name of this main's cluster.
     filenames: The names of the files for which a signed URLs are being
       requested.
     projectNumber: The project number for which the signed URLs are being
-      requested.  This is the project in which this master's cluster resides.
+      requested.  This is the project in which this main's cluster resides.
       Note that this must be a project number, not a project ID.
   """
 
@@ -345,13 +345,13 @@ class CreateSignedUrlsRequest(_messages.Message):
 class CreateTokenRequest(_messages.Message):
   """A request for a compute-read-write
   (https://www.googleapis.com/auth/compute) scoped OAuth2 access token for
-  <project_number>, to allow hosted masters to make modifications to a user's
+  <project_number>, to allow hosted mains to make modifications to a user's
   project.
 
   Fields:
-    clusterId: The name of this master's cluster.
+    clusterId: The name of this main's cluster.
     projectNumber: The project number for which the access is being requested.
-      This is the project in which this master's cluster resides.  Note that
+      This is the project in which this main's cluster resides.  Note that
       this must be a project number, not a project ID.
   """
 
@@ -380,8 +380,8 @@ class ListOperationsResponse(_messages.Message):
   operations = _messages.MessageField('Operation', 1, repeated=True)
 
 
-class MasterAuth(_messages.Message):
-  """The authentication information for accessing the master endpoint.
+class MainAuth(_messages.Message):
+  """The authentication information for accessing the main endpoint.
   Authentication can be done using HTTP basic auth or using client
   certificates.
 
@@ -393,10 +393,10 @@ class MasterAuth(_messages.Message):
     clusterCaCertificate: [Output only] Base64-encoded public certificate that
       is the root of trust for the cluster.
     password: The password to use for HTTP basic authentication when accessing
-      the Kubernetes master endpoint. Because the master endpoint is open to
+      the Kubernetes main endpoint. Because the main endpoint is open to
       the internet, you should create a strong password.
     username: The username to use for HTTP basic authentication when accessing
-      the Kubernetes master endpoint.
+      the Kubernetes main endpoint.
   """
 
   clientCertificate = _messages.StringField(1)
@@ -516,7 +516,7 @@ class Operation(_messages.Message):
       TYPE_UNSPECIFIED: Not set.
       CREATE_CLUSTER: Cluster create.
       DELETE_CLUSTER: Cluster delete.
-      UPGRADE_MASTER: A master upgrade.
+      UPGRADE_MASTER: A main upgrade.
       UPGRADE_NODES: A node upgrade.
       REPAIR_CLUSTER: Cluster repair.
       UPDATE_CLUSTER: Cluster update.
@@ -568,7 +568,7 @@ class ServerConfig(_messages.Message):
 
 class SignedUrls(_messages.Message):
   """Signed URLs that allow for writing a file to a private GCS bucket for
-  storing backups of hosted master data.
+  storing backups of hosted main data.
 
   Fields:
     signedUrls: The signed URLs for writing the request files, in the same
@@ -647,7 +647,7 @@ class StandardQueryParameters(_messages.Message):
 
 class Token(_messages.Message):
   """A compute-read-write (https://www.googleapis.com/auth/compute) scoped
-  OAuth2 access token, to allow hosted masters to make modifications to a
+  OAuth2 access token, to allow hosted mains to make modifications to a
   user's project.
 
   Fields:

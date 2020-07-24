@@ -79,15 +79,15 @@ class ConfigurationHelper(scope_prompter.ScopePrompter):
       self,
       cluster_name,
       image,
-      master_machine_type,
+      main_machine_type,
       worker_machine_type,
       network):
     """Build dict of GCE URIs for Dataproc cluster request."""
     zone_ref = self._GetZoneRef(cluster_name)
     uris = {
         'image': self._GetResourceUri(image, 'images'),
-        'master_machine_type': self._GetResourceUri(
-            master_machine_type, 'machineTypes', zone=zone_ref.Name()),
+        'main_machine_type': self._GetResourceUri(
+            main_machine_type, 'machineTypes', zone=zone_ref.Name()),
         'worker_machine_type': self._GetResourceUri(
             worker_machine_type, 'machineTypes', zone=zone_ref.Name()),
         'network': self._GetResourceUri(network, 'networks'),

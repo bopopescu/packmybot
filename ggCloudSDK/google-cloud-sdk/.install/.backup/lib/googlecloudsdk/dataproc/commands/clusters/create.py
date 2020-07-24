@@ -39,8 +39,8 @@ class Create(base.Command):
         type=int,
         help='The number of preemptible worker nodes in the cluster.')
     parser.add_argument(
-        '--master-machine-type',
-        help='The type of machine to use for the master. Defaults to '
+        '--main-machine-type',
+        help='The type of machine to use for the main. Defaults to '
         'server-specified.')
     parser.add_argument(
         '--worker-machine-type',
@@ -65,17 +65,17 @@ class Create(base.Command):
         type=int,
         help='The number of local SSDs to attach to each worker in a cluster.')
     parser.add_argument(
-        '--num-master-local-ssds',
+        '--num-main-local-ssds',
         type=int,
-        help='The number of local SSDs to attach to the master in a cluster.')
+        help='The number of local SSDs to attach to the main in a cluster.')
     parser.add_argument(
         '--worker-boot-disk-size-gb',
         type=int,
         help='The size in GB of the boot disk of each worker in a cluster.')
     parser.add_argument(
-        '--master-boot-disk-size-gb',
+        '--main-boot-disk-size-gb',
         type=int,
-        help='The size in GB of the boot disk of the master in a cluster.')
+        help='The size in GB of the boot disk of the main in a cluster.')
     parser.add_argument(
         '--initialization-actions',
         type=arg_parsers.ArgList(),
@@ -102,7 +102,7 @@ class Create(base.Command):
     compute_uris = config_helper.ResolveGceUris(
         args.name,
         args.image,
-        args.master_machine_type,
+        args.main_machine_type,
         args.worker_machine_type,
         args.network)
 
@@ -119,12 +119,12 @@ class Create(base.Command):
             networkUri=compute_uris['network'],
             zoneUri=compute_uris['zone'],
         ),
-        masterConfiguration=messages.InstanceGroupConfiguration(
+        mainConfiguration=messages.InstanceGroupConfiguration(
             imageUri=compute_uris['image'],
-            machineTypeUri=compute_uris['master_machine_type'],
+            machineTypeUri=compute_uris['main_machine_type'],
             diskConfiguration=messages.DiskConfiguration(
-                bootDiskSizeGb=args.master_boot_disk_size_gb,
-                numLocalSsds=args.num_master_local_ssds,
+                bootDiskSizeGb=args.main_boot_disk_size_gb,
+                numLocalSsds=args.num_main_local_ssds,
             ),
         ),
         workerConfiguration=messages.InstanceGroupConfiguration(

@@ -272,12 +272,12 @@ class UpdateClusterOptions(object):
 
   def __init__(self,
                version=None,
-               update_master=None,
+               update_main=None,
                update_nodes=None,
                update_cluster=None,
                monitoring_service=None):
     self.version = version
-    self.update_master = bool(update_master)
+    self.update_main = bool(update_main)
     self.update_nodes = bool(update_nodes)
     self.update_cluster = bool(update_cluster)
     self.monitoring_service = str(monitoring_service)
@@ -290,7 +290,7 @@ class V1Adapter(APIAdapter):
     return cluster_ref.zone
 
   def Version(self, cluster):
-    return cluster.currentMasterVersion
+    return cluster.currentMainVersion
 
   def PrintClusters(self, clusters):
     list_printer.PrintResourceList(
@@ -316,7 +316,7 @@ class V1Adapter(APIAdapter):
         name=cluster_ref.clusterId,
         initialNodeCount=options.num_nodes,
         nodeConfig=node_config,
-        masterAuth=self.messages.MasterAuth(username=options.user,
+        mainAuth=self.messages.MainAuth(username=options.user,
                                             password=options.password))
     if options.cluster_version:
       cluster.initialClusterVersion = options.cluster_version
@@ -344,9 +344,9 @@ class V1Adapter(APIAdapter):
     if options.update_nodes:
       update = self.messages.ClusterUpdate(
           desiredNodeVersion=options.version)
-    elif options.update_master:
+    elif options.update_main:
       update = self.messages.ClusterUpdate(
-          desiredMasterVersion=options.version)
+          desiredMainVersion=options.version)
     elif options.update_cluster:
       update = self.messages.ClusterUpdate(
           desiredMonitoringService=options.monitoring_service)

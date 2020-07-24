@@ -32,19 +32,19 @@ class Upgrade(base.Command):
         '--cluster-version',
         help='The Kubernetes release version to which to upgrade the'
         ' cluster\'s nodes. Omit to upgrade the nodes to the version the'
-        ' cluster\'s Kubernetes master is running.')
+        ' cluster\'s Kubernetes main is running.')
     cv.detailed_help = """\
       The Kubernetes release version to which to upgrade the cluster's nodes.
-      Omit to upgrade the nodes to the version the cluster's Kubernetes master
+      Omit to upgrade the nodes to the version the cluster's Kubernetes main
       is running.
 
       If provided, the --cluster-version must be no greater than the cluster
-      master's minor version (x.*X*.x), and must be a latest patch version
+      main's minor version (x.*X*.x), and must be a latest patch version
       (x.x.*X*).
 
-      You can find the current master version by running
+      You can find the current main version by running
 
-        $ gcloud container clusters describe <cluster> | grep MasterVersion
+        $ gcloud container clusters describe <cluster> | grep MainVersion
 
       You can find the list of allowed node versions for upgrades by running
 
@@ -53,7 +53,7 @@ class Upgrade(base.Command):
       and looking at the returned "validNodeVersions".
     """
     parser.add_argument(
-        '--master',
+        '--main',
         help=argparse.SUPPRESS,
         action='store_true')
     parser.add_argument(
@@ -82,8 +82,8 @@ class Upgrade(base.Command):
 
     options = api_adapter.UpdateClusterOptions(
         version=args.cluster_version,
-        update_master=args.master,
-        update_nodes=(not args.master))
+        update_main=args.main,
+        update_nodes=(not args.main))
 
     try:
       op_ref = adapter.UpdateCluster(cluster_ref, options)
@@ -101,7 +101,7 @@ Upgrade.detailed_help = {
       Upgrades the Kubernetes version of an existing container cluster.
 
       This command upgrades the Kubernetes version of the *nodes* of a cluster.
-      The Kubernetes version of the cluster's *master* is periodically upgraded
+      The Kubernetes version of the cluster's *main* is periodically upgraded
       automatically as new releases are available.
 
       *By running this command, all of the cluster's nodes will be deleted and*
@@ -117,7 +117,7 @@ Upgrade.detailed_help = {
     """,
     'EXAMPLES': """\
       Upgrade the nodes of <cluster> to the Kubernetes version of the cluster's
-      master.
+      main.
 
         $ {command} <cluster>
 

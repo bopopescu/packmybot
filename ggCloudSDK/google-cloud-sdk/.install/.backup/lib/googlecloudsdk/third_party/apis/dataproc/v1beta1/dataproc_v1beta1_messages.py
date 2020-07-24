@@ -102,14 +102,14 @@ class ClusterConfiguration(_messages.Message):
     gceClusterConfiguration: [Optional] The shared Google Compute Engine
       configuration settings for all instances in a cluster.
     initializationActions: [Optional] Commands to execute on each node after
-      configuration is completed. By default, executables are run on master
+      configuration is completed. By default, executables are run on main
       and all worker nodes. You can test a node's <code>role</code> metadata
-      to run an executable on a master or worker node, as shown below:
+      to run an executable on a main or worker node, as shown below:
       ROLE=$(/usr/share/google/get_metadata_value attributes/role)     if [[
-      "${ROLE}" == 'Master' ]]; then       ... master specific actions ...
+      "${ROLE}" == 'Main' ]]; then       ... main specific actions ...
       else       ... worker specific actions ...     fi
-    masterConfiguration: [Optional] The Google Compute Engine configuration
-      settings for the master instance in a cluster.
+    mainConfiguration: [Optional] The Google Compute Engine configuration
+      settings for the main instance in a cluster.
     secondaryWorkerConfiguration: [Optional] The Google Compute Engine
       configuration settings for additional worker instances in a cluster.
     softwareConfiguration: [Optional] The configuration settings for software
@@ -121,7 +121,7 @@ class ClusterConfiguration(_messages.Message):
   configurationBucket = _messages.StringField(1)
   gceClusterConfiguration = _messages.MessageField('GceClusterConfiguration', 2)
   initializationActions = _messages.MessageField('NodeInitializationAction', 3, repeated=True)
-  masterConfiguration = _messages.MessageField('InstanceGroupConfiguration', 4)
+  mainConfiguration = _messages.MessageField('InstanceGroupConfiguration', 4)
   secondaryWorkerConfiguration = _messages.MessageField('InstanceGroupConfiguration', 5)
   softwareConfiguration = _messages.MessageField('SoftwareConfiguration', 6)
   workerConfiguration = _messages.MessageField('InstanceGroupConfiguration', 7)
@@ -1784,7 +1784,7 @@ class Task(_messages.Message):
 
 
 class TaskClusterConfiguration(_messages.Message):
-  """A system task corresponding to a request for Master node to update
+  """A system task corresponding to a request for Main node to update
   configuration based on provided values.
 
   Enums:
@@ -2197,7 +2197,7 @@ class YarnApplication(_messages.Message):
     progress: [Required] The numerical progress of the application, from 1 to
       100.
     state: [Required] The application state.
-    trackingUrl: [Optional] The HTTP URL of the ApplicationMaster,
+    trackingUrl: [Optional] The HTTP URL of the ApplicationMain,
       HistoryServer, or TimelineServer that provides application-specific
       information. The URL uses the internal hostname, and requires a proxy
       server for resolution and, possibly, access.

@@ -38,7 +38,7 @@ class Deploy(base.Command):
               'At most one of the parameters --source-revision, '
               '--source-branch or --source-tag must be given if the '
               '--source parameter refers to a Cloud Repository. If none of '
-              'them are provided, the last revision from the master branch '
+              'them are provided, the last revision from the main branch '
               'is used. None of them is allowed when the --source parameter '
               'refers to a local directory; instead, --bucket is required.'
               ''),
